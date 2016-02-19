@@ -15,15 +15,8 @@
  */
 package net.oneandone.inline.types;
 
-import net.oneandone.inline.types.builtin.BooleanType;
-import net.oneandone.inline.types.builtin.CharacterType;
-import net.oneandone.inline.types.builtin.DoubleType;
-import net.oneandone.inline.types.builtin.EnumType;
-import net.oneandone.inline.types.builtin.FloatType;
-import net.oneandone.inline.types.builtin.IntType;
-import net.oneandone.inline.types.builtin.LongType;
-import net.oneandone.inline.types.builtin.StringType;
-
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +81,166 @@ public class Repository {
             return null;
         } else {
             return (Class<?>) WRAPPER_TYPES.get(idx);
+        }
+    }
+
+    //-- built-in types
+
+    public static class BooleanType extends Type {
+        public BooleanType() {
+            super(Boolean.class, false);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            // TODO: because oocalc turns them to upper case
+            str = str.toLowerCase();
+            if ("true".equals(str)) {
+                return Boolean.TRUE;
+            } else if ("false".equals(str)) {
+                return Boolean.FALSE;
+            } else {
+                throw new ParseException("expected true or false, got " + str + ".");
+            }
+        }
+    }
+
+    public static class CharacterType extends Type {
+        public CharacterType() {
+            super(Character.class, (char) 0);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            if (str.length() == 1) {
+                return str.charAt(0);
+            } else {
+                throw new ParseException("single character expected, got '" + str + "'");
+            }
+        }
+    }
+
+    public static class DoubleType extends Type {
+        public DoubleType() {
+            super(Double.class, (double) 0);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            try {
+                return Double.parseDouble(str);
+            } catch (NumberFormatException e) {
+                throw new ParseException("number expected, got '" + str + "'");
+            }
+        }
+    }
+
+    public static class EnumType extends Type {
+        public static EnumType create(Class<? extends Enum> clazz) {
+            return new EnumType(clazz, getValues(clazz));
+        }
+
+        public static <T extends Enum<?>> T[] getValues(Class<T> clazz) {
+            Method m;
+
+            try {
+                m = clazz.getDeclaredMethod("values");
+            } catch (SecurityException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+            m.setAccessible(true);
+            try {
+                return (T[]) m.invoke(null);
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private final Enum[] values;
+
+        public EnumType(Class<?> clazz, Enum[] values) {
+            super(clazz, values[0]);
+            this.values = values;
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            StringBuilder msg;
+            String name;
+
+            str = normalizeEnum(str);
+            msg = new StringBuilder();
+            for (Enum e : values) {
+                name = normalizeEnum(e.name());
+                if (name.equals(str)) {
+                    return e;
+                }
+                msg.append(" '");
+                msg.append(name);
+                msg.append('\'');
+            }
+            throw new ParseException("unknown value '" + str + "', expected one of" + msg);
+        }
+
+        private static String normalizeEnum(String value) {
+            value = value.toLowerCase();
+            return value.replace('_', '-');
+        }
+    }
+
+    public static class FloatType extends Type {
+        public FloatType() {
+            super(Float.class, (float) 0);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            try {
+                return Float.parseFloat(str);
+            } catch (NumberFormatException e) {
+                throw new ParseException("number expected, got '" + str + "'");
+            }
+        }
+    }
+
+    public static class IntType extends Type {
+        public IntType() {
+            super(Integer.class, 0);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            try {
+                return Integer.parseInt(str);
+            } catch (NumberFormatException e) {
+                throw new ParseException("expected integer, got '" + str + "'", e);
+            }
+        }
+    }
+
+    public static class LongType extends Type {
+        public LongType() {
+            super(Long.class, (long) 0);
+        }
+
+        @Override
+        public Object parse(String str) throws ParseException {
+            try {
+                return Long.parseLong(str);
+            } catch (NumberFormatException e) {
+                throw new ParseException("number expected, got '" + str + "'");
+            }
+        }
+    }
+
+    public static class StringType extends Type {
+        public StringType() {
+            super(String.class, "");
+        }
+
+        @Override
+        public Object parse(String str) {
+            return str;
         }
     }
 }
