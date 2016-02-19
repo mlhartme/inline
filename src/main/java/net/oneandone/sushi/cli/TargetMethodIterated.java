@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.Type;
+import net.oneandone.sushi.types.Type;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

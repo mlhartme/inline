@@ -15,8 +15,6 @@
  */
 package net.oneandone.sushi.util;
 
-import net.oneandone.sushi.io.LineFormat;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;

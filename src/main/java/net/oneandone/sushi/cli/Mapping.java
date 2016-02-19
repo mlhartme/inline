@@ -1,6 +1,6 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.Schema;
+import net.oneandone.sushi.types.Schema;
 import net.oneandone.sushi.util.Separator;
 
 import java.lang.reflect.Field;

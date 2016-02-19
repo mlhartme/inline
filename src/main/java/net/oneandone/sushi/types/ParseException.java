@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.metadata.simpletypes;
+package net.oneandone.sushi.types;
 
-import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.ParseException;
+/** Indicates a problem creating a simple type from a String */
+public class ParseException extends Exception {
+    private static final long serialVersionUID = 0;
 
-public class LongType extends Type {
-    public LongType() {
-        super(Long.class);
+    public ParseException(String msg) {
+        super(msg);
     }
-    
-    @Override
-    public Object newInstance() {
-        return 0;
-    }
-
-    @Override
-    public Object parse(String str) throws ParseException {
-        try {
-            return Long.parseLong(str);
-        } catch (NumberFormatException e) {
-            throw new ParseException("number expected, got '" + str + "'");
-        }            
+    public ParseException(String msg, Throwable cause) {
+        this(msg);
+        initCause(cause);
     }
 }

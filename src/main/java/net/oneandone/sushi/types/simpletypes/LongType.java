@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.metadata.simpletypes;
+package net.oneandone.sushi.types.simpletypes;
 
-import net.oneandone.sushi.metadata.Type;
+import net.oneandone.sushi.types.Type;
+import net.oneandone.sushi.types.ParseException;
 
-public class CharacterType extends Type {
-    public CharacterType() {
-        super(Character.class);
+public class LongType extends Type {
+    public LongType() {
+        super(Long.class);
     }
     
     @Override
@@ -28,7 +29,11 @@ public class CharacterType extends Type {
     }
 
     @Override
-    public Object parse(String str) {
-        return str.charAt(0); // TODO
+    public Object parse(String str) throws ParseException {
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            throw new ParseException("number expected, got '" + str + "'");
+        }            
     }
 }

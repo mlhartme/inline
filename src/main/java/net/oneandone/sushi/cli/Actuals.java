@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.ParseException;
+import net.oneandone.sushi.types.ParseException;
 
 import java.util.ArrayList;
 import java.util.Collection;

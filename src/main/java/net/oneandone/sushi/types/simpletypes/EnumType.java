@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.metadata.simpletypes;
+package net.oneandone.sushi.types.simpletypes;
 
-import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.ParseException;
+import net.oneandone.sushi.types.Type;
+import net.oneandone.sushi.types.ParseException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

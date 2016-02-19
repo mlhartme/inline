@@ -13,27 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.metadata.simpletypes;
+package net.oneandone.sushi.types.simpletypes;
 
-import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.ParseException;
+import net.oneandone.sushi.types.Type;
 
-public class DoubleType extends Type {
-    public DoubleType() {
-        super(Double.class);
+public class StringType extends Type {
+    public StringType() {
+        super(String.class);
     }
 
     @Override
     public Object newInstance() {
-        return (double) 0;
+        return "";
     }
 
     @Override
-    public Object parse(String str) throws ParseException {
-        try {
-            return Double.parseDouble(str);
-        } catch (NumberFormatException e) {
-            throw new ParseException("number expected, got '" + str + "'");
-        }            
+    public Object parse(String str) {
+        return str;
     }
 }

@@ -13,34 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.io;
+package net.oneandone.sushi.util;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MultiWriter extends Writer {
-    public static MultiWriter createNullWriter() {
-        return new MultiWriter();
+public class MultiOutputStream extends OutputStream {
+    public static MultiOutputStream createNullStream() {
+        return new MultiOutputStream();
     }
 
-    public static MultiWriter createTeeWriter(Writer ... dests) {
-        MultiWriter result;
-
-        result = new MultiWriter();
+    public static MultiOutputStream createTeeStream(OutputStream ... dests) {
+        MultiOutputStream result;
+        
+        result = new MultiOutputStream();
         result.dests.addAll(Arrays.asList(dests));
         return result;
     }
-
-    private final List<Writer> dests;
-
-    public MultiWriter() {
+    
+    private final List<OutputStream> dests;
+    
+    public MultiOutputStream() {
         dests = new ArrayList<>();
     }
 
-    public List<Writer> dests() {
+    public List<OutputStream> dests() {
         return dests;
     }
 
@@ -48,21 +48,14 @@ public class MultiWriter extends Writer {
     
     @Override
     public void write(int c) throws IOException {
-        for (Writer dest : dests) {
+        for (OutputStream dest : dests) {
             dest.write(c);
         }
     }
 
     @Override
-    public void write(char[] cbuf, int off, int len) throws IOException {
-        for (Writer dest : dests) {
-            dest.write(cbuf, off, len);
-        }
-    }
-
-    @Override
     public void flush() throws IOException {
-        for (Writer dest : dests) {
+        for (OutputStream dest : dests) {
             dest.flush();
         }
     }
@@ -70,7 +63,7 @@ public class MultiWriter extends Writer {
     @Override
     public void close() throws IOException {
         // TODO close as many as possible
-        for (Writer dest : dests) {
+        for (OutputStream dest : dests) {
             dest.close();
         }
     }

@@ -1,8 +1,8 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.ParseException;
+import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Type;
+import net.oneandone.sushi.types.ParseException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

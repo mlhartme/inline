@@ -15,9 +15,9 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.io.InputLogStream;
-import net.oneandone.sushi.io.MultiOutputStream;
-import net.oneandone.sushi.io.MultiWriter;
+import net.oneandone.sushi.util.InputLogStream;
+import net.oneandone.sushi.util.MultiOutputStream;
+import net.oneandone.sushi.util.MultiWriter;
 
 import java.io.InputStream;
 import java.io.OutputStream;

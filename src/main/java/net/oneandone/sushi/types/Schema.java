@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.metadata;
+package net.oneandone.sushi.types;
 
-import net.oneandone.sushi.metadata.simpletypes.BooleanType;
-import net.oneandone.sushi.metadata.simpletypes.CharacterType;
-import net.oneandone.sushi.metadata.simpletypes.DoubleType;
-import net.oneandone.sushi.metadata.simpletypes.EnumType;
-import net.oneandone.sushi.metadata.simpletypes.FloatType;
-import net.oneandone.sushi.metadata.simpletypes.IntType;
-import net.oneandone.sushi.metadata.simpletypes.LongType;
-import net.oneandone.sushi.metadata.simpletypes.StringType;
+import net.oneandone.sushi.types.simpletypes.BooleanType;
+import net.oneandone.sushi.types.simpletypes.CharacterType;
+import net.oneandone.sushi.types.simpletypes.DoubleType;
+import net.oneandone.sushi.types.simpletypes.EnumType;
+import net.oneandone.sushi.types.simpletypes.FloatType;
+import net.oneandone.sushi.types.simpletypes.IntType;
+import net.oneandone.sushi.types.simpletypes.LongType;
+import net.oneandone.sushi.types.simpletypes.StringType;
 
 import java.util.Arrays;
 import java.util.HashMap;

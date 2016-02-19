@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.Schema;
+import net.oneandone.sushi.types.Schema;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

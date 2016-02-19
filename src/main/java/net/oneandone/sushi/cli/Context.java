@@ -1,6 +1,6 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.Schema;
+import net.oneandone.sushi.types.Schema;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
