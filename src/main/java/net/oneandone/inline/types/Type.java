@@ -19,7 +19,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.function.Function;
 
-public abstract class Type {
+public class Type {
     protected final Class<?> raw;
     private final Function<String, ? extends Object> parser;
     public final String expected;
