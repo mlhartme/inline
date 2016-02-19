@@ -189,7 +189,7 @@ public class Context {
 
         result = new ArrayList<>();
         for (Context context = parent; context != null; context = context.parent) {
-            result.add(parent);
+            result.add(context);
         }
         return result;
     }
