@@ -50,7 +50,7 @@ public class Repository {
         type = map.get(clazz);
         if (type == null) {
             if (Enum.class.isAssignableFrom(clazz)) {
-                type = EnumType.create((Class<? extends Enum>) clazz);
+                type = null; // TODO EnumType.create((Class<? extends Enum>) clazz);
             } else {
                 throw new IllegalStateException();
             }
@@ -88,48 +88,40 @@ public class Repository {
 
     public static class BooleanType extends Type {
         public BooleanType() {
-            super(Boolean.class, "'true' or 'false'", false);
-        }
-
-        @Override
-        public Object parse(String str) {
-            str = str.toLowerCase();
-            if ("true".equals(str)) {
-                return Boolean.TRUE;
-            } else if ("false".equals(str)) {
-                return Boolean.FALSE;
-            } else {
-                throw new RuntimeException("not a boolean");
-            }
+            super(Boolean.class, "'true' or 'false'", false, str -> {
+                        str = str.toLowerCase();
+                        if ("true".equals(str)) {
+                            return Boolean.TRUE;
+                        } else if ("false".equals(str)) {
+                            return Boolean.FALSE;
+                        } else {
+                            throw new RuntimeException("not a boolean");
+                        }
+                    }
+                    );
         }
     }
 
     public static class CharacterType extends Type {
         public CharacterType() {
-            super(Character.class, "single character", (char) 0);
-        }
-
-        @Override
-        public Object parse(String str) {
-            if (str.length() == 1) {
-                return str.charAt(0);
-            } else {
-                throw new RuntimeException("unexpected string length: " + str.length());
-            }
+            super(Character.class, "single character", (char) 0,
+                    str -> {
+                        if (str.length() == 1) {
+                            return str.charAt(0);
+                        } else {
+                            throw new RuntimeException("unexpected string length: " + str.length());
+                        }
+                    });
         }
     }
 
     public static class DoubleType extends Type {
         public DoubleType() {
-            super(Double.class, "double", (double) 0);
-        }
-
-        @Override
-        public Object parse(String str) throws NumberFormatException {
-                return Double.parseDouble(str);
+            super(Double.class, "double", (double) 0, Double::parseDouble);
         }
     }
 
+    /*
     public static class EnumType extends Type {
         public static EnumType create(Class<? extends Enum> clazz) {
             return new EnumType(clazz, getValues(clazz));
@@ -198,48 +190,29 @@ public class Repository {
             return value.replace('_', '-');
         }
     }
+*/
 
     public static class FloatType extends Type {
         public FloatType() {
-            super(Float.class, "float number", (float) 0);
-        }
-
-        @Override
-        public Object parse(String str) throws NumberFormatException {
-            return Float.parseFloat(str);
+            super(Float.class, "float number", (float) 0, Float::parseFloat);
         }
     }
 
     public static class IntType extends Type {
         public IntType() {
-            super(Integer.class, "integer", 0);
-        }
-
-        @Override
-        public Object parse(String str) throws NumberFormatException {
-            return Integer.parseInt(str);
+            super(Integer.class, "integer", 0, Integer::parseInt);
         }
     }
 
     public static class LongType extends Type {
         public LongType() {
-            super(Long.class, "long integer", (long) 0);
-        }
-
-        @Override
-        public Object parse(String str) throws NumberFormatException {
-            return Long.parseLong(str);
+            super(Long.class, "long integer", (long) 0, Long::parseLong);
         }
     }
 
     public static class StringType extends Type {
         public StringType() {
-            super(String.class, "string", "");
-        }
-
-        @Override
-        public Object parse(String str) {
-            return str;
+            super(String.class, "string", "", str -> str);
         }
     }
 }

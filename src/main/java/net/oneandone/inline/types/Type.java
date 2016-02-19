@@ -17,13 +17,15 @@ package net.oneandone.inline.types;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.function.Function;
 
 public abstract class Type {
     protected final Class<?> raw;
+    private final Function<String, ? extends Object> parser;
     public final String expected;
     private final Object defaultValue;
 
-    public Type(java.lang.reflect.Type raw, String expected, Object dflt) {
+    public Type(java.lang.reflect.Type raw, String expected, Object dflt, Function<String, ? extends Object> parser) {
         if (raw instanceof Class) {
             this.raw = (Class) raw;
         } else {
@@ -42,11 +44,14 @@ public abstract class Type {
         if (Collection.class.isAssignableFrom(this.raw)) {
             throw new IllegalArgumentException(this.raw.getName());
         }
+        this.parser = parser;
         this.expected = expected;
         this.defaultValue = dflt;
     }
 
-    public abstract Object parse(String str) ;
+    public final Object parse(String str) {
+        return parser.apply(str);
+    };
 
     public Class<?> getRawType() {
         return raw;
