@@ -20,15 +20,12 @@ import java.util.List;
 
 /**
  * Cli example with a single command.
-  * <tt>
-  * mvn org.codehaus.mojo:exec-maven-plugin:1.2.1:java -Dexec.classpathScope=test -Dexec.mainClass=net.oneandone.inline.CliSample -Dexec.args=&quot;-flag -number 8 first second third&quot;
-  * </tt>
 */
-public class CliSingleSample {
+public class SingleSample {
     public static void main(String[] args) throws IOException {
         Cli cli;
 
-        cli = Cli.single(CliSingleSample.class, "ignored -flag=true -number first remaining*");
+        cli = Cli.single(SingleSample.class, "ignored -flag=true -number first remaining*");
         System.exit(cli.run("first", "-number", "42"));
     }
 
@@ -40,7 +37,7 @@ public class CliSingleSample {
 
     private List<String> remaining;
 
-    public CliSingleSample(boolean flag, int number, String first, List<String> remaining) {
+    public SingleSample(boolean flag, int number, String first, List<String> remaining) {
         this.flag = flag;
         this.number = number;
         this.first = first;

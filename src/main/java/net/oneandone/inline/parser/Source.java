@@ -15,7 +15,7 @@
  */
 package net.oneandone.inline.parser;
 
-import net.oneandone.inline.util.Separator;
+import net.oneandone.inline.util.Split;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class Source {
         int last;
 
         result = new ArrayList<>();
-        for (String field : Separator.SPACE.split(syntax)) {
+        for (String field : Split.split(syntax)) {
             option = field.startsWith("-");
             if (option) {
                 name = field.substring(1);

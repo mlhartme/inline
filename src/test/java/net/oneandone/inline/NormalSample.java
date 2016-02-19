@@ -20,17 +20,14 @@ import java.util.List;
 
 /**
  * Cli example with two commands.
-  * <tt>
-  * mvn org.codehaus.mojo:exec-maven-plugin:1.2.1:java -Dexec.classpathScope=test -Dexec.mainClass=net.oneandone.inline.CliSample -Dexec.args=&quot;-flag -number 8 first second third&quot;
-  * </tt>
 */
-public class CliNormalSample {
+public class NormalSample {
     public static void main(String[] args) throws IOException {
         Cli cli;
 
         cli = Cli.create("demo help")
-                .add(FirstCommand.class,    "first -flag=false -number=7 first remaining*")
-                .add(SecondCommand.class,   "second");
+                .add(FirstCommand.class,   "first -flag=false -number=7 first remaining*")
+                .add(SecondCommand.class,  "second");
         System.exit(cli.run("first", "one", "two", "-v", "three"));
     }
 

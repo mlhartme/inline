@@ -1,7 +1,7 @@
 package net.oneandone.inline.parser;
 
 import net.oneandone.inline.types.Repository;
-import net.oneandone.inline.util.Separator;
+import net.oneandone.inline.util.Split;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,7 +14,7 @@ public class Mapping {
         int idx;
 
         result = new Mapping();
-        for (String item : Separator.SPACE.split(str)) {
+        for (String item : Split.split(str)) {
             idx = item.indexOf('=');
             if (idx != -1) {
                 result.addField(item.substring(idx + 1), clazz, item.substring(0, idx));

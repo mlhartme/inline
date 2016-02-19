@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  * A command line parser defined by option and value annotations taken from the command classes.
- * Running the parser instantiates one of the command classes.
+ * Running the parser instantiates one of the command classes and invokes a method.
  */
 public class Cli {
     public static Cli single(Class<?> command, String syntax) throws IOException {
