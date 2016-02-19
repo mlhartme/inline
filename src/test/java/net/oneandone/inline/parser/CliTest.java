@@ -18,6 +18,7 @@ package net.oneandone.inline.parser;
 import net.oneandone.inline.Cli;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +92,8 @@ public class CliTest {
         assertEquals(Color.BLUE, values.second);
         assertEquals("third", values.third);
         assertEquals(2, values.remaining.size());
-        assertEquals("forth", values.remaining.get(0));
-        assertEquals("fifth", values.remaining.get(1));
+        assertEquals(new File("forth"), values.remaining.get(0));
+        assertEquals(new File("fifth"), values.remaining.get(1));
     }
 
     @Test
@@ -177,7 +178,7 @@ public class CliTest {
         public int first;
         public Color second;
         public String third;
-        public List<String> remaining = new ArrayList<>();
+        public List<File> remaining = new ArrayList<>();
 
         public Values(int first) {
             this.first = first;
@@ -187,7 +188,7 @@ public class CliTest {
             this.third = third;
         }
 
-        public void remaining(String str) {
+        public void remaining(File str) {
             remaining.add(str);
         }
 

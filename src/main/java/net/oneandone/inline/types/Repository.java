@@ -15,8 +15,12 @@
  */
 package net.oneandone.inline.types;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -49,6 +53,17 @@ public class Repository {
                             throw new RuntimeException("unexpected string length: " + str.length());
                         }
                     });
+        register(File.class, "file name", new File("."), str -> new File(str));
+        register(URL.class, "url", url("http://localhost"), Repository::url);
+        register(URI.class, "uri", URI.create("http://localhost"), URI::create);
+    }
+
+    private static URL url(String str) {
+        try {
+            return new URL(str);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Type get(Class<?> clazz) {
