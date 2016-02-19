@@ -17,8 +17,6 @@ package net.oneandone.inline.util;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SwitchableWriter extends Writer {
     private final Writer dest;

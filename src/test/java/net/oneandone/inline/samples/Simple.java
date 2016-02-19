@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline;
+package net.oneandone.inline.samples;
+
+import net.oneandone.inline.Cli;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,11 +23,11 @@ import java.util.List;
 /**
  * Cli example with a single command.
 */
-public class SingleSample {
+public class Simple {
     public static void main(String[] args) throws IOException {
         Cli cli;
 
-        cli = Cli.single(SingleSample.class, "ignored -flag=true -number first remaining*");
+        cli = Cli.single(Simple.class, "ignored -flag=true -number first remaining*");
         System.exit(cli.run("first", "-number", "42"));
     }
 
@@ -37,7 +39,7 @@ public class SingleSample {
 
     private List<String> remaining;
 
-    public SingleSample(boolean flag, int number, String first, List<String> remaining) {
+    public Simple(boolean flag, int number, String first, List<String> remaining) {
         this.flag = flag;
         this.number = number;
         this.first = first;

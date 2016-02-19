@@ -1,8 +1,8 @@
 package net.oneandone.inline.parser;
 
+import net.oneandone.inline.types.ParseException;
 import net.oneandone.inline.types.Repository;
 import net.oneandone.inline.types.Type;
-import net.oneandone.inline.types.ParseException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

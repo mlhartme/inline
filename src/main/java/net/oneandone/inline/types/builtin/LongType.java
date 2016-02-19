@@ -15,8 +15,8 @@
  */
 package net.oneandone.inline.types.builtin;
 
-import net.oneandone.inline.types.Type;
 import net.oneandone.inline.types.ParseException;
+import net.oneandone.inline.types.Type;
 
 public class LongType extends Type {
     public LongType() {

@@ -1,6 +1,5 @@
-package net.oneandone.inline;
+package net.oneandone.inline.util;
 
-import net.oneandone.inline.util.Split;
 import org.junit.Test;
 
 import java.util.Arrays;

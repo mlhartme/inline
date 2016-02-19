@@ -31,7 +31,7 @@ public class CliTest {
         Cli cli;
 
         cli = Cli.create("").add(clazz, "foo " + syntax);
-        return cli.add("foo").getBuilder();
+        return cli.get("foo").getBuilder();
     }
 
     @Test

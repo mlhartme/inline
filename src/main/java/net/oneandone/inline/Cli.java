@@ -15,15 +15,15 @@
  */
 package net.oneandone.inline;
 
+import net.oneandone.inline.commands.Help;
+import net.oneandone.inline.commands.PackageVersion;
 import net.oneandone.inline.parser.ArgumentException;
 import net.oneandone.inline.parser.Command;
 import net.oneandone.inline.parser.Context;
 import net.oneandone.inline.parser.ContextBuilder;
 import net.oneandone.inline.parser.ExceptionHandler;
-import net.oneandone.inline.commands.Help;
 import net.oneandone.inline.parser.InvalidCliException;
 import net.oneandone.inline.parser.Mapping;
-import net.oneandone.inline.commands.PackageVersion;
 import net.oneandone.inline.types.Repository;
 
 import java.io.IOException;
@@ -33,8 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A command line parser defined by option and value annotations taken from the command classes.
- * Running the parser instantiates one of the command classes and invokes a method.
+ * A command line interface. Define available command with begin(), add() and end(). Then invoke run() to actually invoke them.
  */
 public class Cli {
     public static Cli single(Class<?> command, String syntax) throws IOException {
@@ -109,6 +108,7 @@ public class Cli {
     public Cli addDefault(Object classOrInstance, String definition) {
         return doAdd(classOrInstance, definition, true);
     }
+
     private Cli doAdd(Object clazzOrInstance, String definition, boolean dflt) {
         Context context;
         int idx;
@@ -185,7 +185,7 @@ public class Cli {
                         throw new ArgumentException("missing command");
                     }
                 } else {
-                    c = add(name);
+                    c = get(name);
                 }
                 obj = c.getBuilder().run(lst);
             }
@@ -208,7 +208,7 @@ public class Cli {
         return null;
     }
 
-    public Command add(String name) {
+    public Command get(String name) {
         Command result;
 
         result = lookup(name);
@@ -226,5 +226,4 @@ public class Cli {
         }
         return null;
     }
-
 }

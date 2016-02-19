@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline;
+package net.oneandone.inline.samples;
+
+import net.oneandone.inline.Cli;
+import net.oneandone.inline.Console;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +24,7 @@ import java.util.List;
 /**
  * Cli example with two commands.
 */
-public class NormalSample {
+public class Normal {
     public static void main(String[] args) throws IOException {
         Cli cli;
 

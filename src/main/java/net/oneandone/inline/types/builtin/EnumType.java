@@ -15,8 +15,8 @@
  */
 package net.oneandone.inline.types.builtin;
 
-import net.oneandone.inline.types.Type;
 import net.oneandone.inline.types.ParseException;
+import net.oneandone.inline.types.Type;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
