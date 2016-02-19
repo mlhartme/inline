@@ -1,4 +1,6 @@
-package net.oneandone.inline.cli;
+package net.oneandone.inline.commands;
+
+import net.oneandone.inline.Console;
 
 public class Help {
     private final Console console;

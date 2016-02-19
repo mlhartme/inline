@@ -1,4 +1,4 @@
-package net.oneandone.inline.cli;
+package net.oneandone.inline.parser;
 
 import net.oneandone.inline.types.Repository;
 

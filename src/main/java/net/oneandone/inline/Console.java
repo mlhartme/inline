@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.cli;
+package net.oneandone.inline;
 
+import net.oneandone.inline.parser.ArgumentException;
+import net.oneandone.inline.parser.ExceptionHandler;
 import net.oneandone.inline.util.SwitchableWriter;
 
 import java.io.InputStream;

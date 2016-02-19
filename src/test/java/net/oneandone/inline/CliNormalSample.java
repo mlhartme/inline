@@ -15,9 +15,6 @@
  */
 package net.oneandone.inline;
 
-import net.oneandone.inline.cli.Cli;
-import net.oneandone.inline.cli.Console;
-
 import java.io.IOException;
 import java.util.List;
 

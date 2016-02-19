@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.cli;
+package net.oneandone.inline.parser;
 
 import net.oneandone.inline.types.Repository;
 import org.junit.Test;
@@ -22,26 +22,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
-public class TargetMethodIteratedTest {
+public class TargetMethodTest {
     @Test
-    public void number() throws NoSuchMethodException {
+    public void bool() throws NoSuchMethodException {
         Target arg;
-        List<Long> lst;
 
-        arg = TargetMethod.create(true, new Repository(), getClass().getMethod("setInt", Long.TYPE));
+        arg = TargetMethod.create(false, new Repository(), getClass().getMethod("bool", Boolean.TYPE));
+        arg.doSet(this, true);
+        assertEquals(true, this.b);
+    }
+
+    @Test
+    public void lst() throws NoSuchMethodException {
+        Target arg;
+        List<Integer> lst;
+
         lst = new ArrayList<>();
-        lst.add((long) 1);
-        lst.add((long) 2);
+        lst.add(42);
+        arg = TargetMethod.create(false, new Repository(), getClass().getMethod("lst", List.class));
         arg.doSet(this, lst);
-        assertEquals(lst, values);
+        assertSame(lst, this.lst);
     }
 
     //--
     
-    private List<Long> values = new ArrayList<>();
+    private boolean b;
+    private List<Integer> lst;
     
-    public void setInt(long l) {
-        values.add(l);
+    public void bool(boolean b) {
+        this.b = b;
+    }
+
+    public void lst(List<Integer> lst) {
+        this.lst = lst;
     }
 }

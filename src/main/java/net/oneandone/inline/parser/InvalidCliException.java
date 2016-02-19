@@ -1,4 +1,4 @@
-package net.oneandone.inline.cli;
+package net.oneandone.inline.parser;
 
 /** Thrown when building the Cli. */
 public class InvalidCliException extends RuntimeException {

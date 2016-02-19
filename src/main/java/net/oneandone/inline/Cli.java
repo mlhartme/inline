@@ -13,8 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.cli;
+package net.oneandone.inline;
 
+import net.oneandone.inline.parser.ArgumentException;
+import net.oneandone.inline.parser.Command;
+import net.oneandone.inline.parser.Context;
+import net.oneandone.inline.parser.ContextBuilder;
+import net.oneandone.inline.parser.ExceptionHandler;
+import net.oneandone.inline.commands.Help;
+import net.oneandone.inline.parser.InvalidCliException;
+import net.oneandone.inline.parser.Mapping;
+import net.oneandone.inline.commands.PackageVersion;
 import net.oneandone.inline.types.Repository;
 
 import java.io.IOException;
@@ -51,8 +60,6 @@ public class Cli {
     }
 
     protected final Repository schema;
-    protected boolean exception;
-
     private final List<Command> commands;
     private Command defaultCommand;
     private Context currentContext;

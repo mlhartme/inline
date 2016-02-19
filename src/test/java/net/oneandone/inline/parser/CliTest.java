@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.cli;
+package net.oneandone.inline.parser;
 
+import net.oneandone.inline.Cli;
 import org.junit.Test;
 
 import java.util.ArrayList;
