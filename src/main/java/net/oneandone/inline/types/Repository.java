@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /** 
  * A set of Types. Initially, the set consists of simple types only. Complex types
@@ -32,12 +33,12 @@ public class Repository {
     
     public Repository() {
         map = new HashMap<>();
-        add(new Type(String.class, "string", "", str -> str));
-        add(new Type(Integer.class, "integer", 0, Integer::parseInt));
-        add(new Type(Long.class, "long integer", (long) 0, Long::parseLong));
-        add(new Type(Float.class, "float number", (float) 0, Float::parseFloat));
-        add(new Type(Double.class, "double", (double) 0, Double::parseDouble));
-        add(new Type(Boolean.class, "'true' or 'false'", false, str -> {
+        add(String.class, "string", "", str -> str);
+        add(Integer.class, "integer", 0, Integer::parseInt);
+        add(Long.class, "long integer", (long) 0, Long::parseLong);
+        add(Float.class, "float number", (float) 0, Float::parseFloat);
+        add(Double.class, "double", (double) 0, Double::parseDouble);
+        add(Boolean.class, "'true' or 'false'", false, str -> {
                         str = str.toLowerCase();
                         if ("true".equals(str)) {
                             return Boolean.TRUE;
@@ -46,15 +47,15 @@ public class Repository {
                         } else {
                             throw new RuntimeException("not a boolean");
                         }
-                    }));
-        add(new Type(Character.class, "single character", (char) 0,
+                    });
+        add(Character.class, "single character", (char) 0,
                     str -> {
                         if (str.length() == 1) {
                             return str.charAt(0);
                         } else {
                             throw new RuntimeException("unexpected string length: " + str.length());
                         }
-                    }));
+                    });
     }
 
     public Type get(Class<?> clazz) {
@@ -72,6 +73,10 @@ public class Repository {
             map.put(clazz, type);
         }
         return type;
+    }
+
+    public void add(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
+        add(new Type(clazz, expected, defaultValue, parser));
     }
 
     public void add(Type type) {
