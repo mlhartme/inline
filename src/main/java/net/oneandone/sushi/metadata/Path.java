@@ -15,8 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import net.oneandone.sushi.fs.Filesystem;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -170,13 +168,7 @@ public class Path {
     //--
 
     protected List<Step> steps() {
-        List<Step> result;
-
-        result = new ArrayList<>();
-        for (String step : Filesystem.SEPARATOR.split(path)) {
-            result.add(Step.parse(step));
-        }
-        return result;
+        return null; // TODO
     }
 
     protected static class Step {

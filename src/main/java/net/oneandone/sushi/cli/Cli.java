@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.metadata.Schema;
 import net.oneandone.sushi.metadata.reflect.ReflectSchema;
 
@@ -34,18 +33,18 @@ public class Cli {
         Console console;
         Cli cli;
 
-        console = Console.create(World.create());
-        cli = new Cli(console.world).begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
+        console = Console.create();
+        cli = new Cli().begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
         cli.add(command, syntax);
         return cli;
     }
 
-    public static Cli create(World world, String help) {
+    public static Cli create(String help) {
         Console console;
         Cli cli;
 
-        console = Console.create(world);
-        cli = new Cli(console.world)
+        console = Console.create();
+        cli = new Cli()
                 .begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }")
                    .addDefault(new Help(console, help), "help")
                    .add(PackageVersion.class, "version");
@@ -60,20 +59,15 @@ public class Cli {
     private Context currentContext;
     private ExceptionHandler exceptionHandler;
 
-    public Cli() throws IOException {
-        this(World.create());
-    }
-
-    public Cli(World world) {
-        this(world, new ReflectSchema(world));
+    public Cli() {
+        this(new ReflectSchema());
     }
     
-    public Cli(World world, Schema schema) {
+    public Cli(Schema schema) {
         this.schema = schema;
         this.commands = new ArrayList<>();
         this.currentContext = null;
         this.defaultCommand = null;
-        begin(world);
     }
 
     public Cli begin(Object context) {

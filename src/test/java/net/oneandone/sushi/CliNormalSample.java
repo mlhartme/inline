@@ -17,7 +17,6 @@ package net.oneandone.sushi;
 
 import net.oneandone.sushi.cli.Cli;
 import net.oneandone.sushi.cli.Console;
-import net.oneandone.sushi.fs.World;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +31,7 @@ public class CliNormalSample {
     public static void main(String[] args) throws IOException {
         Cli cli;
 
-        cli = Cli.create(World.create(), "demo help")
+        cli = Cli.create("demo help")
                 .add(FirstCommand.class,    "first -flag=false -number=7 first remaining*")
                 .add(SecondCommand.class,   "second");
         System.exit(cli.run("first", "one", "two", "-v", "three"));

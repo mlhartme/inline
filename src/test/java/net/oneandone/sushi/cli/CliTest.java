@@ -15,8 +15,6 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.fs.World;
-import net.oneandone.sushi.fs.file.FileNode;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -28,12 +26,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class CliTest {
-    private static final World WORLD = World.createMinimal();
-
     private static ContextBuilder parser(Class<?> clazz, String syntax) {
         Cli cli;
 
-        cli = Cli.create(WORLD, "").add(clazz, "foo " + syntax);
+        cli = Cli.create("").add(clazz, "foo " + syntax);
         return cli.add("foo").getBuilder();
     }
 
@@ -86,16 +82,16 @@ public class CliTest {
         values = (Values) parser.run("1", "second", "third");
         assertEquals(1, values.first);
         assertEquals("second", values.second);
-        assertEquals("third", values.third.getName());
+        assertEquals("third", values.third);
         assertEquals(0, values.remaining.size());
 
         values = (Values) parser.run("2", "second", "third", "forth", "fifth");
         assertEquals(2, values.first);
         assertEquals("second", values.second);
-        assertEquals("third", values.third.getName());
+        assertEquals("third", values.third);
         assertEquals(2, values.remaining.size());
-        assertEquals(WORLD.file("forth"), values.remaining.get(0));
-        assertEquals(WORLD.file("fifth"), values.remaining.get(1));
+        assertEquals("forth", values.remaining.get(0));
+        assertEquals("fifth", values.remaining.get(1));
     }
 
     @Test
@@ -156,7 +152,7 @@ public class CliTest {
         Cli cli;
 
         lastWithContext = null;
-        cli = Cli.create(WORLD, "no help text");
+        cli = Cli.create("no help text");
         cli.begin(Values.class, "first")
                 .add(WithContext.class, "cmd l")
            .end();
@@ -175,18 +171,18 @@ public class CliTest {
     public static class Values {
         public int first;
         public String second;
-        public FileNode third;
-        public List<FileNode> remaining = new ArrayList<>();
+        public String third;
+        public List<String> remaining = new ArrayList<>();
 
         public Values(int first) {
             this.first = first;
         }
 
-        public void third(FileNode third) {
+        public void third(String third) {
             this.third = third;
         }
 
-        public void remaining(FileNode str) {
+        public void remaining(String str) {
             remaining.add(str);
         }
 

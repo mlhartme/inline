@@ -15,8 +15,6 @@
  */
 package net.oneandone.sushi.io;
 
-import net.oneandone.sushi.fs.Node;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,21 +119,7 @@ public class Buffer {
 
     //--
 
-    /** 
-     * Copies all bytes.
-     * 
-     * @return number of bytes actually copied
-     */
-    public long copy(InputStream in, Node dest) throws IOException {
-        long result;
-
-        try (OutputStream out = dest.newOutputStream()) {
-            result = copy(in, out);
-        }
-        return result;
-    }
-    
-    /** 
+    /**
      * Copies all bytes.
      * 
      * @return number of bytes actually copied

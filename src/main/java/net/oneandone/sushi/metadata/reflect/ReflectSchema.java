@@ -15,11 +15,9 @@
  */
 package net.oneandone.sushi.metadata.reflect;
 
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.metadata.ComplexType;
 import net.oneandone.sushi.metadata.Item;
 import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.simpletypes.FileNodeType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -27,11 +25,6 @@ import java.util.Collection;
 
 public class ReflectSchema extends Schema {
     public ReflectSchema() {
-    }
-
-    public ReflectSchema(World world) {
-        this();
-        add(new FileNodeType(this, world));
     }
 
     @Override

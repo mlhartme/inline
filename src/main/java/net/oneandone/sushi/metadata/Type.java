@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.metadata.properties.LoadException;
 import net.oneandone.sushi.metadata.xml.Loader;
 import net.oneandone.sushi.metadata.xml.LoaderException;
@@ -93,13 +92,6 @@ public abstract class Type {
     }
     
     //--
-
-    public <T> Instance<T> loadXml(Node node) throws IOException, LoaderException {
-        // TODO: use stream instead!?
-        try (Reader src = node.newReader()) {
-            return loadXml(node.getURI().toString(), src);
-        }
-    }
 
     public <T> Instance<T> loadXml(String systemId, Reader src) throws IOException, LoaderException {
         InputSource input;

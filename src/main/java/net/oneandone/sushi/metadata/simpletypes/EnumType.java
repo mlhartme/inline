@@ -20,7 +20,6 @@ import net.oneandone.sushi.metadata.SimpleType;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.util.Reflect;
-import net.oneandone.sushi.xml.Serializer;
 
 import java.util.Set;
 
@@ -81,7 +80,7 @@ public class EnumType extends SimpleType {
         dest.append("  <xs:simpleType name='").append(getName()).append("'>\n");
         dest.append("    <xs:restriction base='xs:string' >\n");
         for (Enum e : values) {
-            dest.append("    <xs:enumeration value='").append(Serializer.escapeEntities(normalizeEnum(e.toString()), true)).append("'/>\n");
+            dest.append("    <xs:enumeration value='").append("").append("'/>\n");
         }
         dest.append("    </xs:restriction>\n");
         dest.append("  </xs:simpleType>\n");

@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.metadata.reflect.ReflectSchema;
 import org.junit.Test;
 
@@ -30,7 +29,7 @@ public class TargetMethodIteratedTest {
         Target arg;
         List<Long> lst;
 
-        arg = TargetMethod.create(true, new ReflectSchema(World.createMinimal()), getClass().getMethod("setInt", Long.TYPE));
+        arg = TargetMethod.create(true, new ReflectSchema(), getClass().getMethod("setInt", Long.TYPE));
         lst = new ArrayList<>();
         lst.add((long) 1);
         lst.add((long) 2);

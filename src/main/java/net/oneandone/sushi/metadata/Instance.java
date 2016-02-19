@@ -15,11 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import net.oneandone.sushi.csv.Csv;
-import net.oneandone.sushi.csv.View;
-import net.oneandone.sushi.fs.Node;
-import net.oneandone.sushi.fs.NodeWriter;
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.metadata.properties.Saver;
 import net.oneandone.sushi.metadata.xml.DomTree;
 import net.oneandone.sushi.metadata.xml.LoaderException;
@@ -56,21 +51,7 @@ public class Instance<T> {
     
     @Override
     public Instance<T> clone() {
-        Type type;
-        StringWriter tmp;
-        World world;
-
-        world = World.createMinimal(); // TODO
-        type = getType();
-        tmp = new StringWriter();
-        try {
-            toXml(tmp);
-            return type.loadXml(world.memoryNode(tmp.getBuffer().toString()));
-        } catch (LoaderException e) {
-            throw new RuntimeException("invalid!?", e);
-        } catch (IOException e) {
-            throw new RuntimeException("world exception from memory!?", e);
-        }
+        throw new IllegalStateException("TODO");
     }
 
     @Override
@@ -102,15 +83,6 @@ public class Instance<T> {
         return writer.toString();
     }
 
-    public void toXml(Node dest) throws IOException {
-        try (NodeWriter writer = dest.newWriter()) {
-            writer.write("<?xml version='1.0' encoding='");
-            writer.write(writer.getEncoding());
-            writer.write("'?>\n");
-            toXml(writer);
-        }
-    }
-    
     public void toXml(Element parent) throws IOException {
         serialize(new DomTree(parent), Item.xmlName(type.getName()));
     }
@@ -145,15 +117,4 @@ public class Instance<T> {
         Saver.run(getType(), get(), name, props);
     }
     
-    public void exportCsv(View view, Csv dest, String ... selection) {
-        exportCsv(view, dest, Arrays.asList(selection));
-    }
-
-    public void exportCsv(View view, Csv dest, List<String> selection) {
-        view.toCsv(this, dest, selection);
-    }
-
-    public void importCsv(View view, Csv csv) throws SimpleTypeException {
-        view.fromCsv(csv,  this);
-    }
 }

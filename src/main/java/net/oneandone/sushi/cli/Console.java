@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.io.InputLogStream;
 import net.oneandone.sushi.io.MultiOutputStream;
 import net.oneandone.sushi.io.MultiWriter;
@@ -29,18 +28,17 @@ import java.util.Scanner;
  * Configurable replacement for System.out, System.err and System.in. 
  */
 public class Console implements ExceptionHandler {
-    public static Console create(World world) {
-        return new Console(world, new PrintWriter(System.out, true), new PrintWriter(System.err, true), System.in);
+    public static Console create() {
+        return new Console(new PrintWriter(System.out, true), new PrintWriter(System.err, true), System.in);
     }
 
-    public static Console create(World world, final OutputStream log) {
-        return new Console(world,
+    public static Console create(OutputStream log) {
+        return new Console(
                 new PrintWriter(MultiOutputStream.createTeeStream(System.out, log), true),
                 new PrintWriter(MultiOutputStream.createTeeStream(System.err, log), true),
                 new InputLogStream(System.in, log));
     }
     
-    public final World world;
     public final PrintWriter info;
     public final PrintWriter verbose;
     public final PrintWriter error;
@@ -49,8 +47,7 @@ public class Console implements ExceptionHandler {
     
     private final MultiWriter verboseSwitch;
     
-    public Console(World world, PrintWriter info, PrintWriter error, InputStream in) {
-        this.world = world;
+    public Console(PrintWriter info, PrintWriter error, InputStream in) {
         this.info = info;
         this.verboseSwitch = MultiWriter.createNullWriter();
         this.verbose = new PrintWriter(verboseSwitch, true);

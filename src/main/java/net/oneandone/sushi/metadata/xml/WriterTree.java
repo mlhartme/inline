@@ -94,7 +94,6 @@ public class WriterTree extends Tree {
         dest.write(name);
         type(typeAttribute);
         dest.write('>');
-        dest.write(net.oneandone.sushi.xml.Serializer.escapeEntities(text, strict));
         dest.write("</");
         dest.write(name);
         dest.write('>');

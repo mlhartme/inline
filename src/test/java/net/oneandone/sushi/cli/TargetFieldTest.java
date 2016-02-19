@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.metadata.reflect.ReflectSchema;
 import org.junit.Test;
 
@@ -32,8 +31,7 @@ public class TargetFieldTest {
     private void check(String expected) {
         TargetField arg;
         
-        arg = TargetField.create(
-                new ReflectSchema(World.createMinimal()), getField("fld"));
+        arg = TargetField.create(new ReflectSchema(), getField("fld"));
         arg.doSet(this, expected);
         assertEquals(expected, fld);
     }

@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.xml;
 
-import net.oneandone.sushi.fs.Node;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -43,23 +42,6 @@ import java.util.logging.Logger;
 public class Factories {
     private static final Logger LOG = Logger.getLogger(Factories.class.getName());
     
-    public static SAXParser saxParser(Node schema) throws IOException {
-        SAXParserFactory factory;
-        SAXParser parser;
-        
-        factory = sax();
-        factory.setValidating(true);
-        factory.setNamespaceAware(false);
-        try {
-            parser = factory.newSAXParser();
-            parser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-            parser.setProperty(JAXP_SCHEMA_SOURCE, new ByteArrayInputStream(schema.readBytes()));
-            return parser;
-        } catch (ParserConfigurationException | SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static SAXParser saxParser() {
         SAXParserFactory factory;
         
@@ -77,45 +59,6 @@ public class Factories {
         return SAXParserFactory.newInstance();
     }
 
-    
-    public static DocumentBuilderFactory document(Node schema) throws IOException, SAXException {
-        DocumentBuilderFactory factory;
-        Throwable throwable;
-        
-        factory = document();
-        try {
-            setJaxp13Validating(factory, schema);
-            throwable = null;
-        } catch (UnsupportedOperationException | Error e) {
-            throwable = e;
-        }
-        if (throwable != null) {
-            LOG.log(Level.FINEST, factory.getClass().getName() + ": JAXP 1.3 validation failed, using 1.2", throwable);
-            setJaxp12Validating(factory, schema);
-        }
-        return factory;
-    }
-
-    private static void setJaxp13Validating(DocumentBuilderFactory factory, Node schema) throws IOException, SAXException {
-        SchemaFactory sf;
-        Source src;
-        
-        sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        src = new StreamSource(schema.newInputStream());
-        factory.setSchema(sf.newSchema(src));
-    }
-
-    private static void setJaxp12Validating(DocumentBuilderFactory factory, Node schema) throws IOException {
-        factory.setNamespaceAware(true);
-        factory.setValidating(true);
-        try {
-            factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-        } catch (IllegalArgumentException x) {
-            throw new RuntimeException(factory.getClass().getName() + ": parser does not support JAXP 1.2", x);
-        }
-        factory.setAttribute(JAXP_SCHEMA_SOURCE, new ByteArrayInputStream(schema.readBytes()));
-        
-    }
     public static DocumentBuilderFactory document() {
         return DocumentBuilderFactory.newInstance(); 
     }

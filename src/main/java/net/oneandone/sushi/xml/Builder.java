@@ -44,11 +44,6 @@ public class Builder {
         this.builder = createDocumentBuilder();
     }
 
-    /** Create a validating builder */
-    public Builder(net.oneandone.sushi.fs.Node schema) throws IOException, SAXException {
-        this.builder = createValidatingDocumentBuilder(schema);
-    }
-
     /** This method is not called "parse" to avoid confusion with file parsing methods */
     public Document parseString(String text) throws SAXException {
         try {
@@ -67,17 +62,6 @@ public class Builder {
         }
     }
 
-    public Document parse(net.oneandone.sushi.fs.Node node) throws SAXException, IOException {
-        InputSource src;
-
-        try (InputStream stream = node.newInputStream()) {
-            src = new InputSource();
-            src.setSystemId(node.toString());
-            src.setByteStream(stream);
-            return parse(src);
-        }
-    }
-    
     public Document parse(Reader reader) throws SAXException, IOException {
         return parse(new InputSource(reader));
     }
@@ -200,24 +184,6 @@ public class Builder {
         }
         result.setErrorHandler(ERROR_HANDLER);
         return result;
-    }
-
-    public static DocumentBuilder createValidatingDocumentBuilder(net.oneandone.sushi.fs.Node schema) throws IOException, SAXException {
-        DocumentBuilderFactory factory;
-        DocumentBuilder builder;
-
-        factory = Factories.document(schema);
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-        builder.setErrorHandler(ERROR_HANDLER);
-        return builder;
-    }
-
-    public static SAXParser createValidatingSAXParser(net.oneandone.sushi.fs.Node schema) throws IOException {
-        return Factories.saxParser(schema);
     }
 
     public static SAXParser createSAXParser() {
