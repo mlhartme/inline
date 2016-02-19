@@ -45,7 +45,7 @@ public abstract class Type {
     }
 
     /** throws an SimpleTypeException to indicate a parsing problem */
-    public abstract Object stringToValue(String str) throws SimpleTypeException;
+    public abstract Object parse(String str) throws ParseException;
 
     public Class<?> getRawType() {
         return rawType;

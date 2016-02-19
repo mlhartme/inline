@@ -2,7 +2,7 @@ package net.oneandone.sushi.cli;
 
 import net.oneandone.sushi.metadata.Schema;
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -57,8 +57,8 @@ public abstract class Target {
         return !list && (component.getRawType().equals(Boolean.TYPE) || component.getRawType().equals(Boolean.class));
     }
 
-    public Object stringToComponent(String str) throws SimpleTypeException {
-        return component.stringToValue(str);
+    public Object stringToComponent(String str) throws ParseException {
+        return component.parse(str);
     }
 
     public Object newComponent() {

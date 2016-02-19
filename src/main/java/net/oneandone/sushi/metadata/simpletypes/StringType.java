@@ -28,7 +28,7 @@ public class StringType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) {
+    public Object parse(String str) {
         return str;
     }
 }

@@ -16,7 +16,7 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 public class BooleanType extends Type {
     public BooleanType() {
@@ -29,7 +29,7 @@ public class BooleanType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) throws SimpleTypeException {
+    public Object parse(String str) throws ParseException {
         // TODO: because oocalc turns them to upper case
         str = str.toLowerCase();
         if ("true".equals(str)) {
@@ -37,7 +37,7 @@ public class BooleanType extends Type {
         } else if ("false".equals(str)) {
             return Boolean.FALSE;
         } else {
-            throw new SimpleTypeException("expected true or false, got " + str + ".");
+            throw new ParseException("expected true or false, got " + str + ".");
         }
     }
 }

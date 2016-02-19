@@ -16,7 +16,7 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 public class IntType extends Type {
     public IntType() {
@@ -29,11 +29,11 @@ public class IntType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) throws SimpleTypeException {
+    public Object parse(String str) throws ParseException {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            throw new SimpleTypeException("expected integer, got '" + str + "'", e);
+            throw new ParseException("expected integer, got '" + str + "'", e);
         }
     }
 }

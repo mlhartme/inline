@@ -28,7 +28,7 @@ public class CharacterType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) {
+    public Object parse(String str) {
         return str.charAt(0); // TODO
     }
 }

@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class Argument {
             for (String str : actual) {
                 try {
                     lst.add(target.stringToComponent(str));
-                } catch (SimpleTypeException e) {
+                } catch (ParseException e) {
                     throw new ArgumentException("invalid argument " + source.getName() + ": " + e.getMessage());
                 }
             }
@@ -55,14 +55,14 @@ public class Argument {
                 } else {
                     try {
                         value = target.stringToComponent(d);
-                    } catch (SimpleTypeException e) {
+                    } catch (ParseException e) {
                         throw new IllegalArgumentException("cannot convert default value to type " + target + ": " + d);
                     }
                 }
             } else {
                 try {
                     value = target.stringToComponent(actual.get(0));
-                } catch (SimpleTypeException e) {
+                } catch (ParseException e) {
                     throw new ArgumentException("invalid argument " + source.getName() + ": " + e.getMessage());
                 }
             }

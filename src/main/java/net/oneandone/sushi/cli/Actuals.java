@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class Actuals {
         return value.size() == formal.source.max();
     }
 
-    public void save(Context context, Object target) throws SimpleTypeException {
+    public void save(Context context, Object target) throws ParseException {
         Argument argument;
 
         for (Map.Entry<Argument, List<String>> entry : actuals.entrySet()) {

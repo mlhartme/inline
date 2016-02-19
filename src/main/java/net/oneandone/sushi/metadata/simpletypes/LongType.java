@@ -16,7 +16,7 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 public class LongType extends Type {
     public LongType() {
@@ -29,11 +29,11 @@ public class LongType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) throws SimpleTypeException {
+    public Object parse(String str) throws ParseException {
         try {
             return Long.parseLong(str);
         } catch (NumberFormatException e) {
-            throw new SimpleTypeException("number expected, got '" + str + "'");
+            throw new ParseException("number expected, got '" + str + "'");
         }            
     }
 }

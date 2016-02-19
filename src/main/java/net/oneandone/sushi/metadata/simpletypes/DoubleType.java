@@ -16,7 +16,7 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 public class DoubleType extends Type {
     public DoubleType() {
@@ -29,11 +29,11 @@ public class DoubleType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) throws SimpleTypeException {
+    public Object parse(String str) throws ParseException {
         try {
             return Double.parseDouble(str);
         } catch (NumberFormatException e) {
-            throw new SimpleTypeException("number expected, got '" + str + "'");
+            throw new ParseException("number expected, got '" + str + "'");
         }            
     }
 }

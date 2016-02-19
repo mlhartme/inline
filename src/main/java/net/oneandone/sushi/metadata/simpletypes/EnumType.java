@@ -16,7 +16,7 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.metadata.SimpleTypeException;
+import net.oneandone.sushi.metadata.ParseException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -56,7 +56,7 @@ public class EnumType extends Type {
     }
 
     @Override
-    public Object stringToValue(String str) throws SimpleTypeException {
+    public Object parse(String str) throws ParseException {
         StringBuilder msg;
         String name;
         
@@ -71,7 +71,7 @@ public class EnumType extends Type {
             msg.append(name);
             msg.append('\'');
         }
-        throw new SimpleTypeException("unknown value '" + str + "', expected one of" + msg);
+        throw new ParseException("unknown value '" + str + "', expected one of" + msg);
     }
 
     private static String normalizeEnum(String value) {

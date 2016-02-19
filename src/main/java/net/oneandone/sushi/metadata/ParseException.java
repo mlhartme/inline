@@ -16,13 +16,13 @@
 package net.oneandone.sushi.metadata;
 
 /** Indicates a problem creating a simple type from a String */
-public class SimpleTypeException extends Exception {
+public class ParseException extends Exception {
     private static final long serialVersionUID = 0;
 
-    public SimpleTypeException(String msg) {
+    public ParseException(String msg) {
         super(msg);
     }
-    public SimpleTypeException(String msg, Throwable cause) {
+    public ParseException(String msg, Throwable cause) {
         this(msg);
         initCause(cause);
     }
