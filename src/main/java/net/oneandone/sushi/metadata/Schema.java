@@ -56,10 +56,6 @@ public class Schema {
         add(new ClassType(this));
         add(new MethodType(this));
     }
-    
-    public ComplexType complex(Class<?> clazz) {
-        return (ComplexType) type(clazz);
-    }
 
     public SimpleType simple(Class<?> clazz) {
         return (SimpleType) type(clazz);

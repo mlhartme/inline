@@ -16,7 +16,6 @@
 package net.oneandone.sushi.cli;
 
 import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.reflect.ReflectSchema;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -60,7 +59,7 @@ public class Cli {
     private ExceptionHandler exceptionHandler;
 
     public Cli() {
-        this(new ReflectSchema());
+        this(new Schema());
     }
     
     public Cli(Schema schema) {
