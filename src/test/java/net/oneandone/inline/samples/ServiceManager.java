@@ -12,8 +12,8 @@ public class ServiceManager {
 
         cli = Cli.create("usage:\n"
                 + "list            list available services\n"
-                + "<name> start    starts the specified service\n"
-                + "<name> stop     stop the specified service\n");
+                + "start <name>    starts the specified service\n"
+                + "stop <name>     stop the specified service\n");
 
         cli.add(Ls.class, "list");
         cli.begin(Service.class, "service" );
@@ -21,8 +21,8 @@ public class ServiceManager {
           cli.add(Stop.class, "stop");
 
         cli.run("list");
-        cli.run("apache", "start");
-        cli.run("apache", "stop");
+        cli.run("start", "apache");
+        cli.run("stop", "apache");
     }
 
     public static final String[] AVAILABLE = { "apache", "tomcat"};
