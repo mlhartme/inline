@@ -15,16 +15,45 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
 import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
-import net.oneandone.sushi.util.Reflect;
+import net.oneandone.sushi.util.Strings;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class EnumType extends Type {
     public static EnumType create(Class<? extends Enum> clazz) {
-        return new EnumType(clazz, Schema.typeName(clazz), Reflect.getValues(clazz));
+        return new EnumType(clazz, typeName(clazz), getValues(clazz));
     }
+
+    public static <T extends Enum<?>> T[] getValues(Class<T> clazz) {
+        Method m;
+
+        try {
+            m = clazz.getDeclaredMethod("values");
+        } catch (SecurityException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        m.setAccessible(true);
+        try {
+            return (T[]) m.invoke(null);
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String typeName(Class<?> clazz) {
+        String name;
+
+        name = clazz.getName();
+        name = name.substring(name.lastIndexOf(".") + 1); // ok for -1
+        // simplify inner class names ...
+        name = name.substring(name.indexOf('$') + 1); // ok for -1
+        return Strings.decapitalize(name);
+    }
+
 
     private final Enum[] values;
     

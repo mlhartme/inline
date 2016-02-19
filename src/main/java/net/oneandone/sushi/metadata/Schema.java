@@ -23,10 +23,13 @@ import net.oneandone.sushi.metadata.simpletypes.FloatType;
 import net.oneandone.sushi.metadata.simpletypes.IntType;
 import net.oneandone.sushi.metadata.simpletypes.LongType;
 import net.oneandone.sushi.metadata.simpletypes.StringType;
-import net.oneandone.sushi.util.Reflect;
 import net.oneandone.sushi.util.Strings;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** 
@@ -52,7 +55,7 @@ public class Schema {
         Type type;
         
         if (clazz.isPrimitive()) {
-            clazz = Reflect.getWrapper(clazz);
+            clazz = getWrapper(clazz);
         }
         type = map.get(clazz);
         if (type == null) {
@@ -70,13 +73,24 @@ public class Schema {
         map.put(type.getRawType(), type);
     }
     
-    public static String typeName(Class<?> clazz) {
-        String name;
-        
-        name = clazz.getName();
-        name = name.substring(name.lastIndexOf(".") + 1); // ok for -1
-        // simplify inner class names ... 
-        name = name.substring(name.indexOf('$') + 1); // ok for -1
-        return Strings.decapitalize(name);
+    //--
+
+    private static final List<?> PRIMITIVE_TYPES = Arrays.asList(
+            Void.TYPE, Boolean.TYPE, Byte.TYPE, Character.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE
+    );
+
+    private static final List<?> WRAPPER_TYPES = Arrays.asList(
+            Void.class, Boolean.class, Byte.class, Character.class, Integer.class, Long.class, Float.class, Double.class
+    );
+
+    public static Class<?> getWrapper(Class<?> primitive) {
+        int idx;
+
+        idx = PRIMITIVE_TYPES.indexOf(primitive);
+        if (idx == -1) {
+            return null;
+        } else {
+            return (Class<?>) WRAPPER_TYPES.get(idx);
+        }
     }
 }
