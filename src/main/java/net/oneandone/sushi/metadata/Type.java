@@ -15,9 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import net.oneandone.sushi.metadata.properties.LoadException;
-import net.oneandone.sushi.metadata.xml.Loader;
-import net.oneandone.sushi.metadata.xml.LoaderException;
 import org.xml.sax.InputSource;
 
 import java.io.IOException;
@@ -93,37 +90,6 @@ public abstract class Type {
     
     //--
 
-    public <T> Instance<T> loadXml(String systemId, Reader src) throws IOException, LoaderException {
-        InputSource input;
-        
-        input = new InputSource(src);
-        input.setSystemId(systemId);
-        return loadXml(input);
-    }
-
-    public <T> Instance<T> loadXml(InputSource src) throws IOException, LoaderException {
-        Loader loader;
-        T obj;
-        
-        loader = Loader.create(this);
-        obj = (T) loader.run(src);
-        return instance(obj);
-    }
-
-    public <T> Instance<T> loadProperties(Properties props) throws LoadException {
-        return loadProperties(props, "");
-    }
-
-    public <T> Instance<T> loadProperties(Properties props, String name) throws LoadException {
-        T obj;
-        
-        obj = (T) net.oneandone.sushi.metadata.properties.Loader.run(props, this, name);
-        return instance(obj);
-    }
-    
-    //--
-
-    
     public List<Type> closure() {
         List<Type> result;
         ComplexType complex;

@@ -15,22 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import net.oneandone.sushi.metadata.properties.Saver;
-import net.oneandone.sushi.metadata.xml.DomTree;
-import net.oneandone.sushi.metadata.xml.LoaderException;
-import net.oneandone.sushi.metadata.xml.Serializer;
-import net.oneandone.sushi.metadata.xml.Tree;
-import net.oneandone.sushi.metadata.xml.WriterTree;
-import org.w3c.dom.Element;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
 /** Some object and its type. TODO: toCsv, fromCsv. */
 public class Instance<T> {
     private final Type type;
@@ -54,11 +38,6 @@ public class Instance<T> {
         throw new IllegalStateException("TODO");
     }
 
-    @Override
-    public String toString() {
-        return toXml();
-    }
-    
     public String valueToString() {
         Type type;
         
@@ -68,52 +47,4 @@ public class Instance<T> {
         }
         return ((SimpleType) type).valueToString(get());
     }
-
-    //--
-
-    public String toXml() {
-        StringWriter writer;
-        
-        writer = new StringWriter();
-        try {
-            toXml(writer);
-        } catch (IOException e) {
-            throw new RuntimeException("unexected", e);
-        }
-        return writer.toString();
-    }
-
-    public void toXml(Element parent) throws IOException {
-        serialize(new DomTree(parent), Item.xmlName(type.getName()));
-    }
-    
-    public void toXml(Writer dest) throws IOException {
-    }
-
-    private void serialize(Tree tree, String name) throws IOException {
-        Object root;
-        List<Object> ids;
-        
-        root = get();
-        ids = Serializer.ids(type, root);
-        new Serializer(tree, ids).run(name, type, root);
-        tree.done();
-    }
-
-    public Properties toProperties() {
-        return toProperties("");
-    }
-
-    public Properties toProperties(String name) {
-        Properties props;
-        
-        props = new Properties();
-        toMap(props, name);
-        return props;
-    }
-
-    public void toMap(Map<Object, Object> props, String name) {
-        Saver.run(getType(), get(), name, props);
-    }
-    
 }
