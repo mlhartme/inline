@@ -88,50 +88,45 @@ public class Repository {
 
     public static class BooleanType extends Type {
         public BooleanType() {
-            super(Boolean.class, false);
+            super(Boolean.class, "'true' or 'false'", false);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
-            // TODO: because oocalc turns them to upper case
+        public Object doParse(String str) throws ParseException {
             str = str.toLowerCase();
             if ("true".equals(str)) {
                 return Boolean.TRUE;
             } else if ("false".equals(str)) {
                 return Boolean.FALSE;
             } else {
-                throw new ParseException("expected true or false, got " + str + ".");
+                throw new ParseException("not a boolean");
             }
         }
     }
 
     public static class CharacterType extends Type {
         public CharacterType() {
-            super(Character.class, (char) 0);
+            super(Character.class, "single character", (char) 0);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
+        public Object doParse(String str) throws ParseException {
             if (str.length() == 1) {
                 return str.charAt(0);
             } else {
-                throw new ParseException("single character expected, got '" + str + "'");
+                throw new RuntimeException("unexpected string length: " + str.length());
             }
         }
     }
 
     public static class DoubleType extends Type {
         public DoubleType() {
-            super(Double.class, (double) 0);
+            super(Double.class, "double", (double) 0);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
-            try {
+        public Object doParse(String str) throws NumberFormatException {
                 return Double.parseDouble(str);
-            } catch (NumberFormatException e) {
-                throw new ParseException("number expected, got '" + str + "'");
-            }
         }
     }
 
@@ -159,27 +154,43 @@ public class Repository {
         private final Enum[] values;
 
         public EnumType(Class<?> clazz, Enum[] values) {
-            super(clazz, values[0]);
+            super(clazz, expected(values), values[0]);
             this.values = values;
         }
 
-        @Override
-        public Object parse(String str) throws ParseException {
+        private static String expected(Enum[] values) {
             StringBuilder msg;
+            Enum e;
+
+            msg = new StringBuilder();
+            for (int i = 0; i < values.length; i++) {
+                e = values[i];
+                if (i == 0) {
+                    // nothing
+                } else if (i == values.length - 1) {
+                    msg.append(" or ");
+                } else {
+                    msg.append(", ");
+                }
+                msg.append("'");
+                msg.append(normalizeEnum(e.name()));
+                msg.append('\'');
+            }
+            return msg.toString();
+        }
+
+        @Override
+        public Object doParse(String str) throws ParseException {
             String name;
 
             str = normalizeEnum(str);
-            msg = new StringBuilder();
             for (Enum e : values) {
                 name = normalizeEnum(e.name());
                 if (name.equals(str)) {
                     return e;
                 }
-                msg.append(" '");
-                msg.append(name);
-                msg.append('\'');
             }
-            throw new ParseException("unknown value '" + str + "', expected one of" + msg);
+            throw new RuntimeException();
         }
 
         private static String normalizeEnum(String value) {
@@ -190,56 +201,44 @@ public class Repository {
 
     public static class FloatType extends Type {
         public FloatType() {
-            super(Float.class, (float) 0);
+            super(Float.class, "float number", (float) 0);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
-            try {
-                return Float.parseFloat(str);
-            } catch (NumberFormatException e) {
-                throw new ParseException("number expected, got '" + str + "'");
-            }
+        public Object doParse(String str) throws NumberFormatException {
+            return Float.parseFloat(str);
         }
     }
 
     public static class IntType extends Type {
         public IntType() {
-            super(Integer.class, 0);
+            super(Integer.class, "integer", 0);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
-            try {
-                return Integer.parseInt(str);
-            } catch (NumberFormatException e) {
-                throw new ParseException("expected integer, got '" + str + "'", e);
-            }
+        public Object doParse(String str) throws NumberFormatException {
+            return Integer.parseInt(str);
         }
     }
 
     public static class LongType extends Type {
         public LongType() {
-            super(Long.class, (long) 0);
+            super(Long.class, "long integer", (long) 0);
         }
 
         @Override
-        public Object parse(String str) throws ParseException {
-            try {
-                return Long.parseLong(str);
-            } catch (NumberFormatException e) {
-                throw new ParseException("number expected, got '" + str + "'");
-            }
+        public Object doParse(String str) throws NumberFormatException {
+            return Long.parseLong(str);
         }
     }
 
     public static class StringType extends Type {
         public StringType() {
-            super(String.class, "");
+            super(String.class, "string", "");
         }
 
         @Override
-        public Object parse(String str) {
+        public Object doParse(String str) {
             return str;
         }
     }

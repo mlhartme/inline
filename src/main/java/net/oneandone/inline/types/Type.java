@@ -20,9 +20,10 @@ import java.util.Collection;
 
 public abstract class Type {
     protected final Class<?> raw;
+    private final String expected;
     private final Object defaultValue;
 
-    public Type(java.lang.reflect.Type raw, Object dflt) {
+    public Type(java.lang.reflect.Type raw, String expected, Object dflt) {
         if (raw instanceof Class) {
             this.raw = (Class) raw;
         } else {
@@ -41,11 +42,19 @@ public abstract class Type {
         if (Collection.class.isAssignableFrom(this.raw)) {
             throw new IllegalArgumentException(this.raw.getName());
         }
+        this.expected = expected;
         this.defaultValue = dflt;
     }
 
     /** throws an SimpleTypeException to indicate a parsing problem */
-    public abstract Object parse(String str) throws ParseException;
+    public Object parse(String str) throws ParseException {
+        try {
+            return doParse(str);
+        } catch (RuntimeException e) {
+            throw new ParseException("expected " + expected + ", got '" + str + "'");
+        }
+    }
+    public abstract Object doParse(String str) ;
 
     public Class<?> getRawType() {
         return raw;
