@@ -29,11 +29,6 @@ public class FloatType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return obj.toString();
-    }
-    
-    @Override
     public Object stringToValue(String str) throws SimpleTypeException {
         try {
             return Float.parseFloat(str);

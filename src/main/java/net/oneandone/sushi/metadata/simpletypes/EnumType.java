@@ -39,11 +39,6 @@ public class EnumType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return normalizeEnum(obj.toString());
-    }
-    
-    @Override
     public Object stringToValue(String str) throws SimpleTypeException {
         StringBuilder msg;
         String name;

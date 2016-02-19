@@ -29,11 +29,6 @@ public class LongType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return obj.toString();
-    }
-    
-    @Override
     public Object stringToValue(String str) throws SimpleTypeException {
         try {
             return Long.parseLong(str);

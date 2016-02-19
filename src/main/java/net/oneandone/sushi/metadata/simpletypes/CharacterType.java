@@ -28,11 +28,6 @@ public class CharacterType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return obj.toString();
-    }
-    
-    @Override
     public Object stringToValue(String str) {
         return str.charAt(0); // TODO
     }

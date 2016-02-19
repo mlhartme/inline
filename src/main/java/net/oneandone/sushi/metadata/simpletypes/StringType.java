@@ -28,11 +28,6 @@ public class StringType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return (String) obj;
-    }
-    
-    @Override
     public Object stringToValue(String str) {
         return str;
     }

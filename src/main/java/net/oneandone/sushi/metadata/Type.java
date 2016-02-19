@@ -46,8 +46,6 @@ public abstract class Type {
         this.name = name;
     }
 
-    public abstract String valueToString(Object value);
-
     /** throws an SimpleTypeException to indicate a parsing problem */
     public abstract Object stringToValue(String str) throws SimpleTypeException;
 

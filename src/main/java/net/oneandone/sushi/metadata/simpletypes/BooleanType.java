@@ -29,11 +29,6 @@ public class BooleanType extends Type {
     }
 
     @Override
-    public String valueToString(Object obj) {
-        return obj.toString();
-    }
-    
-    @Override
     public Object stringToValue(String str) throws SimpleTypeException {
         // TODO: because oocalc turns them to upper case
         str = str.toLowerCase();

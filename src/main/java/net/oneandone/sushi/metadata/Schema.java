@@ -66,15 +66,6 @@ public class Schema {
         return type;
     }
 
-    public Type type(String name) {
-        for (Type type : map.values()) {
-            if (name.equals(type.getName())) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException(name);
-    }
-    
     public void add(Type type) {
         map.put(type.getRawType(), type);
     }
