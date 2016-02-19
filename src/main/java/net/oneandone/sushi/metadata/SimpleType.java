@@ -15,9 +15,6 @@
  */
 package net.oneandone.sushi.metadata;
 
-import java.util.Set;
-
-
 public abstract class SimpleType extends Type {
     public SimpleType(Schema schema, java.lang.reflect.Type type, String name) {
         super(schema, type, name);
@@ -27,14 +24,4 @@ public abstract class SimpleType extends Type {
     
     /** throws an SimpleTypeException to indicate a parsing problem */
     public abstract Object stringToValue(String str) throws SimpleTypeException;
-
-    @Override
-    public String getSchemaTypeName() {
-        return "xs:" + getName();
-    }
-
-    @Override
-    public void addSchemaType(Set<Type> done, StringBuilder dest) {
-        // type is pre-defined by w3c, nothing to do
-    }
 }

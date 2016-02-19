@@ -15,27 +15,10 @@
  */
 package net.oneandone.sushi.metadata;
 
-import org.xml.sax.InputSource;
-
-import java.io.IOException;
-import java.io.Reader;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
 
 public abstract class Type {
-    public static final String SCHEMA_HEAD = 
-        "<?xml version='1.0' encoding='UTF-8'?>\n" + 
-        "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n" +
-        "  <xs:attributeGroup name='ids'>\n" +
-        "    <xs:attribute name='id' type='xs:string'/>\n" +
-        "    <xs:attribute name='idref' type='xs:string'/>\n" +
-        "  </xs:attributeGroup>\n";
-        
     protected final Schema schema;
     protected final java.lang.reflect.Type type;
     protected final Class<?> rawType;
@@ -84,26 +67,4 @@ public abstract class Type {
     
     public abstract Object newInstance();
 
-    //--
-
-    //-- xsd schema generation
-    public String createSchema() {
-        StringBuilder schema;
-        Set<Type> types;
-
-        schema = new StringBuilder();
-
-        schema.append(SCHEMA_HEAD);
-        schema.append("  <xs:element name='").append(getName()).append("' type='").append(getSchemaTypeName()).append("'/>\n");
-
-        types = new HashSet<>();
-        addSchemaType(types, schema);
-
-        schema.append("</xs:schema>");
-        return schema.toString();
-    }
-
-    public abstract String getSchemaTypeName();
-    public abstract void addSchemaType(Set<Type> done, StringBuilder dest);
-    
 }

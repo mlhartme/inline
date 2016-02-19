@@ -18,10 +18,7 @@ package net.oneandone.sushi.metadata.simpletypes;
 import net.oneandone.sushi.metadata.Schema;
 import net.oneandone.sushi.metadata.SimpleType;
 import net.oneandone.sushi.metadata.SimpleTypeException;
-import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.util.Reflect;
-
-import java.util.Set;
 
 
 public class EnumType extends SimpleType {
@@ -63,27 +60,6 @@ public class EnumType extends SimpleType {
             msg.append('\'');
         }
         throw new SimpleTypeException("unknown value '" + str + "', expected one of" + msg);
-    }
-
-    @Override
-    public String getSchemaTypeName() {
-        return getName();
-    }
-
-    @Override
-    public void addSchemaType(Set<Type> done, StringBuilder dest) {
-        if (done.contains(this)) {
-            return;
-        }
-        done.add(this);
-
-        dest.append("  <xs:simpleType name='").append(getName()).append("'>\n");
-        dest.append("    <xs:restriction base='xs:string' >\n");
-        for (Enum e : values) {
-            dest.append("    <xs:enumeration value='").append("").append("'/>\n");
-        }
-        dest.append("    </xs:restriction>\n");
-        dest.append("  </xs:simpleType>\n");
     }
 
     private static String normalizeEnum(String value) {
