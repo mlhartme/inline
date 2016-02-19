@@ -61,7 +61,7 @@ public abstract class Target {
         return component.parse(str);
     }
 
-    public Object newComponent() {
+    public Object defaultComponent() {
         return component.defaultValue();
     }
 }

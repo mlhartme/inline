@@ -20,9 +20,10 @@ public class ArgumentException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ArgumentException(String msg) {
-        this(msg, null);
+        super(msg);
     }
     public ArgumentException(String msg, Throwable cause) {
-        super(msg, cause);
+        this(msg);
+        initCause(cause);
     }
 }

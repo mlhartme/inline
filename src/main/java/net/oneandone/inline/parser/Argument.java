@@ -51,7 +51,7 @@ public class Argument {
             if (actual.isEmpty()) {
                 d = source.getDefaultString();
                 if (Source.DEFAULT_UNDEFINED.equals(d)) {
-                    value = target.newComponent();
+                    value = target.defaultComponent();
                 } else {
                     try {
                         value = target.stringToComponent(d);

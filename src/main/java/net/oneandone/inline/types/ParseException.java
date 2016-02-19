@@ -15,8 +15,9 @@
  */
 package net.oneandone.inline.types;
 
-/** Indicates a problem creating a simple type from a String */
-public class ParseException extends Exception {
+import net.oneandone.inline.parser.ArgumentException;
+
+public class ParseException extends ArgumentException {
     private static final long serialVersionUID = 0;
 
     public ParseException(String msg) {
