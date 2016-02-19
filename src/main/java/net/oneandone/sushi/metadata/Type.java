@@ -84,32 +84,7 @@ public abstract class Type {
     
     public abstract Object newInstance();
 
-    public <T> Instance<T> instance(T obj) {
-        return new Instance<>(this, obj);
-    }
-    
     //--
-
-    public List<Type> closure() {
-        List<Type> result;
-        ComplexType complex;
-        Type type;
-        
-        result = new ArrayList<>();
-        result.add(this);
-        for (int i = 0; i < result.size(); i++) { // result grows!
-            type = result.get(i);
-            if (type instanceof ComplexType) {
-                complex = (ComplexType) type;
-                for (Item<?> item : complex.items()) {
-                    if (!result.contains(item.getType())) {
-                        result.add(item.getType());
-                    }
-                }
-            }
-        }
-        return result;
-    }
 
     //-- xsd schema generation
     public String createSchema() {

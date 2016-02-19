@@ -76,14 +76,9 @@ public class Schema {
             if (Enum.class.isAssignableFrom(clazz)) {
                 type = EnumType.create(this, (Class) clazz);
             } else {
-                type = new ComplexType(this, clazz, typeName(clazz));
+                throw new IllegalStateException();
             }
             map.put(clazz, type);
-            if (Enum.class.isAssignableFrom(clazz)) {
-                // nothing
-            } else {
-                complex((ComplexType) type);
-            }
         }
         return type;
     }
@@ -97,31 +92,10 @@ public class Schema {
         throw new IllegalArgumentException(name);
     }
     
-    public <T> Instance<T> instance(T obj) {
-        Type type;
-        
-        type = type(obj.getClass());
-        return new Instance<>(type, obj);
-    }
-    
-    public <T> List<Instance<T>> instances(Collection<T> col) {
-        List<Instance<T>> result;
-        
-        result = new ArrayList<>();
-        for (T obj : col) {
-            result.add(instance(obj));
-        }
-        return result;
-    }
-
     public void add(Type type) {
         map.put(type.getRawType(), type);
     }
     
-    public void complex(ComplexType type) {
-        throw new UnsupportedOperationException(type.getName());
-    }
-
     public static String typeName(Class<?> clazz) {
         String name;
         
