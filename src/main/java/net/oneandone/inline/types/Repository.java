@@ -92,7 +92,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) {
+        public Object parse(String str) {
             str = str.toLowerCase();
             if ("true".equals(str)) {
                 return Boolean.TRUE;
@@ -110,7 +110,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) {
+        public Object parse(String str) {
             if (str.length() == 1) {
                 return str.charAt(0);
             } else {
@@ -125,7 +125,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws NumberFormatException {
+        public Object parse(String str) throws NumberFormatException {
                 return Double.parseDouble(str);
         }
     }
@@ -180,7 +180,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) {
+        public Object parse(String str) {
             String name;
 
             str = normalizeEnum(str);
@@ -205,7 +205,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws NumberFormatException {
+        public Object parse(String str) throws NumberFormatException {
             return Float.parseFloat(str);
         }
     }
@@ -216,7 +216,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws NumberFormatException {
+        public Object parse(String str) throws NumberFormatException {
             return Integer.parseInt(str);
         }
     }
@@ -227,7 +227,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws NumberFormatException {
+        public Object parse(String str) throws NumberFormatException {
             return Long.parseLong(str);
         }
     }
@@ -238,7 +238,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) {
+        public Object parse(String str) {
             return str;
         }
     }

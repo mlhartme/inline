@@ -57,7 +57,7 @@ public abstract class Target {
     }
 
     public Object stringToComponent(String str) {
-        return component.doParse(str);
+        return component.parse(str);
     }
 
     public Object defaultComponent() {

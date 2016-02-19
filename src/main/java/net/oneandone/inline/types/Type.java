@@ -46,7 +46,7 @@ public abstract class Type {
         this.defaultValue = dflt;
     }
 
-    public abstract Object doParse(String str) ;
+    public abstract Object parse(String str) ;
 
     public Class<?> getRawType() {
         return raw;
