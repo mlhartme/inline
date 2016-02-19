@@ -15,8 +15,6 @@
  */
 package net.oneandone.inline.parser;
 
-import net.oneandone.inline.types.ParseException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,7 +49,7 @@ public class Actuals {
         return value.size() == formal.source.max();
     }
 
-    public void save(Context context, Object target) throws ParseException {
+    public void save(Context context, Object target) {
         Argument argument;
 
         for (Map.Entry<Argument, List<String>> entry : actuals.entrySet()) {

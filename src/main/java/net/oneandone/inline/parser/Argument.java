@@ -15,8 +15,6 @@
  */
 package net.oneandone.inline.parser;
 
-import net.oneandone.inline.types.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +38,7 @@ public class Argument {
         if (target.isList()) {
             lst = new ArrayList<>();
             for (String str : actual) {
-                try {
-                    lst.add(target.stringToComponent(str));
-                } catch (ParseException e) {
-                    throw new ArgumentException("invalid argument " + source.getName() + ": " + e.getMessage());
-                }
+                 lst.add(parse(str));
             }
             value = lst;
         } else {
@@ -54,20 +48,24 @@ public class Argument {
                     value = target.defaultComponent();
                 } else {
                     try {
-                        value = target.stringToComponent(d);
-                    } catch (ParseException e) {
+                        value = parse(d);
+                    } catch (ArgumentException e) {
                         throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                     }
                 }
             } else {
-                try {
-                    value = target.stringToComponent(actual.get(0));
-                } catch (ParseException e) {
-                    throw new ArgumentException("invalid argument " + source.getName() + ": " + e.getMessage());
-                }
+                value = parse(actual.get(0));
             }
             target.doSet(dest, value);
         }
         target.doSet(dest, value);
+    }
+
+    private Object parse(String str) {
+        try {
+            return target.stringToComponent(str);
+        } catch (RuntimeException e) {
+            throw new ArgumentException("invalid argument " + source.getName() + ": expected " + target.expected() + ", got '" + str + '"', e);
+        }
     }
 }

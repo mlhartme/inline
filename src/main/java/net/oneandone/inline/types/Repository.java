@@ -92,14 +92,14 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws ParseException {
+        public Object doParse(String str) {
             str = str.toLowerCase();
             if ("true".equals(str)) {
                 return Boolean.TRUE;
             } else if ("false".equals(str)) {
                 return Boolean.FALSE;
             } else {
-                throw new ParseException("not a boolean");
+                throw new RuntimeException("not a boolean");
             }
         }
     }
@@ -110,7 +110,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws ParseException {
+        public Object doParse(String str) {
             if (str.length() == 1) {
                 return str.charAt(0);
             } else {
@@ -180,7 +180,7 @@ public class Repository {
         }
 
         @Override
-        public Object doParse(String str) throws ParseException {
+        public Object doParse(String str) {
             String name;
 
             str = normalizeEnum(str);

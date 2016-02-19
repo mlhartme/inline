@@ -1,6 +1,5 @@
 package net.oneandone.inline.parser;
 
-import net.oneandone.inline.types.ParseException;
 import net.oneandone.inline.types.Repository;
 import net.oneandone.inline.types.Type;
 
@@ -57,11 +56,15 @@ public abstract class Target {
         return !list && (component.getRawType().equals(Boolean.TYPE) || component.getRawType().equals(Boolean.class));
     }
 
-    public Object stringToComponent(String str) throws ParseException {
-        return component.parse(str);
+    public Object stringToComponent(String str) {
+        return component.doParse(str);
     }
 
     public Object defaultComponent() {
         return component.defaultValue();
+    }
+
+    public String expected() {
+        return component.expected;
     }
 }
