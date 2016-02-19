@@ -23,10 +23,7 @@ import net.oneandone.sushi.metadata.simpletypes.FloatType;
 import net.oneandone.sushi.metadata.simpletypes.IntType;
 import net.oneandone.sushi.metadata.simpletypes.LongType;
 import net.oneandone.sushi.metadata.simpletypes.StringType;
-import net.oneandone.sushi.util.Strings;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

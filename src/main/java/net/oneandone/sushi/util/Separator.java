@@ -34,12 +34,6 @@ public class Separator {
     /** Whitespace delimited lists. Skip empty because I want to ignore heading/tailing whitespace */
     public static final Separator SPACE = Separator.on(" ", Pattern.compile("\\s+")).skipEmpty();
 
-    /** Separator in user-supplied lists. */
-    public static final Separator COMMA = Separator.on(',').trim().skipEmpty().forNull("null");
-
-    /** Skip empty remove the last line */
-    public static final Separator RAW_LINE = Separator.on("\n", LineFormat.GENERIC_SEPARATOR).trim(LineFormat.Trim.NOTHING).skipEmpty();
-
     public static Separator on(char c) {
         return on(Character.toString(c));
     }

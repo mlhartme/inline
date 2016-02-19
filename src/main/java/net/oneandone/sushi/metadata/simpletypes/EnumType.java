@@ -17,7 +17,6 @@ package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
-import net.oneandone.sushi.util.Strings;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
