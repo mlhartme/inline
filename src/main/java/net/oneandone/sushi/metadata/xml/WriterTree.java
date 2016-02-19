@@ -15,8 +15,6 @@
  */
 package net.oneandone.sushi.metadata.xml;
 
-import net.oneandone.sushi.io.OS;
-
 import java.io.IOException;
 import java.io.Writer;
 
@@ -25,10 +23,6 @@ public class WriterTree extends Tree {
     private int indent;
     private boolean strict;
     private final String lineSeparator;
-
-    public WriterTree(Writer dest, boolean strict) {
-    	this(dest, strict, OS.CURRENT.lineSeparator.getSeparator());
-    }
 
     public WriterTree(Writer dest, boolean strict, String lineSeparator) {
         this.dest = dest;
