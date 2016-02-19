@@ -15,7 +15,7 @@
  */
 package net.oneandone.inline.cli;
 
-import net.oneandone.inline.util.MultiWriter;
+import net.oneandone.inline.util.SwitchableWriter;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -35,11 +35,11 @@ public class Console implements ExceptionHandler {
     public final Scanner input;
     private boolean stacktraces;
     
-    private final MultiWriter verboseSwitch;
+    private final SwitchableWriter verboseSwitch;
     
     public Console(PrintWriter info, PrintWriter error, InputStream in) {
         this.info = info;
-        this.verboseSwitch = MultiWriter.createNullWriter();
+        this.verboseSwitch = new SwitchableWriter(info, false);
         this.verbose = new PrintWriter(verboseSwitch, true);
         this.error = error;
         this.input = new Scanner(in);
@@ -55,14 +55,11 @@ public class Console implements ExceptionHandler {
     }
 
     public boolean getVerbose() {
-        return verboseSwitch.dests().size() == 1;
+        return verboseSwitch.getEnabled();
     }
 
     public void setVerbose(boolean verbose) {
-        verboseSwitch.dests().clear();
-        if (verbose) {
-            verboseSwitch.dests().add(info);
-        }
+        verboseSwitch.setEnabled(verbose);
     }
     
     public void pressReturn() {

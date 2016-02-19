@@ -18,59 +18,51 @@ package net.oneandone.inline.util;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class MultiWriter extends Writer {
-    public static MultiWriter createNullWriter() {
-        return new MultiWriter();
+public class SwitchableWriter extends Writer {
+    private final Writer dest;
+    private boolean enabled;
+
+    public SwitchableWriter(Writer dest, boolean enabled) {
+        this.dest = dest;
+        this.enabled = enabled;
     }
 
-    public static MultiWriter createTeeWriter(Writer ... dests) {
-        MultiWriter result;
-
-        result = new MultiWriter();
-        result.dests.addAll(Arrays.asList(dests));
-        return result;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    private final List<Writer> dests;
-
-    public MultiWriter() {
-        dests = new ArrayList<>();
-    }
-
-    public List<Writer> dests() {
-        return dests;
+    public boolean getEnabled() {
+        return enabled;
     }
 
     //--
     
     @Override
     public void write(int c) throws IOException {
-        for (Writer dest : dests) {
+        if (enabled) {
             dest.write(c);
         }
     }
 
     @Override
     public void write(char[] cbuf, int off, int len) throws IOException {
-        for (Writer dest : dests) {
+        if (enabled) {
             dest.write(cbuf, off, len);
         }
     }
 
     @Override
     public void flush() throws IOException {
-        for (Writer dest : dests) {
+        if (enabled) {
             dest.flush();
         }
     }
 
     @Override
     public void close() throws IOException {
-        // TODO close as many as possible
-        for (Writer dest : dests) {
+        if (enabled) {
             dest.close();
         }
     }
