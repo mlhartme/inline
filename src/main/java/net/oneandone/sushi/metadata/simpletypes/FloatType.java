@@ -15,13 +15,12 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
-public class FloatType extends SimpleType {
-    public FloatType(Schema schema) {
-        super(schema, Float.class, "float");
+public class FloatType extends Type {
+    public FloatType() {
+        super(Float.class, "float");
     }
     
     @Override

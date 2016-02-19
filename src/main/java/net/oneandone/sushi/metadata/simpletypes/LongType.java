@@ -15,13 +15,12 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
-public class LongType extends SimpleType {
-    public LongType(Schema schema) {
-        super(schema, Long.class, "long");
+public class LongType extends Type {
+    public LongType() {
+        super(Long.class, "long");
     }
     
     @Override

@@ -15,13 +15,12 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
-public class DoubleType extends SimpleType {
-    public DoubleType(Schema schema) {
-        super(schema, Double.class, "double");
+public class DoubleType extends Type {
+    public DoubleType() {
+        super(Double.class, "double");
     }
 
     @Override

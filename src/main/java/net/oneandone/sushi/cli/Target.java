@@ -1,7 +1,7 @@
 package net.oneandone.sushi.cli;
 
 import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
 import java.lang.reflect.ParameterizedType;
@@ -10,7 +10,7 @@ import java.util.List;
 /** Defines where to store values from the command line. */
 public abstract class Target {
     private final boolean list;
-    private final SimpleType component;
+    private final Type component;
 
     public Target(Schema schema, java.lang.reflect.Type type) {
         ParameterizedType p;
@@ -38,7 +38,7 @@ public abstract class Target {
         }
     }
 
-    public Target(boolean list, SimpleType component) {
+    public Target(boolean list, Type component) {
         this.list = list;
         this.component = component;
     }

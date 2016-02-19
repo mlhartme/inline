@@ -17,15 +17,12 @@ package net.oneandone.sushi.metadata;
 
 import net.oneandone.sushi.metadata.simpletypes.BooleanType;
 import net.oneandone.sushi.metadata.simpletypes.CharacterType;
-import net.oneandone.sushi.metadata.simpletypes.ClassType;
 import net.oneandone.sushi.metadata.simpletypes.DoubleType;
 import net.oneandone.sushi.metadata.simpletypes.EnumType;
 import net.oneandone.sushi.metadata.simpletypes.FloatType;
 import net.oneandone.sushi.metadata.simpletypes.IntType;
 import net.oneandone.sushi.metadata.simpletypes.LongType;
-import net.oneandone.sushi.metadata.simpletypes.MethodType;
 import net.oneandone.sushi.metadata.simpletypes.StringType;
-import net.oneandone.sushi.metadata.simpletypes.VoidType;
 import net.oneandone.sushi.util.Reflect;
 import net.oneandone.sushi.util.Strings;
 
@@ -42,27 +39,16 @@ public class Schema {
     
     public Schema() {
         map = new HashMap<>();
-        add(new StringType(this));
-        add(new IntType(this));
-        add(new LongType(this));
-        add(new FloatType(this));
-        add(new DoubleType(this));
-        add(new BooleanType(this));
-        add(new CharacterType(this));
-        add(new VoidType(this));
-        add(new ClassType(this));
-        add(new MethodType(this));
+        add(new StringType());
+        add(new IntType());
+        add(new LongType());
+        add(new FloatType());
+        add(new DoubleType());
+        add(new BooleanType());
+        add(new CharacterType());
     }
 
-    public SimpleType simple(Class<?> clazz) {
-        return (SimpleType) type(clazz);
-    }
-
-    /**
-     * This method is the main purpose of this class.
-     * @return never null 
-     */
-    public Type type(Class<?> clazz) {
+    public Type simple(Class<?> clazz) {
         Type type;
         
         if (clazz.isPrimitive()) {
@@ -71,7 +57,7 @@ public class Schema {
         type = map.get(clazz);
         if (type == null) {
             if (Enum.class.isAssignableFrom(clazz)) {
-                type = EnumType.create(this, (Class) clazz);
+                type = EnumType.create((Class<? extends Enum>) clazz);
             } else {
                 throw new IllegalStateException();
             }

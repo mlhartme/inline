@@ -16,20 +16,20 @@
 package net.oneandone.sushi.metadata.simpletypes;
 
 import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 import net.oneandone.sushi.util.Reflect;
 
 
-public class EnumType extends SimpleType {
-    public static EnumType create(Schema schema, Class<? extends Enum> clazz) {
-        return new EnumType(schema, clazz, Schema.typeName(clazz), Reflect.getValues(clazz));
+public class EnumType extends Type {
+    public static EnumType create(Class<? extends Enum> clazz) {
+        return new EnumType(clazz, Schema.typeName(clazz), Reflect.getValues(clazz));
     }
 
     private final Enum[] values;
     
-    public EnumType(Schema schema, Class<?> clazz, String name, Enum[] values) {
-        super(schema, clazz, name);
+    public EnumType(Class<?> clazz, String name, Enum[] values) {
+        super(clazz, name);
         this.values = values;
     }
     

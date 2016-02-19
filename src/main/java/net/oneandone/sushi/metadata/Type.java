@@ -19,13 +19,11 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 public abstract class Type {
-    protected final Schema schema;
     protected final java.lang.reflect.Type type;
     protected final Class<?> rawType;
     protected final String name;
 
-    public Type(Schema schema, java.lang.reflect.Type type, String name) {
-        this.schema = schema;
+    public Type(java.lang.reflect.Type type, String name) {
         this.type = type;
         if (type instanceof Class) {
             rawType = (Class) type;
@@ -48,10 +46,11 @@ public abstract class Type {
         this.name = name;
     }
 
-    public Schema getSchema() {
-        return schema;
-    }
-    
+    public abstract String valueToString(Object value);
+
+    /** throws an SimpleTypeException to indicate a parsing problem */
+    public abstract Object stringToValue(String str) throws SimpleTypeException;
+
     public Class<?> getRawType() {
         return rawType;
     }

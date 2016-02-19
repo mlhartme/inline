@@ -15,12 +15,11 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 
-public class StringType extends SimpleType {
-    public StringType(Schema schema) {
-        super(schema, String.class, "string");
+public class StringType extends Type {
+    public StringType() {
+        super(String.class, "string");
     }
 
     @Override

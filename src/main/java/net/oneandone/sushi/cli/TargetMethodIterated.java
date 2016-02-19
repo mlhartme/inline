@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +24,7 @@ import java.util.List;
 public class TargetMethodIterated extends Target {
     private final Method method;
 
-    public TargetMethodIterated(boolean list, SimpleType component, Method method) {
+    public TargetMethodIterated(boolean list, Type component, Method method) {
         super(list, component);
         this.method = method;
     }

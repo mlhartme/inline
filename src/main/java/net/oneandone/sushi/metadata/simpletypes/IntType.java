@@ -15,13 +15,12 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
-public class IntType extends SimpleType {
-    public IntType(Schema schema) {
-        super(schema, Integer.class, "int");
+public class IntType extends Type {
+    public IntType() {
+        super(Integer.class, "int");
     }
     
     @Override

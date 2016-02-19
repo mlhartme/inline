@@ -15,12 +15,11 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 
-public class CharacterType extends SimpleType {
-    public CharacterType(Schema schema) {
-        super(schema, Character.class, "char");
+public class CharacterType extends Type {
+    public CharacterType() {
+        super(Character.class, "char");
     }
     
     @Override

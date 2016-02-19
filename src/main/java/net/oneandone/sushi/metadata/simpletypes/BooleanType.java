@@ -15,13 +15,12 @@
  */
 package net.oneandone.sushi.metadata.simpletypes;
 
-import net.oneandone.sushi.metadata.Schema;
-import net.oneandone.sushi.metadata.SimpleType;
+import net.oneandone.sushi.metadata.Type;
 import net.oneandone.sushi.metadata.SimpleTypeException;
 
-public class BooleanType extends SimpleType {
-    public BooleanType(Schema schema) {
-        super(schema, Boolean.class, "boolean");
+public class BooleanType extends Type {
+    public BooleanType() {
+        super(Boolean.class, "boolean");
     }
     
     @Override
