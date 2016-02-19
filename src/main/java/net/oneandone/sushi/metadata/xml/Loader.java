@@ -17,7 +17,6 @@ package net.oneandone.sushi.metadata.xml;
 
 import net.oneandone.sushi.metadata.Item;
 import net.oneandone.sushi.metadata.Type;
-import net.oneandone.sushi.xml.Builder;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -46,7 +45,7 @@ public class Loader extends DefaultHandler {
         // No validation - because it's generally impossible: the complete schema
         // is unknown because users my specify arbitrary types. Instead, the loader
         // performs proper validation - all unknown elements/attributes are rejected.
-        return new Loader(type, Builder.createSAXParser());
+        return new Loader(type, null);
     }
 
     public Loader(Type type, SAXParser parser) {

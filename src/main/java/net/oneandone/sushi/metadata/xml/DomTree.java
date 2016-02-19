@@ -15,7 +15,6 @@
  */
 package net.oneandone.sushi.metadata.xml;
 
-import net.oneandone.sushi.xml.Builder;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -41,23 +40,12 @@ public class DomTree extends Tree {
 
     @Override
     public void ref(String name, int idref) throws IOException {
-        Element element;
-        
-        element = Builder.element(parent(), name);
-        element.setAttribute("idref", Integer.toString(idref));
-        parents.add(element);
+        // todo
     }
 
     @Override
     public void begin(String name, int id, String type, boolean withEnd) throws IOException {
-        Element element;
-        
-        element = Builder.element(parent(), name);
-        if (id != -1) {
-            element.setAttribute("id", Integer.toString(id));
-        }
-        type(element, type);
-        parents.add(element);
+        // todo
     }
 
     @Override
@@ -67,10 +55,7 @@ public class DomTree extends Tree {
 
     @Override
     public void text(String name, String type, String content) {
-        Element element;
-        
-        element = (Element) Builder.textElement(parent(), name, content).getParentNode();
-        type(element, type);
+        // todo
     }
 
     private void type(Element element, String type) {
