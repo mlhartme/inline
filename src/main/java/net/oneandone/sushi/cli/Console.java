@@ -15,12 +15,9 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.util.InputLogStream;
-import net.oneandone.sushi.util.MultiOutputStream;
 import net.oneandone.sushi.util.MultiWriter;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -32,13 +29,6 @@ public class Console implements ExceptionHandler {
         return new Console(new PrintWriter(System.out, true), new PrintWriter(System.err, true), System.in);
     }
 
-    public static Console create(OutputStream log) {
-        return new Console(
-                new PrintWriter(MultiOutputStream.createTeeStream(System.out, log), true),
-                new PrintWriter(MultiOutputStream.createTeeStream(System.err, log), true),
-                new InputLogStream(System.in, log));
-    }
-    
     public final PrintWriter info;
     public final PrintWriter verbose;
     public final PrintWriter error;
