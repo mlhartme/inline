@@ -7,14 +7,14 @@
     <relativePath />
   </parent>
 
-  <name>Sushi</name>
+  <name>Inline</name>
   <description>See ${project.url}.</description>
-  <url>https://github.com/mlhartme/sushi</url>
-  <inceptionYear>2004</inceptionYear>
+  <url>https://github.com/mlhartme/inline</url>
+  <inceptionYear>2016</inceptionYear>
 
   <groupId>net.oneandone</groupId>
-  <artifactId>sushi</artifactId>
-  <version>2.9.0-SNAPSHOT</version>
+  <artifactId>inline</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <properties>
@@ -72,15 +72,15 @@
   </contributors>
 
   <scm>
-    <connection>scm:git:ssh://git@github.com/mlhartme/sushi.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/mlhartme/sushi.git</developerConnection>
-    <url>https://github.com/mlhartme/sushi</url>
+    <connection>scm:git:ssh://git@github.com/mlhartme/inline.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mlhartme/inline.git</developerConnection>
+    <url>https://github.com/mlhartme/inline</url>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/mlhartme/sushi/issues/</url>
+    <url>https://github.com/mlhartme/inline/issues/</url>
   </issueManagement>
 
   <dependencies>
@@ -144,13 +144,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- sushi has a base64 codec, this is to test it: -->
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
