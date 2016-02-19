@@ -1,6 +1,6 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 import net.oneandone.sushi.util.Separator;
 
 import java.lang.reflect.Field;
@@ -103,7 +103,7 @@ public class Mapping {
         return fields.containsKey(name) || methods.containsKey(name) || iteratedMethods.containsKey(name);
     }
 
-    public Target target(Schema schema, String argument) {
+    public Target target(Repository schema, String argument) {
         Field field;
         Method method;
 

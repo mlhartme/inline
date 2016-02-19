@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
 public class TargetMethod extends Target {
-    public static Target create(boolean iterated, Schema schema, Method method) {
+    public static Target create(boolean iterated, Repository schema, Method method) {
         Parameter[] formals;
         java.lang.reflect.Type type;
 
@@ -39,7 +39,7 @@ public class TargetMethod extends Target {
         }
         type = formals[0].getParameterizedType();
         if (iterated) {
-            return new TargetMethodIterated(true, schema.simple((Class) type), method);
+            return new TargetMethodIterated(true, schema.get((Class) type), method);
         } else {
             return new TargetMethod(schema, type, method);
         }
@@ -49,7 +49,7 @@ public class TargetMethod extends Target {
 
     private final Method method;
     
-    public TargetMethod(Schema schema, java.lang.reflect.Type type, Method method) {
+    public TargetMethod(Repository schema, java.lang.reflect.Type type, Method method) {
         super(schema, type);
         this.method = method;
     }

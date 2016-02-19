@@ -1,6 +1,6 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 import net.oneandone.sushi.types.Type;
 import net.oneandone.sushi.types.ParseException;
 
@@ -12,13 +12,13 @@ public abstract class Target {
     private final boolean list;
     private final Type component;
 
-    public Target(Schema schema, java.lang.reflect.Type type) {
+    public Target(Repository schema, java.lang.reflect.Type type) {
         ParameterizedType p;
         java.lang.reflect.Type[] args;
 
         if (type instanceof Class) {
             this.list = false;
-            this.component = schema.simple((Class) type);
+            this.component = schema.get((Class) type);
         } else if (type instanceof ParameterizedType) {
             p = (ParameterizedType) type;
             args = p.getActualTypeArguments();
@@ -32,7 +32,7 @@ public abstract class Target {
                 throw new IllegalArgumentException("too much nesting: " + type.toString());
             }
             this.list = true;
-            this.component = schema.simple((Class) args[0]);
+            this.component = schema.get((Class) args[0]);
         } else {
             throw new IllegalArgumentException("unsupported type: " + type);
         }

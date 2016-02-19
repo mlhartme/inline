@@ -15,14 +15,14 @@
  */
 package net.oneandone.sushi.types;
 
-import net.oneandone.sushi.types.simpletypes.BooleanType;
-import net.oneandone.sushi.types.simpletypes.CharacterType;
-import net.oneandone.sushi.types.simpletypes.DoubleType;
-import net.oneandone.sushi.types.simpletypes.EnumType;
-import net.oneandone.sushi.types.simpletypes.FloatType;
-import net.oneandone.sushi.types.simpletypes.IntType;
-import net.oneandone.sushi.types.simpletypes.LongType;
-import net.oneandone.sushi.types.simpletypes.StringType;
+import net.oneandone.sushi.types.builtin.BooleanType;
+import net.oneandone.sushi.types.builtin.CharacterType;
+import net.oneandone.sushi.types.builtin.DoubleType;
+import net.oneandone.sushi.types.builtin.EnumType;
+import net.oneandone.sushi.types.builtin.FloatType;
+import net.oneandone.sushi.types.builtin.IntType;
+import net.oneandone.sushi.types.builtin.LongType;
+import net.oneandone.sushi.types.builtin.StringType;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,10 +34,10 @@ import java.util.Map;
  * can be created explicitly by invoking the add method or implicitly by overriding the complex
  * method. Thus, metadata can be used as a factory for complex types.
  */
-public class Schema {
+public class Repository {
     private final Map<Class<?>, Type> map;
     
-    public Schema() {
+    public Repository() {
         map = new HashMap<>();
         add(new StringType());
         add(new IntType());
@@ -48,7 +48,7 @@ public class Schema {
         add(new CharacterType());
     }
 
-    public Type simple(Class<?> clazz) {
+    public Type get(Class<?> clazz) {
         Type type;
         
         if (clazz.isPrimitive()) {

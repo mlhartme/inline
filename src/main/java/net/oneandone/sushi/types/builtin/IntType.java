@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.types.simpletypes;
+package net.oneandone.sushi.types.builtin;
 
 import net.oneandone.sushi.types.Type;
 import net.oneandone.sushi.types.ParseException;

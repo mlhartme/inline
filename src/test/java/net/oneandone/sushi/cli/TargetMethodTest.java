@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class TargetMethodTest {
     public void bool() throws NoSuchMethodException {
         Target arg;
 
-        arg = TargetMethod.create(false, new Schema(), getClass().getMethod("bool", Boolean.TYPE));
+        arg = TargetMethod.create(false, new Repository(), getClass().getMethod("bool", Boolean.TYPE));
         arg.doSet(this, true);
         assertEquals(true, this.b);
     }
@@ -41,7 +41,7 @@ public class TargetMethodTest {
 
         lst = new ArrayList<>();
         lst.add(42);
-        arg = TargetMethod.create(false, new Schema(), getClass().getMethod("lst", List.class));
+        arg = TargetMethod.create(false, new Repository(), getClass().getMethod("lst", List.class));
         arg.doSet(this, lst);
         assertSame(lst, this.lst);
     }

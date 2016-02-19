@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -50,7 +50,7 @@ public class Cli {
         return cli;
     }
 
-    protected final Schema schema;
+    protected final Repository schema;
     protected boolean exception;
 
     private final List<Command> commands;
@@ -59,10 +59,10 @@ public class Cli {
     private ExceptionHandler exceptionHandler;
 
     public Cli() {
-        this(new Schema());
+        this(new Repository());
     }
     
-    public Cli(Schema schema) {
+    public Cli(Repository schema) {
         this.schema = schema;
         this.commands = new ArrayList<>();
         this.currentContext = null;

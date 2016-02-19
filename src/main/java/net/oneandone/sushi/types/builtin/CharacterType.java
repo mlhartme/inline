@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.types.simpletypes;
+package net.oneandone.sushi.types.builtin;
 
 import net.oneandone.sushi.types.Type;
-import net.oneandone.sushi.types.ParseException;
 
-public class BooleanType extends Type {
-    public BooleanType() {
-        super(Boolean.class);
+public class CharacterType extends Type {
+    public CharacterType() {
+        super(Character.class);
     }
     
     @Override
     public Object newInstance() {
-        return Boolean.FALSE;
+        return 0;
     }
 
     @Override
-    public Object parse(String str) throws ParseException {
-        // TODO: because oocalc turns them to upper case
-        str = str.toLowerCase();
-        if ("true".equals(str)) {
-            return Boolean.TRUE;
-        } else if ("false".equals(str)) {
-            return Boolean.FALSE;
-        } else {
-            throw new ParseException("expected true or false, got " + str + ".");
-        }
+    public Object parse(String str) {
+        return str.charAt(0); // TODO
     }
 }

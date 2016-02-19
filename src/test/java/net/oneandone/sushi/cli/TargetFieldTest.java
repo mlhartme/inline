@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -31,7 +31,7 @@ public class TargetFieldTest {
     private void check(String expected) {
         TargetField arg;
         
-        arg = TargetField.create(new Schema(), getField("fld"));
+        arg = TargetField.create(new Repository(), getField("fld"));
         arg.doSet(this, expected);
         assertEquals(expected, fld);
     }

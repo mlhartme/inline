@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.types.simpletypes;
+package net.oneandone.sushi.types.builtin;
 
 import net.oneandone.sushi.types.Type;
 import net.oneandone.sushi.types.ParseException;
 
-public class FloatType extends Type {
-    public FloatType() {
-        super(Float.class);
+public class DoubleType extends Type {
+    public DoubleType() {
+        super(Double.class);
     }
-    
+
     @Override
     public Object newInstance() {
-        return 0;
+        return (double) 0;
     }
 
     @Override
     public Object parse(String str) throws ParseException {
         try {
-            return Float.parseFloat(str);
+            return Double.parseDouble(str);
         } catch (NumberFormatException e) {
             throw new ParseException("number expected, got '" + str + "'");
         }            

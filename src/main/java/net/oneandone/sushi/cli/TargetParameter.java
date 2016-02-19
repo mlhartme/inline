@@ -1,12 +1,12 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 
 public class TargetParameter extends Target {
     private final Object[] actuals;
     private final int idx;
 
-    protected TargetParameter(Schema schema, java.lang.reflect.Type type, Object[] actuals, int idx) {
+    protected TargetParameter(Repository schema, java.lang.reflect.Type type, Object[] actuals, int idx) {
         super(schema, type);
         this.actuals = actuals;
         this.idx = idx;

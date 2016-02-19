@@ -1,6 +1,6 @@
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
@@ -55,14 +55,14 @@ public class Context {
         this.lazyCompiledContext = null;
     }
 
-    public ContextBuilder compile(Schema schema) {
+    public ContextBuilder compile(Repository schema) {
         if (lazyCompiledContext == null) {
             lazyCompiledContext = doCompile(schema);
         }
         return lazyCompiledContext;
     }
 
-    private ContextBuilder doCompile(Schema schema) {
+    private ContextBuilder doCompile(Repository schema) {
         Class<?> clazz;
         List<Source> constructorSources;
         List<Source> extraSources;
@@ -119,7 +119,7 @@ public class Context {
         return result;
     }
 
-    private ContextBuilder compiledParent(Schema schema) {
+    private ContextBuilder compiledParent(Repository schema) {
         return parent == null ? null : parent.compile(schema);
     }
 
@@ -136,7 +136,7 @@ public class Context {
         return result.toString();
     }
 
-    private Object[] match(Schema schema, Constructor constructor, List<Source> initialSources, List<Argument> result) {
+    private Object[] match(Repository schema, Constructor constructor, List<Source> initialSources, List<Argument> result) {
         List<Context> remainingContext;
         List<Source> remainingSources;
         Parameter[] formals;

@@ -15,7 +15,7 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class TargetMethodIteratedTest {
         Target arg;
         List<Long> lst;
 
-        arg = TargetMethod.create(true, new Schema(), getClass().getMethod("setInt", Long.TYPE));
+        arg = TargetMethod.create(true, new Repository(), getClass().getMethod("setInt", Long.TYPE));
         lst = new ArrayList<>();
         lst.add((long) 1);
         lst.add((long) 2);

@@ -15,13 +15,13 @@
  */
 package net.oneandone.sushi.cli;
 
-import net.oneandone.sushi.types.Schema;
+import net.oneandone.sushi.types.Repository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class TargetField extends Target {
-    public static TargetField create(Schema schema, Field field) {
+    public static TargetField create(Repository schema, Field field) {
         if (Modifier.isStatic(field.getModifiers())) {
             throw new IllegalArgumentException(field + ": static not allowed");
         }
@@ -32,7 +32,7 @@ public class TargetField extends Target {
 
     private final Field field;
     
-    public TargetField(Schema schema, java.lang.reflect.Type type, Field field) {
+    public TargetField(Repository schema, java.lang.reflect.Type type, Field field) {
         super(schema, type);
         this.field = field;
     }

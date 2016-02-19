@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.sushi.types.simpletypes;
+package net.oneandone.sushi.types.builtin;
 
 import net.oneandone.sushi.types.Type;
 import net.oneandone.sushi.types.ParseException;
 
-public class LongType extends Type {
-    public LongType() {
-        super(Long.class);
+public class FloatType extends Type {
+    public FloatType() {
+        super(Float.class);
     }
     
     @Override
@@ -31,7 +31,7 @@ public class LongType extends Type {
     @Override
     public Object parse(String str) throws ParseException {
         try {
-            return Long.parseLong(str);
+            return Float.parseFloat(str);
         } catch (NumberFormatException e) {
             throw new ParseException("number expected, got '" + str + "'");
         }            
