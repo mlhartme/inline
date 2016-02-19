@@ -17,28 +17,21 @@ package net.oneandone.inline.types;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-/** 
- * A set of Types. Initially, the set consists of simple types only. Complex types
- * can be created explicitly by invoking the add method or implicitly by overriding the complex
- * method. Thus, metadata can be used as a factory for complex types.
- */
 public class Repository {
     private final Map<Class<?>, Type> map;
     
     public Repository() {
         map = new HashMap<>();
-        add(String.class, "string", "", str -> str);
-        add(Integer.class, "integer", 0, Integer::parseInt);
-        add(Long.class, "long integer", (long) 0, Long::parseLong);
-        add(Float.class, "float number", (float) 0, Float::parseFloat);
-        add(Double.class, "double", (double) 0, Double::parseDouble);
-        add(Boolean.class, "'true' or 'false'", false, str -> {
+        register(String.class, "string", "", str -> str);
+        register(Integer.class, Integer.TYPE, "integer", 0, Integer::parseInt);
+        register(Long.class, Long.TYPE, "long integer", (long) 0, Long::parseLong);
+        register(Float.class, Float.TYPE, "float number", (float) 0, Float::parseFloat);
+        register(Double.class, Double.TYPE, "double", (double) 0, Double::parseDouble);
+        register(Boolean.class, Boolean.TYPE, "'true' or 'false'", false, str -> {
                         str = str.toLowerCase();
                         if ("true".equals(str)) {
                             return Boolean.TRUE;
@@ -48,7 +41,7 @@ public class Repository {
                             throw new RuntimeException("not a boolean");
                         }
                     });
-        add(Character.class, "single character", (char) 0,
+        register(Character.class, Character.TYPE, "single character", (char) 0,
                     str -> {
                         if (str.length() == 1) {
                             return str.charAt(0);
@@ -61,9 +54,6 @@ public class Repository {
     public Type get(Class<?> clazz) {
         Type type;
         
-        if (clazz.isPrimitive()) {
-            clazz = getWrapper(clazz);
-        }
         type = map.get(clazz);
         if (type == null) {
             if (!Enum.class.isAssignableFrom(clazz)) {
@@ -75,34 +65,19 @@ public class Repository {
         return type;
     }
 
-    public void add(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
-        add(new Type(clazz, expected, defaultValue, parser));
+    public void register(Class<?> clazz, Class<?> primitive, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
+        map.put(primitive, register(clazz, expected, defaultValue, parser));
     }
 
-    public void add(Type type) {
+    public Type register(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
+        Type type;
+
+        type = new Type(clazz, expected, defaultValue, parser);
         map.put(type.getRawType(), type);
+        return type;
     }
-    
+
     //--
-
-    private static final List<?> PRIMITIVE_TYPES = Arrays.asList(
-            Void.TYPE, Boolean.TYPE, Byte.TYPE, Character.TYPE, Integer.TYPE, Long.TYPE, Float.TYPE, Double.TYPE
-    );
-
-    private static final List<?> WRAPPER_TYPES = Arrays.asList(
-            Void.class, Boolean.class, Byte.class, Character.class, Integer.class, Long.class, Float.class, Double.class
-    );
-
-    public static Class<?> getWrapper(Class<?> primitive) {
-        int idx;
-
-        idx = PRIMITIVE_TYPES.indexOf(primitive);
-        if (idx == -1) {
-            return null;
-        } else {
-            return (Class<?>) WRAPPER_TYPES.get(idx);
-        }
-    }
 
     public static Type forEnum(Class<? extends Enum> clazz) {
         Enum[] values = getValues(clazz);
