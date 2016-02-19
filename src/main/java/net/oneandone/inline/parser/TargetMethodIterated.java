@@ -44,9 +44,9 @@ public class TargetMethodIterated extends Target {
                 method.invoke(dest, item);
             }
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException(value + ":" + value.getClass(), e);
+            throw new IllegalStateException(value + ":" + value.getClass(), e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         } catch (InvocationTargetException e) {
             cause = e.getCause();
             if (cause instanceof Error) {
@@ -58,7 +58,7 @@ public class TargetMethodIterated extends Target {
             if (cause instanceof RuntimeException) {
                 throw (RuntimeException) cause;
             }
-            throw new RuntimeException("unexpected exception" , cause);
+            throw new IllegalStateException("unexpected exception" , cause);
         }
     }
 }

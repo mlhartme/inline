@@ -23,18 +23,18 @@ public abstract class Target {
             p = (ParameterizedType) type;
             args = p.getActualTypeArguments();
             if (!p.getRawType().equals(List.class)) {
-                throw new IllegalArgumentException("not a list: " + type.toString());
+                throw new InvalidCliException("not a list: " + type.toString());
             }
             if (args.length != 1) {
-                throw new IllegalArgumentException("too many type parameter: " + type.toString());
+                throw new InvalidCliException("too many type parameter: " + type.toString());
             }
             if (!(args[0] instanceof Class)) {
-                throw new IllegalArgumentException("too much nesting: " + type.toString());
+                throw new InvalidCliException("too much nesting: " + type.toString());
             }
             this.list = true;
             this.component = schema.get((Class) args[0]);
         } else {
-            throw new IllegalArgumentException("unsupported type: " + type);
+            throw new InvalidCliException("unsupported type: " + type);
         }
     }
 

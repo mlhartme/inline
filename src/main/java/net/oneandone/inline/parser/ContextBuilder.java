@@ -65,7 +65,7 @@ public class ContextBuilder {
         if (source.option) {
             name = source.getName();
             if (options.put(name, arg) != null) {
-                throw new IllegalArgumentException("duplicate option: " + name);
+                throw new InvalidCliException("duplicate option: " + name);
             }
         } else {
             values.add(arg);

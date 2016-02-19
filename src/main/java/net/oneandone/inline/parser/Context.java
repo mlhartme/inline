@@ -23,7 +23,7 @@ public class Context {
             mapping = "";
         } else {
             if (!definition.endsWith("}")) {
-                throw new IllegalArgumentException(definition);
+                throw new InvalidCliException(definition);
             }
             mapping = definition.substring(idx + 1, definition.length() - 1).trim();
             syntax = definition.substring(0, idx).trim();

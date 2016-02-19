@@ -56,7 +56,7 @@ public class Argument {
                     try {
                         value = target.stringToComponent(d);
                     } catch (ParseException e) {
-                        throw new IllegalArgumentException("cannot convert default value to type " + target + ": " + d);
+                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                     }
                 }
             } else {

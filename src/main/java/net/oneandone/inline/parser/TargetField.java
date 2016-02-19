@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 public class TargetField extends Target {
     public static TargetField create(Repository schema, Field field) {
         if (Modifier.isStatic(field.getModifiers())) {
-            throw new IllegalArgumentException(field + ": static not allowed");
+            throw new InvalidCliException(field + ": static not allowed");
         }
         return new TargetField(schema, field.getGenericType(), field);
     }
@@ -48,7 +48,7 @@ public class TargetField extends Target {
         try {
             field.set(obj, value);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 }

@@ -28,14 +28,14 @@ public class TargetMethod extends Target {
         java.lang.reflect.Type type;
 
         if (Modifier.isStatic(method.getModifiers())) {
-            throw new IllegalArgumentException(method + ": static not allowed");
+            throw new InvalidCliException(method + ": static not allowed");
         }
         if (!Modifier.isPublic(method.getModifiers())) {
-            throw new IllegalArgumentException(method + ": public expected");
+            throw new InvalidCliException(method + ": public expected");
         }
         formals = method.getParameters();
         if (formals.length != 1) {
-            throw new IllegalArgumentException("1 argument expected");
+            throw new InvalidCliException("1 argument expected");
         }
         type = formals[0].getParameterizedType();
         if (iterated) {
@@ -65,9 +65,9 @@ public class TargetMethod extends Target {
         try {
             method.invoke(dest, value);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException(value + ":" + value.getClass(), e);
+            throw new IllegalStateException(value + ":" + value.getClass(), e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         } catch (InvocationTargetException e) {
             cause = e.getCause();
             if (cause instanceof Error) {
@@ -79,7 +79,7 @@ public class TargetMethod extends Target {
             if (cause instanceof RuntimeException) {
                 throw (RuntimeException) cause;
             }
-            throw new RuntimeException("unexpected exception" , cause);
+            throw new IllegalStateException("unexpected exception" , cause);
         }
     }
 }

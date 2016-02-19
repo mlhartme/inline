@@ -22,7 +22,7 @@ public class Mapping {
                 idx = item.indexOf('(');
                 if (idx != -1) {
                     if (!item.endsWith(")")) {
-                        throw new IllegalArgumentException("invalid method mapping: " + item);
+                        throw new InvalidCliException("invalid method mapping: " + item);
                     }
                     result.addMethod(item.substring(idx + 1, item.length() - 1), clazz, item.substring(0, idx));
                 } else {
@@ -56,7 +56,7 @@ public class Mapping {
 
     public void command(String cmd) {
         if (command != null) {
-            throw new IllegalArgumentException("duplicate command mapping");
+            throw new InvalidCliException("duplicate command mapping");
         }
         command = cmd;
     }
@@ -67,10 +67,10 @@ public class Mapping {
         try {
             field = clazz.getDeclaredField(name);
         } catch (NoSuchFieldException e) {
-            throw new IllegalStateException("no such field: " + clazz.getName() + "." + name);
+            throw new InvalidCliException("no such field: " + clazz.getName() + "." + name);
         }
         if (fields.put(argument, field) != null) {
-            throw new IllegalStateException("duplicate field mapping for argument " + argument);
+            throw new InvalidCliException("duplicate field mapping for argument " + argument);
         }
     }
 
@@ -86,16 +86,16 @@ public class Mapping {
         for (Method candidate : clazz.getMethods()) {
             if (candidate.getParameterCount() == 1 && candidate.getName().equals(name)) {
                 if (method != null) {
-                    throw new IllegalArgumentException("method mapping ambiguous: " + name);
+                    throw new InvalidCliException("method mapping ambiguous: " + name);
                 }
                 method = candidate;
             }
         }
         if (method == null) {
-            throw new IllegalArgumentException("method not found: " + clazz.getName() + "." + name + "(x)");
+            throw new InvalidCliException("method not found: " + clazz.getName() + "." + name + "(x)");
         }
         if ((iterable ? iteratedMethods : methods).put(argument, method) != null) {
-            throw new IllegalArgumentException("duplicate method mapping for argument " + argument);
+            throw new InvalidCliException("duplicate method mapping for argument " + argument);
         }
     }
 

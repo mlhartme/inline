@@ -24,19 +24,19 @@ public class Command {
         Class<?> returnType;
 
         if (Modifier.isStatic(method.getModifiers())) {
-            throw new IllegalArgumentException(method + ": static not allowed");
+            throw new InvalidCliException(method + ": static not allowed");
         }
         if (!Modifier.isPublic(method.getModifiers())) {
-            throw new IllegalArgumentException(method + ": public expected");
+            throw new InvalidCliException(method + ": public expected");
         }
         if (method.getParameterTypes().length != 0) {
-            throw new IllegalArgumentException(method + ": unexpected arguments");
+            throw new InvalidCliException(method + ": unexpected arguments");
         }
         returnType = method.getReturnType();
         if (Void.TYPE.equals(returnType) || Integer.TYPE.equals(returnType)) {
             return new Command(builder, name, method);
         } else {
-            throw new IllegalArgumentException("unsupported return type: " + returnType);
+            throw new InvalidCliException("unsupported return type: " + returnType);
         }
     }
 
