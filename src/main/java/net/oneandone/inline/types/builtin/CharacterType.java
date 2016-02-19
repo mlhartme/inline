@@ -15,20 +15,20 @@
  */
 package net.oneandone.inline.types.builtin;
 
+import net.oneandone.inline.types.ParseException;
 import net.oneandone.inline.types.Type;
 
 public class CharacterType extends Type {
     public CharacterType() {
-        super(Character.class);
+        super(Character.class, (char) 0);
     }
     
     @Override
-    public Object newInstance() {
-        return 0;
-    }
-
-    @Override
-    public Object parse(String str) {
-        return str.charAt(0); // TODO
+    public Object parse(String str) throws ParseException {
+        if (str.length() == 1) {
+            return str.charAt(0);
+        } else {
+            throw new ParseException("single character expected, got '" + str + "'");
+        }
     }
 }

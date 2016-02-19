@@ -20,8 +20,9 @@ import java.util.Collection;
 
 public abstract class Type {
     protected final Class<?> raw;
+    private final Object defaultValue;
 
-    public Type(java.lang.reflect.Type raw) {
+    public Type(java.lang.reflect.Type raw, Object dflt) {
         if (raw instanceof Class) {
             this.raw = (Class) raw;
         } else {
@@ -40,6 +41,7 @@ public abstract class Type {
         if (Collection.class.isAssignableFrom(this.raw)) {
             throw new IllegalArgumentException(this.raw.getName());
         }
+        this.defaultValue = dflt;
     }
 
     /** throws an SimpleTypeException to indicate a parsing problem */
@@ -49,6 +51,8 @@ public abstract class Type {
         return raw;
     }
 
-    public abstract Object newInstance();
+    public Object defaultValue() {
+        return defaultValue;
+    }
 
 }

@@ -20,12 +20,7 @@ import net.oneandone.inline.types.Type;
 
 public class BooleanType extends Type {
     public BooleanType() {
-        super(Boolean.class);
-    }
-    
-    @Override
-    public Object newInstance() {
-        return Boolean.FALSE;
+        super(Boolean.class, false);
     }
 
     @Override

@@ -20,12 +20,7 @@ import net.oneandone.inline.types.Type;
 
 public class DoubleType extends Type {
     public DoubleType() {
-        super(Double.class);
-    }
-
-    @Override
-    public Object newInstance() {
-        return (double) 0;
+        super(Double.class, (double) 0);
     }
 
     @Override

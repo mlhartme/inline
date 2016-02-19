@@ -20,14 +20,9 @@ import net.oneandone.inline.types.Type;
 
 public class FloatType extends Type {
     public FloatType() {
-        super(Float.class);
+        super(Float.class, (float) 0);
     }
     
-    @Override
-    public Object newInstance() {
-        return 0;
-    }
-
     @Override
     public Object parse(String str) throws ParseException {
         try {

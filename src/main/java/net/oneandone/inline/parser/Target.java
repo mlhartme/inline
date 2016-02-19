@@ -62,6 +62,6 @@ public abstract class Target {
     }
 
     public Object newComponent() {
-        return component.newInstance();
+        return component.defaultValue();
     }
 }

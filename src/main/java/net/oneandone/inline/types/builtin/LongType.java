@@ -20,14 +20,9 @@ import net.oneandone.inline.types.Type;
 
 public class LongType extends Type {
     public LongType() {
-        super(Long.class);
+        super(Long.class, (long) 0);
     }
     
-    @Override
-    public Object newInstance() {
-        return 0;
-    }
-
     @Override
     public Object parse(String str) throws ParseException {
         try {

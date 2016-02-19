@@ -20,14 +20,9 @@ import net.oneandone.inline.types.Type;
 
 public class IntType extends Type {
     public IntType() {
-        super(Integer.class);
+        super(Integer.class, 0);
     }
     
-    @Override
-    public Object newInstance() {
-        return 0;
-    }
-
     @Override
     public Object parse(String str) throws ParseException {
         try {

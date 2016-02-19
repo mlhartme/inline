@@ -19,12 +19,7 @@ import net.oneandone.inline.types.Type;
 
 public class StringType extends Type {
     public StringType() {
-        super(String.class);
-    }
-
-    @Override
-    public Object newInstance() {
-        return "";
+        super(String.class, "");
     }
 
     @Override

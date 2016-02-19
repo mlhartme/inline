@@ -46,15 +46,10 @@ public class EnumType extends Type {
     private final Enum[] values;
     
     public EnumType(Class<?> clazz, Enum[] values) {
-        super(clazz);
+        super(clazz, values[0]);
         this.values = values;
     }
     
-    @Override
-    public Object newInstance() {
-        return values[0];
-    }
-
     @Override
     public Object parse(String str) throws ParseException {
         StringBuilder msg;
