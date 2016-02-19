@@ -19,28 +19,26 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 
 public abstract class Type {
-    protected final java.lang.reflect.Type type;
-    protected final Class<?> rawType;
+    protected final Class<?> raw;
 
-    public Type(java.lang.reflect.Type type) {
-        this.type = type;
-        if (type instanceof Class) {
-            rawType = (Class) type;
+    public Type(java.lang.reflect.Type raw) {
+        if (raw instanceof Class) {
+            this.raw = (Class) raw;
         } else {
             try {
-                rawType = (Class) ((ParameterizedType) type).getRawType();
+                this.raw = (Class) ((ParameterizedType) raw).getRawType();
             } catch (ClassCastException e) {
                 throw new UnsupportedOperationException();
             }
         }
-        if (rawType.isPrimitive()) {
-            throw new IllegalArgumentException(rawType.getName());
+        if (this.raw.isPrimitive()) {
+            throw new IllegalArgumentException(this.raw.getName());
         }
-        if (rawType.isArray()) {
-            throw new IllegalArgumentException(rawType.getName());
+        if (this.raw.isArray()) {
+            throw new IllegalArgumentException(this.raw.getName());
         }
-        if (Collection.class.isAssignableFrom(rawType)) {
-            throw new IllegalArgumentException(rawType.getName());
+        if (Collection.class.isAssignableFrom(this.raw)) {
+            throw new IllegalArgumentException(this.raw.getName());
         }
     }
 
@@ -48,11 +46,7 @@ public abstract class Type {
     public abstract Object parse(String str) throws ParseException;
 
     public Class<?> getRawType() {
-        return rawType;
-    }
-
-    public java.lang.reflect.Type getType() {
-        return type;
+        return raw;
     }
 
     public abstract Object newInstance();
