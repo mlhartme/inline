@@ -20,7 +20,7 @@ import net.oneandone.sushi.metadata.SimpleTypeException;
 
 public class DoubleType extends Type {
     public DoubleType() {
-        super(Double.class, "double");
+        super(Double.class);
     }
 
     @Override

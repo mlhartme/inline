@@ -20,7 +20,7 @@ import net.oneandone.sushi.metadata.SimpleTypeException;
 
 public class IntType extends Type {
     public IntType() {
-        super(Integer.class, "int");
+        super(Integer.class);
     }
     
     @Override

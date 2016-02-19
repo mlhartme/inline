@@ -20,7 +20,7 @@ import net.oneandone.sushi.metadata.SimpleTypeException;
 
 public class FloatType extends Type {
     public FloatType() {
-        super(Float.class, "float");
+        super(Float.class);
     }
     
     @Override

@@ -19,7 +19,7 @@ import net.oneandone.sushi.metadata.Type;
 
 public class CharacterType extends Type {
     public CharacterType() {
-        super(Character.class, "char");
+        super(Character.class);
     }
     
     @Override

@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 
 public class EnumType extends Type {
     public static EnumType create(Class<? extends Enum> clazz) {
-        return new EnumType(clazz, typeName(clazz), getValues(clazz));
+        return new EnumType(clazz, getValues(clazz));
     }
 
     public static <T extends Enum<?>> T[] getValues(Class<T> clazz) {
@@ -44,21 +44,10 @@ public class EnumType extends Type {
         }
     }
 
-    public static String typeName(Class<?> clazz) {
-        String name;
-
-        name = clazz.getName();
-        name = name.substring(name.lastIndexOf(".") + 1); // ok for -1
-        // simplify inner class names ...
-        name = name.substring(name.indexOf('$') + 1); // ok for -1
-        return Strings.decapitalize(name);
-    }
-
-
     private final Enum[] values;
     
-    public EnumType(Class<?> clazz, String name, Enum[] values) {
-        super(clazz, name);
+    public EnumType(Class<?> clazz, Enum[] values) {
+        super(clazz);
         this.values = values;
     }
     

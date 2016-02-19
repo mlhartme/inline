@@ -20,7 +20,7 @@ import net.oneandone.sushi.metadata.SimpleTypeException;
 
 public class LongType extends Type {
     public LongType() {
-        super(Long.class, "long");
+        super(Long.class);
     }
     
     @Override

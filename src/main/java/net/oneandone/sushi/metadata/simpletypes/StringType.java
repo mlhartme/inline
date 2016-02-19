@@ -19,7 +19,7 @@ import net.oneandone.sushi.metadata.Type;
 
 public class StringType extends Type {
     public StringType() {
-        super(String.class, "string");
+        super(String.class);
     }
 
     @Override

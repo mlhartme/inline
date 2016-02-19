@@ -21,9 +21,8 @@ import java.util.Collection;
 public abstract class Type {
     protected final java.lang.reflect.Type type;
     protected final Class<?> rawType;
-    protected final String name;
 
-    public Type(java.lang.reflect.Type type, String name) {
+    public Type(java.lang.reflect.Type type) {
         this.type = type;
         if (type instanceof Class) {
             rawType = (Class) type;
@@ -43,7 +42,6 @@ public abstract class Type {
         if (Collection.class.isAssignableFrom(rawType)) {
             throw new IllegalArgumentException(rawType.getName());
         }
-        this.name = name;
     }
 
     /** throws an SimpleTypeException to indicate a parsing problem */
@@ -57,11 +55,6 @@ public abstract class Type {
         return type;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    
     public abstract Object newInstance();
 
 }

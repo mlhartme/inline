@@ -20,7 +20,7 @@ import net.oneandone.sushi.metadata.SimpleTypeException;
 
 public class BooleanType extends Type {
     public BooleanType() {
-        super(Boolean.class, "boolean");
+        super(Boolean.class);
     }
     
     @Override
