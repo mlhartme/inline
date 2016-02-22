@@ -38,23 +38,17 @@ public class ContextBuilder {
     private final List<Argument> values;
 
     public ContextBuilder(Context context, ContextBuilder parent, Object commandInstance) {
-        this(context, parent, commandInstance, null, null);
+        this(context, parent, new IdentityContextFactory(commandInstance));
     }
 
     public ContextBuilder(Context context, ContextBuilder parent, Constructor<?> constructor, Object[] constructorActuals) {
-        this(context, parent, null, constructor, constructorActuals);
+        this(context, parent, new ConstructorContextFactory(constructor, constructorActuals));
     }
 
-    private ContextBuilder(Context context, ContextBuilder parent, Object commandInstance, Constructor<?> constructor, Object[] constructorActuals) {
-        if (commandInstance != null && constructor != null) {
-            throw new IllegalArgumentException();
-        }
-        if (commandInstance == null && constructor == null) {
-            throw new IllegalArgumentException();
-        }
+    private ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
         this.context = context;
         this.parent = parent;
-        this.factory = constructor == null ? new IdentityContextFactory(commandInstance) : new ConstructorContextFactory(constructor, constructorActuals);
+        this.factory = factory;
         this.options = new HashMap<>();
         this.values = new ArrayList<>();
     }
