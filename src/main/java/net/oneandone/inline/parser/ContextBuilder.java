@@ -106,7 +106,7 @@ public class ContextBuilder {
             parent.instantiate(actuals, instantiatedContexts);
         }
         actuals.save(context, null);
-        obj = commandInstance == null ? newInstance(instantiatedContexts) : commandInstance;
+        obj = commandInstance == null ? compiledHandle.newInstance(instantiatedContexts, context) : commandInstance;
         actuals.save(context, obj);
         return obj;
     }
@@ -117,29 +117,6 @@ public class ContextBuilder {
         }
         result.defineAll(options.values());
         result.defineAll(values);
-    }
-
-    private Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
-        Object instance;
-
-        for (int i = 0, max = compiledHandle.constructorActuals.length; i < max; i++) {
-            if (compiledHandle.constructorActuals[i] instanceof Context) {
-                instance = instantiatedContexts.get(compiledHandle.constructorActuals[i]);
-                if (instance == null) {
-                    throw new IllegalStateException();
-                }
-                compiledHandle.constructorActuals[i] = instance;
-            }
-        }
-        try {
-            instance = compiledHandle.constructor.newInstance(compiledHandle.constructorActuals);
-        } catch (InvocationTargetException e) {
-            throw e.getCause();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalStateException("TODO", e);
-        }
-        instantiatedContexts.put(context, instance);
-        return instance;
     }
 
     private void addOptions(Map<String, Argument> result) {
@@ -166,5 +143,29 @@ public class ContextBuilder {
             this.constructor = constructor;
             this.constructorActuals = constructorActuals;
         }
+
+        public Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable {
+            Object instance;
+
+            for (int i = 0, max = constructorActuals.length; i < max; i++) {
+                if (constructorActuals[i] instanceof Context) {
+                    instance = instantiatedContexts.get(constructorActuals[i]);
+                    if (instance == null) {
+                        throw new IllegalStateException();
+                    }
+                    constructorActuals[i] = instance;
+                }
+            }
+            try {
+                instance = constructor.newInstance(constructorActuals);
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new IllegalStateException("TODO", e);
+            }
+            instantiatedContexts.put(context, instance);
+            return instance;
+        }
+
     }
 }
