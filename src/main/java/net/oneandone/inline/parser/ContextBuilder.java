@@ -48,6 +48,12 @@ public class ContextBuilder {
     }
 
     private ContextBuilder(Context context, ContextBuilder parent, Object commandInstance, Constructor<?> constructor, Object[] constructorActuals) {
+        if (commandInstance != null && constructor != null) {
+            throw new IllegalArgumentException();
+        }
+        if (commandInstance == null && constructor == null) {
+            throw new IllegalArgumentException();
+        }
         this.context = context;
         this.parent = parent;
         this.commandInstance = commandInstance;
@@ -84,7 +90,6 @@ public class ContextBuilder {
         Actuals actuals;
         Map<String, Argument> allOptions;
         List<Argument> allValues;
-        Map<Context, Object> context;
 
         actuals = new Actuals();
         define(actuals);
