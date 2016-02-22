@@ -28,7 +28,7 @@ public class Context {
             syntax = definition.substring(0, idx).trim();
         }
         if (explicitName == null) {
-            name = handle.clazz().getName();
+            name = handle.name();
         } else {
             name = explicitName;
         }

@@ -17,15 +17,8 @@ public class Handle {
         this.classOrInstance = classOrInstance;
     }
 
-    private boolean isClass() {
-        return classOrInstance instanceof Class<?>;
-    }
-
-    private Object instance() {
-        if (isClass()) {
-            throw new IllegalStateException();
-        }
-        return classOrInstance;
+    public String name() {
+        return clazz().toString();
     }
 
     public ExceptionHandler exceptionHandler() {
@@ -76,6 +69,8 @@ public class Handle {
         }
     }
 
+    //--
+
     private static Object eatContext(List<Context> parents, Class<?> type) {
         Context context;
         boolean isClass;
@@ -102,6 +97,17 @@ public class Handle {
             result.append(source.getName());
         }
         return result.toString();
+    }
+
+    private boolean isClass() {
+        return classOrInstance instanceof Class<?>;
+    }
+
+    private Object instance() {
+        if (isClass()) {
+            throw new IllegalStateException();
+        }
+        return classOrInstance;
     }
 
     //--
