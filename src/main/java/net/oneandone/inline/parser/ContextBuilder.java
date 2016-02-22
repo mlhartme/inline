@@ -27,8 +27,6 @@ public class ContextBuilder {
         return arg.length() > 1 && arg.startsWith("-");
     }
 
-    //--
-
     private final Context context;
     private final ContextBuilder parent;
     private final ContextFactory factory;

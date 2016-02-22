@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/** Reference to a Class or an Instance. A ContextFactory factory. */
 public class Handle {
     private final Object classOrInstance;
 
@@ -16,7 +17,18 @@ public class Handle {
         this.classOrInstance = classOrInstance;
     }
 
-    public boolean isClass() {
+    public ExceptionHandler exceptionHandler() {
+        if (isClass()) {
+            return null;
+        }
+        if (classOrInstance instanceof ExceptionHandler) {
+            return (ExceptionHandler) classOrInstance;
+        } else {
+            return null;
+        }
+    }
+
+    private boolean isClass() {
         return classOrInstance instanceof Class<?>;
     }
 

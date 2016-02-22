@@ -85,19 +85,19 @@ public class Cli {
     }
 
     public Cli begin(String name, Object context, String syntax) {
+        ExceptionHandler h;
         Handle handle;
-        Object contextInstance;
 
         if (context == null) {
             throw new IllegalArgumentException();
         }
         handle = new Handle(context);
-        if (!handle.isClass()) {
-            contextInstance = handle.instance();
+        h = handle.exceptionHandler();
+        if (h != null) {
             if (exceptionHandler != null) {
-                throw new InvalidCliException("duplicate exception handler: " + exceptionHandler + " vs "+ contextInstance);
+                throw new InvalidCliException("duplicate exception handler: " + exceptionHandler + " vs "+ h);
             }
-            exceptionHandler = (ExceptionHandler) contextInstance;
+            exceptionHandler = h;
         }
         this.currentContext = Context.create(currentContext, name, handle, syntax);
         return this;
