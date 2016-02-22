@@ -80,6 +80,10 @@ public class Cli {
     }
 
     public Cli begin(Object context, String syntax) {
+        return begin(null, context, syntax);
+    }
+
+    public Cli begin(String name, Object context, String syntax) {
         if (context == null) {
             throw new IllegalArgumentException();
         }
@@ -89,7 +93,7 @@ public class Cli {
             }
             exceptionHandler = (ExceptionHandler) context;
         }
-        this.currentContext = Context.create(currentContext, context, syntax);
+        this.currentContext = Context.create(currentContext, name, context, syntax);
         return this;
     }
 
@@ -124,7 +128,7 @@ public class Cli {
             name = definition.substring(0, idx);
             definition = definition.substring(idx + 1);
         }
-        context = Context.create(currentContext, clazzOrInstance, definition);
+        context = Context.create(currentContext, null, clazzOrInstance, definition);
         builder = context.compile(schema);
         if (lookup(name) != null) {
             throw new IllegalArgumentException("duplicate command: " + name);

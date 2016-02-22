@@ -2,6 +2,10 @@ package net.oneandone.inline.samples;
 
 import net.oneandone.inline.Cli;
 import net.oneandone.inline.Console;
+import net.oneandone.inline.parser.ArgumentException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dummy implementation of the 'service' command. Demonstraces contexts.
@@ -9,23 +13,42 @@ import net.oneandone.inline.Console;
 public class ServiceManager {
     public static void main(String[] args) {
         Cli cli;
+        ServiceManager manager;
 
         cli = Cli.create("usage:\n"
                 + "list            list available services\n"
                 + "start <name>    starts the specified service\n"
                 + "stop <name>     stop the specified service\n");
 
-        cli.add(Ls.class, "list");
-        cli.begin(Service.class, "service" );
-          cli.add(Start.class, "start");
-          cli.add(Stop.class, "stop");
+        manager = new ServiceManager();
+        cli.begin("manager", manager, "");
+          cli.add(Ls.class, "list");
+          cli.begin("manager.service", "service" );
+            cli.add(Start.class, "start");
+            cli.add(Stop.class, "stop");
 
+        //--
         cli.run("list");
         cli.run("start", "apache");
         cli.run("stop", "apache");
     }
 
-    public static final String[] AVAILABLE = { "apache", "tomcat"};
+    public final List<Service> all;
+
+    public ServiceManager() {
+        all = new ArrayList<>();
+        all.add(new Service("apache"));
+        all.add(new Service("tomcat"));
+    }
+
+    public Service service(String name) {
+        for (Service service : all) {
+            if (name.equals(service.name)) {
+                return service;
+            }
+        }
+        throw new ArgumentException("unknown service: " + name);
+    }
 
     public static class Service {
         private final String name;
@@ -48,13 +71,16 @@ public class ServiceManager {
     }
 
     public static class Ls extends Base {
-        public Ls(Console console) {
+        private final ServiceManager manager;
+
+        public Ls(ServiceManager manager, Console console) {
             super(console);
+            this.manager = manager;
         }
 
         public void run() {
-            for (String name : AVAILABLE) {
-                console.info.println(name);
+            for (Service service : manager.all) {
+                console.info.println(service.name);
             }
         }
     }

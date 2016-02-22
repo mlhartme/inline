@@ -12,7 +12,8 @@ import java.util.List;
  * "compiles" into a ContextBuilder.
  */
 public class Context {
-    public static Context create(Context parent, Object classOrInstance, String definition) {
+    public static Context create(Context parent, String explicitName, Object classOrInstance, String definition) {
+        String name;
         int idx;
         String syntax;
         String mapping;
@@ -28,7 +29,12 @@ public class Context {
             mapping = definition.substring(idx + 1, definition.length() - 1).trim();
             syntax = definition.substring(0, idx).trim();
         }
-        return new Context(parent, classOrInstance, Source.forSyntax(syntax), Mapping.parse(mapping, clazz(classOrInstance)));
+        if (explicitName == null) {
+            name = clazz(classOrInstance).getName();
+        } else {
+            name = explicitName;
+        }
+        return new Context(parent, name, classOrInstance, Source.forSyntax(syntax), Mapping.parse(mapping, clazz(classOrInstance)));
     }
 
     private static Class<?> clazz(Object classOrInstance) {
@@ -41,14 +47,16 @@ public class Context {
 
     /** may be null */
     public final Context parent;
+    public final String name;
     public final Object classOrInstance;
     public final List<Source> sources;
     public final Mapping mapping;
 
     private ContextBuilder lazyCompiledContext;
 
-    public Context(Context parent, Object classOrInstance, List<Source> sources, Mapping mapping) {
+    public Context(Context parent, String name, Object classOrInstance, List<Source> sources, Mapping mapping) {
         this.parent = parent;
+        this.name = name;
         this.classOrInstance = classOrInstance;
         this.sources = sources;
         this.mapping = mapping;
