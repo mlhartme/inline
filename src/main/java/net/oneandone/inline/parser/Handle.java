@@ -49,34 +49,25 @@ public class Handle {
 
     public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
         Class<?> clazz;
-        Object[] actuals;
-        List<Argument> arguments;
-        Constructor found;
-        Object[] foundActuals;
-        List<Argument> foundArguments;
+        ContextFactory found;
+        ContextFactory candidate;
 
         found = null;
-        foundActuals = null;
-        foundArguments = null;
-        arguments = new ArrayList<>();
         if (isClass()) {
             clazz = clazz();
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                arguments.clear();
-                actuals = match(context, schema, constructor, constructorSources, arguments);
-                if (actuals != null) {
+                candidate = match(context, schema, constructor, constructorSources);
+                if (candidate != null) {
                     if (found != null) {
                         throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
                     }
-                    found = constructor;
-                    foundActuals = actuals;
-                    foundArguments = new ArrayList<>(arguments);
+                    found = candidate;
                 }
             }
             if (found == null) {
                 throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
             }
-            return new ConstructorContextFactory(found, foundActuals, foundArguments);
+            return found;
         } else {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
@@ -85,7 +76,8 @@ public class Handle {
         }
     }
 
-    private Object[] match(Context context, Repository schema, Constructor constructor, List<Source> initialSources, List<Argument> result) {
+    private ContextFactory match(Context context, Repository schema, Constructor constructor, List<Source> initialSources) {
+        List<Argument> arguments;
         List<Context> remainingContext;
         List<Source> remainingSources;
         Parameter[] formals;
@@ -94,6 +86,7 @@ public class Handle {
         Object ctx;
         Source source;
 
+        arguments = new ArrayList<>();
         remainingContext = context.parentList();
         remainingSources = new ArrayList<>(initialSources);
         formals = constructor.getParameters();
@@ -107,13 +100,13 @@ public class Handle {
                 return null; // too many constructor arguments
             } else {
                 source = remainingSources.remove(0);
-                result.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
+                arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
             }
         }
         if (!remainingSources.isEmpty()) {
             return null; // not all arguments matched
         }
-        return actuals;
+        return new ConstructorContextFactory(constructor, actuals, arguments);
     }
 
     private static Object eatContext(List<Context> parents, Class<?> type) {
