@@ -56,7 +56,7 @@ public class Handle {
         if (isClass()) {
             clazz = clazz();
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                candidate = match(context, schema, constructor, constructorSources);
+                candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
                 if (candidate != null) {
                     if (found != null) {
                         throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
@@ -74,39 +74,6 @@ public class Handle {
             }
             return new IdentityContextFactory(instance());
         }
-    }
-
-    private ContextFactory match(Context context, Repository schema, Constructor constructor, List<Source> initialSources) {
-        List<Argument> arguments;
-        List<Context> remainingContext;
-        List<Source> remainingSources;
-        Parameter[] formals;
-        Object[] actuals;
-        Parameter formal;
-        Object ctx;
-        Source source;
-
-        arguments = new ArrayList<>();
-        remainingContext = context.parentList();
-        remainingSources = new ArrayList<>(initialSources);
-        formals = constructor.getParameters();
-        actuals = new Object[formals.length];
-        for (int i = 0; i < formals.length; i++) {
-            formal = formals[i];
-            ctx = eatContext(remainingContext, formal.getType());
-            if (ctx != null) {
-                actuals[i] = ctx;
-            } else if (remainingSources.isEmpty()) {
-                return null; // too many constructor arguments
-            } else {
-                source = remainingSources.remove(0);
-                arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
-            }
-        }
-        if (!remainingSources.isEmpty()) {
-            return null; // not all arguments matched
-        }
-        return new ConstructorContextFactory(constructor, actuals, arguments);
     }
 
     private static Object eatContext(List<Context> parents, Class<?> type) {
@@ -139,23 +106,40 @@ public class Handle {
 
     //--
 
-    //--
-
-    public static class IdentityContextFactory extends ContextFactory {
-        private final Object instance;
-
-        public IdentityContextFactory(Object instance) {
-            super(new ArrayList<>());
-            this.instance = instance;
-        }
-
-        @Override
-        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
-            return instance;
-        }
-    }
-
     public static class ConstructorContextFactory extends ContextFactory {
+        public static ContextFactory createOpt(Context context, Repository schema, Constructor constructor, List<Source> initialSources) {
+            List<Argument> arguments;
+            List<Context> remainingContext;
+            List<Source> remainingSources;
+            Parameter[] formals;
+            Object[] actuals;
+            Parameter formal;
+            Object ctx;
+            Source source;
+
+            arguments = new ArrayList<>();
+            remainingContext = context.parentList();
+            remainingSources = new ArrayList<>(initialSources);
+            formals = constructor.getParameters();
+            actuals = new Object[formals.length];
+            for (int i = 0; i < formals.length; i++) {
+                formal = formals[i];
+                ctx = eatContext(remainingContext, formal.getType());
+                if (ctx != null) {
+                    actuals[i] = ctx;
+                } else if (remainingSources.isEmpty()) {
+                    return null; // too many constructor arguments
+                } else {
+                    source = remainingSources.remove(0);
+                    arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
+                }
+            }
+            if (!remainingSources.isEmpty()) {
+                return null; // not all arguments matched
+            }
+            return new ConstructorContextFactory(constructor, actuals, arguments);
+        }
+
         private final Constructor<?> constructor;
         private final Object[] constructorActuals;
 
@@ -189,4 +173,19 @@ public class Handle {
         }
 
     }
+
+    public static class IdentityContextFactory extends ContextFactory {
+        private final Object instance;
+
+        public IdentityContextFactory(Object instance) {
+            super(new ArrayList<>());
+            this.instance = instance;
+        }
+
+        @Override
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
+            return instance;
+        }
+    }
+
 }
