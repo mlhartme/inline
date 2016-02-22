@@ -3,9 +3,11 @@ package net.oneandone.inline.parser;
 import net.oneandone.inline.types.Repository;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Handle {
     private final Object classOrInstance;
@@ -33,7 +35,7 @@ public class Handle {
         return classOrInstance;
     }
 
-    public ContextBuilder.ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
+    public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
         Class<?> clazz;
         Object[] actuals;
         List<Argument> arguments;
@@ -62,12 +64,12 @@ public class Handle {
             if (found == null) {
                 throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
             }
-            return new ContextBuilder.ConstructorContextFactory(found, foundActuals, foundArguments);
+            return new ConstructorContextFactory(found, foundActuals, foundArguments);
         } else {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
-            return new ContextBuilder.IdentityContextFactory(instance());
+            return new IdentityContextFactory(instance());
         }
     }
 
@@ -128,5 +130,72 @@ public class Handle {
             result.append(source.getName());
         }
         return result.toString();
+    }
+
+    //--
+
+    //--
+
+    public static abstract class ContextFactory {
+        private final List<Argument> arguments;
+
+        public ContextFactory(List<Argument> arguments) {
+            this.arguments = arguments;
+        }
+
+        public List<Argument> arguments() {
+            return arguments;
+        }
+
+        public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
+    }
+
+    public static class IdentityContextFactory extends ContextFactory {
+        private final Object instance;
+
+        public IdentityContextFactory(Object instance) {
+            super(new ArrayList<>());
+            this.instance = instance;
+        }
+
+        @Override
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
+            return instance;
+        }
+    }
+
+    public static class ConstructorContextFactory extends ContextFactory {
+        private final Constructor<?> constructor;
+        private final Object[] constructorActuals;
+
+        public ConstructorContextFactory(Constructor<?> constructor, Object[] constructorActuals, List<Argument> arguments) {
+            super(arguments);
+            this.constructor = constructor;
+            this.constructorActuals = constructorActuals;
+        }
+
+        @Override
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
+            Object instance;
+
+            for (int i = 0, max = constructorActuals.length; i < max; i++) {
+                if (constructorActuals[i] instanceof Context) {
+                    instance = instantiatedContexts.get(constructorActuals[i]);
+                    if (instance == null) {
+                        throw new IllegalStateException();
+                    }
+                    constructorActuals[i] = instance;
+                }
+            }
+            try {
+                instance = constructor.newInstance(constructorActuals);
+            } catch (InvocationTargetException e) {
+                throw e.getCause();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new IllegalStateException("TODO", e);
+            }
+            return instance;
+        }
+
     }
 }

@@ -64,7 +64,7 @@ public class Context {
         List<Source> constructorSources;
         List<Source> extraSources;
         ContextBuilder result;
-        ContextBuilder.ContextFactory factory;
+        Handle.ContextFactory factory;
 
         constructorSources = new ArrayList<>(sources.size());
         extraSources = new ArrayList<>();

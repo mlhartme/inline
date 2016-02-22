@@ -33,19 +33,11 @@ public class ContextBuilder {
 
     private final Context context;
     private final ContextBuilder parent;
-    private final ContextFactory factory;
+    private final Handle.ContextFactory factory;
     private final Map<String, Argument> options;
     private final List<Argument> values;
 
-    public ContextBuilder(Context context, ContextBuilder parent, Object commandInstance) {
-        this(context, parent, new IdentityContextFactory(commandInstance));
-    }
-
-    public ContextBuilder(Context context, ContextBuilder parent, Constructor<?> constructor, Object[] constructorActuals, List<Argument> arguments) {
-        this(context, parent, new ConstructorContextFactory(constructor, constructorActuals, arguments));
-    }
-
-    public ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
+    public ContextBuilder(Context context, ContextBuilder parent, Handle.ContextFactory factory) {
         this.context = context;
         this.parent = parent;
         this.factory = factory;
@@ -124,70 +116,5 @@ public class ContextBuilder {
             parent.addValues(result);
         }
         result.addAll(values);
-    }
-
-    //--
-
-    public static abstract class ContextFactory {
-        private final List<Argument> arguments;
-
-        public ContextFactory(List<Argument> arguments) {
-            this.arguments = arguments;
-        }
-
-        public List<Argument> arguments() {
-            return arguments;
-        }
-
-        public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
-    }
-
-    public static class IdentityContextFactory extends ContextFactory {
-        private final Object instance;
-
-        public IdentityContextFactory(Object instance) {
-            super(new ArrayList<>());
-            this.instance = instance;
-        }
-
-        @Override
-        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
-            return instance;
-        }
-    }
-
-    public static class ConstructorContextFactory extends ContextFactory {
-        private final Constructor<?> constructor;
-        private final Object[] constructorActuals;
-
-        public ConstructorContextFactory(Constructor<?> constructor, Object[] constructorActuals, List<Argument> arguments) {
-            super(arguments);
-            this.constructor = constructor;
-            this.constructorActuals = constructorActuals;
-        }
-
-        @Override
-        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
-            Object instance;
-
-            for (int i = 0, max = constructorActuals.length; i < max; i++) {
-                if (constructorActuals[i] instanceof Context) {
-                    instance = instantiatedContexts.get(constructorActuals[i]);
-                    if (instance == null) {
-                        throw new IllegalStateException();
-                    }
-                    constructorActuals[i] = instance;
-                }
-            }
-            try {
-                instance = constructor.newInstance(constructorActuals);
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw new IllegalStateException("TODO", e);
-            }
-            return instance;
-        }
-
     }
 }
