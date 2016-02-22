@@ -103,7 +103,7 @@ public class Context {
             if (found == null) {
                 throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
             }
-            result = new ContextBuilder(this, compiledParent(schema), found, foundActuals);
+            result = new ContextBuilder(this, compiledParent(schema), found, foundActuals, foundArguments);
             for (Argument a : foundArguments) {
                 result.addArgument(a);
             }

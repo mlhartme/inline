@@ -41,8 +41,8 @@ public class ContextBuilder {
         this(context, parent, new IdentityContextFactory(commandInstance));
     }
 
-    public ContextBuilder(Context context, ContextBuilder parent, Constructor<?> constructor, Object[] constructorActuals) {
-        this(context, parent, new ConstructorContextFactory(constructor, constructorActuals));
+    public ContextBuilder(Context context, ContextBuilder parent, Constructor<?> constructor, Object[] constructorActuals, List<Argument> arguments) {
+        this(context, parent, new ConstructorContextFactory(constructor, constructorActuals, arguments));
     }
 
     private ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
@@ -129,6 +129,12 @@ public class ContextBuilder {
     //--
 
     public static abstract class ContextFactory {
+        private final List<Argument> arguments;
+
+        public ContextFactory(List<Argument> arguments) {
+            this.arguments = arguments;
+        }
+
         public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
     }
 
@@ -136,6 +142,7 @@ public class ContextBuilder {
         private final Object instance;
 
         public IdentityContextFactory(Object instance) {
+            super(new ArrayList<>());
             this.instance = instance;
         }
 
@@ -149,7 +156,8 @@ public class ContextBuilder {
         private final Constructor<?> constructor;
         private final Object[] constructorActuals;
 
-        public ConstructorContextFactory(Constructor<?> constructor, Object[] constructorActuals) {
+        public ConstructorContextFactory(Constructor<?> constructor, Object[] constructorActuals, List<Argument> arguments) {
+            super(arguments);
             this.constructor = constructor;
             this.constructorActuals = constructorActuals;
         }
