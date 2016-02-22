@@ -91,7 +91,7 @@ public class Cli {
         if (context == null) {
             throw new IllegalArgumentException();
         }
-        handle = new Handle(context);
+        handle = Handle.create(context);
         h = handle.exceptionHandler();
         if (h != null) {
             if (exceptionHandler != null) {
@@ -134,7 +134,7 @@ public class Cli {
             name = definition.substring(0, idx);
             definition = definition.substring(idx + 1);
         }
-        context = Context.create(currentContext, null, new Handle(clazzOrInstance), definition);
+        context = Context.create(currentContext, null, Handle.create(clazzOrInstance), definition);
         builder = context.compile(schema);
         if (lookup(name) != null) {
             throw new IllegalArgumentException("duplicate command: " + name);

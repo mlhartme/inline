@@ -11,9 +11,13 @@ import java.util.Map;
 
 /** Reference to a Class or an Instance. A ContextFactory factory. */
 public class Handle {
+    public static Handle create(Object classOrInstance) {
+        return new Handle(classOrInstance);
+    }
+
     private final Object classOrInstance;
 
-    public Handle(Object classOrInstance) {
+    private Handle(Object classOrInstance) {
         this.classOrInstance = classOrInstance;
     }
 
