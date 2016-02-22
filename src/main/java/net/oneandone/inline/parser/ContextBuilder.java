@@ -33,8 +33,7 @@ public class ContextBuilder {
 
     private final Context context;
     private final ContextBuilder parent;
-    private final Object commandInstance; // or null
-    private final ContextFactory compiledHandle;
+    private final ContextFactory factory;
     private final Map<String, Argument> options;
     private final List<Argument> values;
 
@@ -55,8 +54,7 @@ public class ContextBuilder {
         }
         this.context = context;
         this.parent = parent;
-        this.commandInstance = commandInstance;
-        this.compiledHandle = constructor == null ? null : new ContextFactory(constructor, constructorActuals);
+        this.factory = constructor == null ? new IdentityContextFactory(commandInstance) : new ConstructorContextFactory(constructor, constructorActuals);
         this.options = new HashMap<>();
         this.values = new ArrayList<>();
     }
@@ -106,7 +104,7 @@ public class ContextBuilder {
             parent.instantiate(actuals, instantiatedContexts);
         }
         actuals.save(context, null);
-        obj = commandInstance == null ? compiledHandle.newInstance(instantiatedContexts, context) : commandInstance;
+        obj = factory.newInstance(instantiatedContexts, context);
         actuals.save(context, obj);
         return obj;
     }
@@ -135,15 +133,33 @@ public class ContextBuilder {
 
     //--
 
-    public static class ContextFactory {
+    public static abstract class ContextFactory {
+        public abstract Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable;
+    }
+
+    public static class IdentityContextFactory extends ContextFactory {
+        private final Object instance;
+
+        public IdentityContextFactory(Object instance) {
+            this.instance = instance;
+        }
+
+        @Override
+        public Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable {
+            return instance;
+        }
+    }
+
+    public static class ConstructorContextFactory extends ContextFactory {
         private final Constructor<?> constructor;
         private final Object[] constructorActuals;
 
-        public ContextFactory(Constructor<?> constructor, Object[] constructorActuals) {
+        public ConstructorContextFactory(Constructor<?> constructor, Object[] constructorActuals) {
             this.constructor = constructor;
             this.constructorActuals = constructorActuals;
         }
 
+        @Override
         public Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable {
             Object instance;
 
