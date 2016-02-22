@@ -136,20 +136,6 @@ public class Handle {
 
     //--
 
-    public static abstract class ContextFactory {
-        private final List<Argument> arguments;
-
-        public ContextFactory(List<Argument> arguments) {
-            this.arguments = arguments;
-        }
-
-        public List<Argument> arguments() {
-            return arguments;
-        }
-
-        public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
-    }
-
     public static class IdentityContextFactory extends ContextFactory {
         private final Object instance;
 

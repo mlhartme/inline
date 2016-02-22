@@ -15,8 +15,6 @@
  */
 package net.oneandone.inline.parser;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,11 +31,11 @@ public class ContextBuilder {
 
     private final Context context;
     private final ContextBuilder parent;
-    private final Handle.ContextFactory factory;
+    private final ContextFactory factory;
     private final Map<String, Argument> options;
     private final List<Argument> values;
 
-    public ContextBuilder(Context context, ContextBuilder parent, Handle.ContextFactory factory) {
+    public ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
         this.context = context;
         this.parent = parent;
         this.factory = factory;
