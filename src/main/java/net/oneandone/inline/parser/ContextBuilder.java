@@ -33,7 +33,7 @@ public class ContextBuilder {
 
     private final Context context;
     private final ContextBuilder parent;
-    private final Object commandInstance;
+    private final Object commandInstance; // or null
     private final Constructor<?> constructor;
     private final Object[] constructorActuals;
     private final Map<String, Argument> options;

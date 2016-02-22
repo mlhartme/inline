@@ -94,8 +94,8 @@ public class Context {
                 constructorSources.add(s);
             }
         }
-        if (handle.classOrInstance instanceof Class) {
-            clazz = (Class<?>) handle.classOrInstance;
+        if (handle.isClass()) {
+            clazz = handle.clazz();
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
                 arguments.clear();
                 actuals = match(schema, constructor, constructorSources, arguments);
@@ -119,7 +119,7 @@ public class Context {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
-            result = new ContextBuilder(this, compiledParent(schema), handle.classOrInstance);
+            result = new ContextBuilder(this, compiledParent(schema), handle.instance());
         }
         for (Source s : extraSources) {
             result.addArgument(new Argument(this, s, mapping.target(schema, s.getName())));
@@ -177,16 +177,14 @@ public class Context {
 
     private static Object eatContext(List<Context> parents, Class<?> type) {
         Context context;
-        Object classOrInstance;
         boolean isClass;
 
         for (int i = 0, max = parents.size(); i < max; i++) {
             context = parents.get(i);
-            classOrInstance = context.handle.classOrInstance;
-            isClass = classOrInstance instanceof Class<?>;
-            if (type.isAssignableFrom(isClass ? (Class<?>) classOrInstance : classOrInstance.getClass())) {
+            isClass = context.handle.isClass();
+            if (type.isAssignableFrom(context.handle.clazz())) {
                 parents.remove(i);
-                return isClass ? context : classOrInstance;
+                return isClass ? context : context.handle.instance();
             }
         }
         return null;
