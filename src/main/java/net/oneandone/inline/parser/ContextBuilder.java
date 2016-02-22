@@ -45,7 +45,7 @@ public class ContextBuilder {
         this(context, parent, new ConstructorContextFactory(constructor, constructorActuals, arguments));
     }
 
-    private ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
+    public ContextBuilder(Context context, ContextBuilder parent, ContextFactory factory) {
         this.context = context;
         this.parent = parent;
         this.factory = factory;
@@ -133,6 +133,10 @@ public class ContextBuilder {
 
         public ContextFactory(List<Argument> arguments) {
             this.arguments = arguments;
+        }
+
+        public List<Argument> arguments() {
+            return arguments;
         }
 
         public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
