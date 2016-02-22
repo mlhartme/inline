@@ -12,7 +12,11 @@ import java.util.Map;
 /** Reference to a Class or an Instance. A ContextFactory factory. */
 public abstract class Handle {
     public static Handle create(Object classOrInstance) {
-        return new TmpHandle(classOrInstance);
+        if (classOrInstance instanceof Class<?>) {
+            return new ClassHandle((Class) classOrInstance);
+        } else {
+            return new InstanceHandle(classOrInstance);
+        }
     }
 
     public abstract Class<?> clazz();
@@ -27,70 +31,82 @@ public abstract class Handle {
 
     //--
 
-    public static class TmpHandle extends Handle {
-        private final Object classOrInstance;
+    public static class InstanceHandle extends Handle {
+        private final Object instance;
 
-        public TmpHandle(Object classOrInstance) {
-            this.classOrInstance = classOrInstance;
+        public InstanceHandle(Object instance) {
+            this.instance = instance;
         }
 
         public ExceptionHandler exceptionHandler() {
-            if (isClass()) {
-                return null;
-            }
-            if (classOrInstance instanceof ExceptionHandler) {
-                return (ExceptionHandler) classOrInstance;
+            if (instance instanceof ExceptionHandler) {
+                return (ExceptionHandler) instance;
             } else {
                 return null;
             }
         }
 
         public Class<?> clazz() {
-            if (isClass()) {
-                return (Class) classOrInstance;
-            } else {
-                return classOrInstance.getClass();
-            }
+            return instance.getClass();
         }
 
         public boolean isClass() {
-            return classOrInstance instanceof Class<?>;
+            return false;
         }
 
         public Object instance() {
-            if (isClass()) {
-                throw new IllegalStateException();
-            }
-            return classOrInstance;
+            return instance;
         }
 
         public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
-            Class<?> clazz;
+            if (!constructorSources.isEmpty()) {
+                throw new InvalidCliException("cannot apply constructor argument to an instance");
+            }
+            return new IdentityContextFactory(instance());
+        }
+    }
+
+    public static class ClassHandle extends Handle {
+        private final Class<?> clazz;
+
+        public ClassHandle(Class<?> clazz) {
+            this.clazz = clazz;
+        }
+
+        public ExceptionHandler exceptionHandler() {
+            return null;
+        }
+
+        public Class<?> clazz() {
+            return clazz;
+        }
+
+        public boolean isClass() {
+            return true;
+        }
+
+        public Object instance() {
+            throw new IllegalStateException();
+        }
+
+        public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
             ContextFactory found;
             ContextFactory candidate;
 
             found = null;
-            if (isClass()) {
-                clazz = clazz();
-                for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                    candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
-                    if (candidate != null) {
-                        if (found != null) {
-                            throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
-                        }
-                        found = candidate;
+            for (Constructor constructor : clazz.getDeclaredConstructors()) {
+                candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
+                if (candidate != null) {
+                    if (found != null) {
+                        throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
                     }
+                    found = candidate;
                 }
-                if (found == null) {
-                    throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
-                }
-                return found;
-            } else {
-                if (!constructorSources.isEmpty()) {
-                    throw new InvalidCliException("cannot apply constructor argument to an instance");
-                }
-                return new IdentityContextFactory(instance());
             }
+            if (found == null) {
+                throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
+            }
+            return found;
         }
 
         private static String names(List<Source> sources) {
