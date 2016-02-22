@@ -98,7 +98,8 @@ public class ContextBuilder {
             parent.instantiate(actuals, instantiatedContexts);
         }
         actuals.save(context, null);
-        obj = factory.newInstance(instantiatedContexts, context);
+        obj = factory.newInstance(instantiatedContexts);
+        instantiatedContexts.put(context, obj);
         actuals.save(context, obj);
         return obj;
     }
@@ -128,7 +129,7 @@ public class ContextBuilder {
     //--
 
     public static abstract class ContextFactory {
-        public abstract Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable;
+        public abstract Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable;
     }
 
     public static class IdentityContextFactory extends ContextFactory {
@@ -139,7 +140,7 @@ public class ContextBuilder {
         }
 
         @Override
-        public Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable {
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
             return instance;
         }
     }
@@ -154,7 +155,7 @@ public class ContextBuilder {
         }
 
         @Override
-        public Object newInstance(Map<Context, Object> instantiatedContexts, Context context) throws Throwable {
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
             Object instance;
 
             for (int i = 0, max = constructorActuals.length; i < max; i++) {
@@ -173,7 +174,6 @@ public class ContextBuilder {
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new IllegalStateException("TODO", e);
             }
-            instantiatedContexts.put(context, instance);
             return instance;
         }
 
