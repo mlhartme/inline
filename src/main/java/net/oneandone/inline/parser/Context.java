@@ -29,20 +29,13 @@ public class Context {
             mapping = definition.substring(idx + 1, definition.length() - 1).trim();
             syntax = definition.substring(0, idx).trim();
         }
+        Handle handle = new Handle(classOrInstance);
         if (explicitName == null) {
-            name = clazz(classOrInstance).getName();
+            name = handle.clazz().getName();
         } else {
             name = explicitName;
         }
-        return new Context(parent, name, classOrInstance, Source.forSyntax(syntax), Mapping.parse(mapping, clazz(classOrInstance)));
-    }
-
-    private static Class<?> clazz(Object classOrInstance) {
-        if (classOrInstance instanceof Class<?>) {
-            return (Class<?>) classOrInstance;
-        } else {
-            return classOrInstance.getClass();
-        }
+        return new Context(parent, name, handle, Source.forSyntax(syntax), Mapping.parse(mapping, handle.clazz()));
     }
 
     /** may be null */
@@ -54,10 +47,10 @@ public class Context {
 
     private ContextBuilder lazyCompiledContext;
 
-    public Context(Context parent, String name, Object classOrInstance, List<Source> sources, Mapping mapping) {
+    public Context(Context parent, String name, Handle handle, List<Source> sources, Mapping mapping) {
         this.parent = parent;
         this.name = name;
-        this.handle = new Handle(classOrInstance);
+        this.handle = handle;
         this.sources = sources;
         this.mapping = mapping;
         this.lazyCompiledContext = null;
