@@ -20,7 +20,6 @@ public abstract class Handle {
     }
 
     public abstract Class<?> clazz();
-    public abstract boolean isClass();
     public abstract ExceptionHandler exceptionHandler();
     public abstract ContextFactory compile(Context context, Repository schema, List<Source> constructorSources);
 
@@ -49,10 +48,6 @@ public abstract class Handle {
             return instance.getClass();
         }
 
-        public boolean isClass() {
-            return false;
-        }
-
         public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
@@ -74,10 +69,6 @@ public abstract class Handle {
 
         public Class<?> clazz() {
             return clazz;
-        }
-
-        public boolean isClass() {
-            return true;
         }
 
         public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
