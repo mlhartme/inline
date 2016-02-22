@@ -48,7 +48,7 @@ public class Context {
     /** may be null */
     public final Context parent;
     public final String name;
-    public final Object classOrInstance;
+    public final Handle handle;
     public final List<Source> sources;
     public final Mapping mapping;
 
@@ -57,7 +57,7 @@ public class Context {
     public Context(Context parent, String name, Object classOrInstance, List<Source> sources, Mapping mapping) {
         this.parent = parent;
         this.name = name;
-        this.classOrInstance = classOrInstance;
+        this.handle = new Handle(classOrInstance);
         this.sources = sources;
         this.mapping = mapping;
         this.lazyCompiledContext = null;
@@ -94,8 +94,8 @@ public class Context {
                 constructorSources.add(s);
             }
         }
-        if (classOrInstance instanceof Class) {
-            clazz = (Class<?>) classOrInstance;
+        if (handle.classOrInstance instanceof Class) {
+            clazz = (Class<?>) handle.classOrInstance;
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
                 arguments.clear();
                 actuals = match(schema, constructor, constructorSources, arguments);
@@ -119,7 +119,7 @@ public class Context {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
-            result = new ContextBuilder(this, compiledParent(schema), classOrInstance);
+            result = new ContextBuilder(this, compiledParent(schema), handle.classOrInstance);
         }
         for (Source s : extraSources) {
             result.addArgument(new Argument(this, s, mapping.target(schema, s.getName())));
@@ -182,7 +182,7 @@ public class Context {
 
         for (int i = 0, max = parents.size(); i < max; i++) {
             context = parents.get(i);
-            classOrInstance = context.classOrInstance;
+            classOrInstance = context.handle.classOrInstance;
             isClass = classOrInstance instanceof Class<?>;
             if (type.isAssignableFrom(isClass ? (Class<?>) classOrInstance : classOrInstance.getClass())) {
                 parents.remove(i);
