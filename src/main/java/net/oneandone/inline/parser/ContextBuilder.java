@@ -34,8 +34,7 @@ public class ContextBuilder {
     private final Context context;
     private final ContextBuilder parent;
     private final Object commandInstance; // or null
-    private final Constructor<?> constructor;
-    private final Object[] constructorActuals;
+    private final CompiledHandle compiledHandle;
     private final Map<String, Argument> options;
     private final List<Argument> values;
 
@@ -57,8 +56,7 @@ public class ContextBuilder {
         this.context = context;
         this.parent = parent;
         this.commandInstance = commandInstance;
-        this.constructor = constructor;
-        this.constructorActuals = constructorActuals;
+        this.compiledHandle = constructor == null ? null : new CompiledHandle(constructor, constructorActuals);
         this.options = new HashMap<>();
         this.values = new ArrayList<>();
     }
@@ -124,17 +122,17 @@ public class ContextBuilder {
     private Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
         Object instance;
 
-        for (int i = 0, max = constructorActuals.length; i < max; i++) {
-            if (constructorActuals[i] instanceof Context) {
-                instance = instantiatedContexts.get(constructorActuals[i]);
+        for (int i = 0, max = compiledHandle.constructorActuals.length; i < max; i++) {
+            if (compiledHandle.constructorActuals[i] instanceof Context) {
+                instance = instantiatedContexts.get(compiledHandle.constructorActuals[i]);
                 if (instance == null) {
                     throw new IllegalStateException();
                 }
-                constructorActuals[i] = instance;
+                compiledHandle.constructorActuals[i] = instance;
             }
         }
         try {
-            instance = constructor.newInstance(constructorActuals);
+            instance = compiledHandle.constructor.newInstance(compiledHandle.constructorActuals);
         } catch (InvocationTargetException e) {
             throw e.getCause();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -156,5 +154,17 @@ public class ContextBuilder {
             parent.addValues(result);
         }
         result.addAll(values);
+    }
+
+    //--
+
+    public static class CompiledHandle {
+        private final Constructor<?> constructor;
+        private final Object[] constructorActuals;
+
+        public CompiledHandle(Constructor<?> constructor, Object[] constructorActuals) {
+            this.constructor = constructor;
+            this.constructorActuals = constructorActuals;
+        }
     }
 }
