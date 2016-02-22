@@ -10,108 +10,101 @@ import java.util.List;
 import java.util.Map;
 
 /** Reference to a Class or an Instance. A ContextFactory factory. */
-public class Handle {
+public abstract class Handle {
     public static Handle create(Object classOrInstance) {
-        return new Handle(classOrInstance);
+        return new TmpHandle(classOrInstance);
     }
 
-    private final Object classOrInstance;
-
-    private Handle(Object classOrInstance) {
-        this.classOrInstance = classOrInstance;
-    }
+    public abstract Class<?> clazz();
+    public abstract Object instance();
+    public abstract boolean isClass();
+    public abstract ExceptionHandler exceptionHandler();
+    public abstract ContextFactory compile(Context context, Repository schema, List<Source> constructorSources);
 
     public String name() {
         return clazz().toString();
     }
 
-    public ExceptionHandler exceptionHandler() {
-        if (isClass()) {
-            return null;
-        }
-        if (classOrInstance instanceof ExceptionHandler) {
-            return (ExceptionHandler) classOrInstance;
-        } else {
-            return null;
-        }
-    }
-
-    public Class<?> clazz() {
-        if (isClass()) {
-            return (Class) classOrInstance;
-        } else {
-            return classOrInstance.getClass();
-        }
-    }
-
-    public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
-        Class<?> clazz;
-        ContextFactory found;
-        ContextFactory candidate;
-
-        found = null;
-        if (isClass()) {
-            clazz = clazz();
-            for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
-                if (candidate != null) {
-                    if (found != null) {
-                        throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
-                    }
-                    found = candidate;
-                }
-            }
-            if (found == null) {
-                throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
-            }
-            return found;
-        } else {
-            if (!constructorSources.isEmpty()) {
-                throw new InvalidCliException("cannot apply constructor argument to an instance");
-            }
-            return new IdentityContextFactory(instance());
-        }
-    }
-
     //--
 
-    private static Object eatContext(List<Context> parents, Class<?> type) {
-        Context context;
-        boolean isClass;
+    public static class TmpHandle extends Handle {
+        private final Object classOrInstance;
 
-        for (int i = 0, max = parents.size(); i < max; i++) {
-            context = parents.get(i);
-            isClass = context.handle.isClass();
-            if (type.isAssignableFrom(context.handle.clazz())) {
-                parents.remove(i);
-                return isClass ? context : context.handle.instance();
+        public TmpHandle(Object classOrInstance) {
+            this.classOrInstance = classOrInstance;
+        }
+
+        public ExceptionHandler exceptionHandler() {
+            if (isClass()) {
+                return null;
+            }
+            if (classOrInstance instanceof ExceptionHandler) {
+                return (ExceptionHandler) classOrInstance;
+            } else {
+                return null;
             }
         }
-        return null;
-    }
 
-    private static String names(List<Source> sources) {
-        StringBuilder result;
-
-        result = new StringBuilder();
-        for (Source source : sources) {
-            if (result.length() > 0) {
-                result.append(", ");
+        public Class<?> clazz() {
+            if (isClass()) {
+                return (Class) classOrInstance;
+            } else {
+                return classOrInstance.getClass();
             }
-            result.append(source.getName());
         }
-        return result.toString();
-    }
 
-    private boolean isClass() {
-        return classOrInstance instanceof Class<?>;
-    }
-
-    private Object instance() {
-        if (isClass()) {
-            throw new IllegalStateException();
+        public boolean isClass() {
+            return classOrInstance instanceof Class<?>;
         }
-        return classOrInstance;
+
+        public Object instance() {
+            if (isClass()) {
+                throw new IllegalStateException();
+            }
+            return classOrInstance;
+        }
+
+        public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
+            Class<?> clazz;
+            ContextFactory found;
+            ContextFactory candidate;
+
+            found = null;
+            if (isClass()) {
+                clazz = clazz();
+                for (Constructor constructor : clazz.getDeclaredConstructors()) {
+                    candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
+                    if (candidate != null) {
+                        if (found != null) {
+                            throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
+                        }
+                        found = candidate;
+                    }
+                }
+                if (found == null) {
+                    throw new InvalidCliException("no matching constructor: " + clazz.getName() + "(" + names(constructorSources) + ")");
+                }
+                return found;
+            } else {
+                if (!constructorSources.isEmpty()) {
+                    throw new InvalidCliException("cannot apply constructor argument to an instance");
+                }
+                return new IdentityContextFactory(instance());
+            }
+        }
+
+        private static String names(List<Source> sources) {
+            StringBuilder result;
+
+            result = new StringBuilder();
+            for (Source source : sources) {
+                if (result.length() > 0) {
+                    result.append(", ");
+                }
+                result.append(source.getName());
+            }
+            return result.toString();
+        }
     }
 
     //--
@@ -148,6 +141,21 @@ public class Handle {
                 return null; // not all arguments matched
             }
             return new ConstructorContextFactory(constructor, actuals, arguments);
+        }
+
+        private static Object eatContext(List<Context> parents, Class<?> type) {
+            Context context;
+            boolean isClass;
+
+            for (int i = 0, max = parents.size(); i < max; i++) {
+                context = parents.get(i);
+                isClass = context.handle.isClass();
+                if (type.isAssignableFrom(context.handle.clazz())) {
+                    parents.remove(i);
+                    return isClass ? context : context.handle.instance();
+                }
+            }
+            return null;
         }
 
         private final Constructor<?> constructor;
