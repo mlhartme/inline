@@ -34,7 +34,7 @@ public class ContextBuilder {
     private final Context context;
     private final ContextBuilder parent;
     private final Object commandInstance; // or null
-    private final CompiledHandle compiledHandle;
+    private final ContextFactory compiledHandle;
     private final Map<String, Argument> options;
     private final List<Argument> values;
 
@@ -56,7 +56,7 @@ public class ContextBuilder {
         this.context = context;
         this.parent = parent;
         this.commandInstance = commandInstance;
-        this.compiledHandle = constructor == null ? null : new CompiledHandle(constructor, constructorActuals);
+        this.compiledHandle = constructor == null ? null : new ContextFactory(constructor, constructorActuals);
         this.options = new HashMap<>();
         this.values = new ArrayList<>();
     }
@@ -135,11 +135,11 @@ public class ContextBuilder {
 
     //--
 
-    public static class CompiledHandle {
+    public static class ContextFactory {
         private final Constructor<?> constructor;
         private final Object[] constructorActuals;
 
-        public CompiledHandle(Constructor<?> constructor, Object[] constructorActuals) {
+        public ContextFactory(Constructor<?> constructor, Object[] constructorActuals) {
             this.constructor = constructor;
             this.constructorActuals = constructorActuals;
         }
