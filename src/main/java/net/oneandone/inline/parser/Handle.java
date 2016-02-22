@@ -20,7 +20,6 @@ public abstract class Handle {
     }
 
     public abstract Class<?> clazz();
-    public abstract Object instance();
     public abstract boolean isClass();
     public abstract ExceptionHandler exceptionHandler();
     public abstract ContextFactory compile(Context context, Repository schema, List<Source> constructorSources);
@@ -54,15 +53,11 @@ public abstract class Handle {
             return false;
         }
 
-        public Object instance() {
-            return instance;
-        }
-
         public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
-            return new IdentityContextFactory(instance());
+            return new IdentityContextFactory(instance);
         }
     }
 
@@ -83,10 +78,6 @@ public abstract class Handle {
 
         public boolean isClass() {
             return true;
-        }
-
-        public Object instance() {
-            throw new IllegalStateException();
         }
 
         public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
@@ -159,16 +150,14 @@ public abstract class Handle {
             return new ConstructorContextFactory(constructor, actuals, arguments);
         }
 
-        private static Object eatContext(List<Context> parents, Class<?> type) {
+        private static Context eatContext(List<Context> parents, Class<?> type) {
             Context context;
-            boolean isClass;
 
             for (int i = 0, max = parents.size(); i < max; i++) {
                 context = parents.get(i);
-                isClass = context.handle.isClass();
                 if (type.isAssignableFrom(context.handle.clazz())) {
                     parents.remove(i);
-                    return isClass ? context : context.handle.instance();
+                    return context;
                 }
             }
             return null;
