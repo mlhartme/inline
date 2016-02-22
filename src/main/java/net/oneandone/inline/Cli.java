@@ -22,6 +22,7 @@ import net.oneandone.inline.parser.Command;
 import net.oneandone.inline.parser.Context;
 import net.oneandone.inline.parser.ContextBuilder;
 import net.oneandone.inline.parser.ExceptionHandler;
+import net.oneandone.inline.parser.Handle;
 import net.oneandone.inline.parser.InvalidCliException;
 import net.oneandone.inline.parser.Mapping;
 import net.oneandone.inline.types.Repository;
@@ -84,16 +85,21 @@ public class Cli {
     }
 
     public Cli begin(String name, Object context, String syntax) {
+        Handle handle;
+        Object contextInstance;
+
         if (context == null) {
             throw new IllegalArgumentException();
         }
-        if (context instanceof ExceptionHandler) {
+        handle = new Handle(context);
+        if (!handle.isClass()) {
+            contextInstance = handle.instance();
             if (exceptionHandler != null) {
-                throw new InvalidCliException("duplicate exception handler: " + exceptionHandler + " vs "+ context);
+                throw new InvalidCliException("duplicate exception handler: " + exceptionHandler + " vs "+ contextInstance);
             }
-            exceptionHandler = (ExceptionHandler) context;
+            exceptionHandler = (ExceptionHandler) contextInstance;
         }
-        this.currentContext = Context.create(currentContext, name, context, syntax);
+        this.currentContext = Context.create(currentContext, name, handle, syntax);
         return this;
     }
 
@@ -128,7 +134,7 @@ public class Cli {
             name = definition.substring(0, idx);
             definition = definition.substring(idx + 1);
         }
-        context = Context.create(currentContext, null, clazzOrInstance, definition);
+        context = Context.create(currentContext, null, new Handle(clazzOrInstance), definition);
         builder = context.compile(schema);
         if (lookup(name) != null) {
             throw new IllegalArgumentException("duplicate command: " + name);

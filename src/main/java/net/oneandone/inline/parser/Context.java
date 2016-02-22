@@ -12,7 +12,7 @@ import java.util.List;
  * "compiles" into a ContextBuilder.
  */
 public class Context {
-    public static Context create(Context parent, String explicitName, Object classOrInstance, String definition) {
+    public static Context create(Context parent, String explicitName, Handle handle, String definition) {
         String name;
         int idx;
         String syntax;
@@ -29,7 +29,6 @@ public class Context {
             mapping = definition.substring(idx + 1, definition.length() - 1).trim();
             syntax = definition.substring(0, idx).trim();
         }
-        Handle handle = new Handle(classOrInstance);
         if (explicitName == null) {
             name = handle.clazz().getName();
         } else {
