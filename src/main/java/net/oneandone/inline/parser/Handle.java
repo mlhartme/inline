@@ -17,6 +17,17 @@ public class Handle {
         this.classOrInstance = classOrInstance;
     }
 
+    private boolean isClass() {
+        return classOrInstance instanceof Class<?>;
+    }
+
+    private Object instance() {
+        if (isClass()) {
+            throw new IllegalStateException();
+        }
+        return classOrInstance;
+    }
+
     public ExceptionHandler exceptionHandler() {
         if (isClass()) {
             return null;
@@ -28,23 +39,12 @@ public class Handle {
         }
     }
 
-    private boolean isClass() {
-        return classOrInstance instanceof Class<?>;
-    }
-
     public Class<?> clazz() {
         if (isClass()) {
             return (Class) classOrInstance;
         } else {
             return classOrInstance.getClass();
         }
-    }
-
-    public Object instance() {
-        if (isClass()) {
-            throw new IllegalStateException();
-        }
-        return classOrInstance;
     }
 
     public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
