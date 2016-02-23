@@ -9,3 +9,7 @@ yields command objects that can be re-used in normal code (e.g. if one command a
 Rationale: I know there's https://github.com/airlift, but I need context objects and my console with default options
 and exception handling. (And the same for JCommander)
 
+## Migration from Sushi 2.8.x
+
+Inline is a spin of from Sushi. 
+
