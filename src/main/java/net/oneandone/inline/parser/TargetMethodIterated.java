@@ -15,7 +15,7 @@
  */
 package net.oneandone.inline.parser;
 
-import net.oneandone.inline.types.Type;
+import net.oneandone.inline.types.Primitive;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +24,7 @@ import java.util.List;
 public class TargetMethodIterated extends Target {
     private final Method method;
 
-    public TargetMethodIterated(boolean list, Type component, Method method) {
+    public TargetMethodIterated(boolean list, Primitive component, Method method) {
         super(list, component);
         this.method = method;
     }

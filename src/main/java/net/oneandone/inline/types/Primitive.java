@@ -19,13 +19,13 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.function.Function;
 
-public class Type {
+public class Primitive {
     protected final Class<?> raw;
     private final Function<String, ? extends Object> parser;
     public final String expected;
     private final Object defaultValue;
 
-    public Type(java.lang.reflect.Type raw, String expected, Object dflt, Function<String, ? extends Object> parser) {
+    public Primitive(java.lang.reflect.Type raw, String expected, Object dflt, Function<String, ? extends Object> parser) {
         if (raw instanceof Class) {
             this.raw = (Class) raw;
         } else {

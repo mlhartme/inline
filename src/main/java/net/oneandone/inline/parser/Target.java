@@ -1,7 +1,7 @@
 package net.oneandone.inline.parser;
 
 import net.oneandone.inline.types.Repository;
-import net.oneandone.inline.types.Type;
+import net.oneandone.inline.types.Primitive;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /** Defines where to store values from the command line. */
 public abstract class Target {
     private final boolean list;
-    private final Type component;
+    private final Primitive component;
 
     public Target(Repository schema, java.lang.reflect.Type type) {
         ParameterizedType p;
@@ -37,7 +37,7 @@ public abstract class Target {
         }
     }
 
-    public Target(boolean list, Type component) {
+    public Target(boolean list, Primitive component) {
         this.list = list;
         this.component = component;
     }

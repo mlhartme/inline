@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class Repository {
-    private final Map<Class<?>, Type> map;
+    private final Map<Class<?>, Primitive> map;
     
     public Repository() {
         map = new HashMap<>();
@@ -66,37 +66,37 @@ public class Repository {
         }
     }
 
-    public Type get(Class<?> clazz) {
-        Type type;
+    public Primitive get(Class<?> clazz) {
+        Primitive primitive;
         
-        type = map.get(clazz);
-        if (type == null) {
+        primitive = map.get(clazz);
+        if (primitive == null) {
             if (!Enum.class.isAssignableFrom(clazz)) {
                 throw new IllegalStateException();
             }
-            type = forEnum((Class) clazz);
-            map.put(clazz, type);
+            primitive = forEnum((Class) clazz);
+            map.put(clazz, primitive);
         }
-        return type;
+        return primitive;
     }
 
     public void register(Class<?> clazz, Class<?> primitive, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
         map.put(primitive, register(clazz, expected, defaultValue, parser));
     }
 
-    public Type register(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
-        Type type;
+    public Primitive register(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
+        Primitive primitive;
 
-        type = new Type(clazz, expected, defaultValue, parser);
-        map.put(type.getRawType(), type);
-        return type;
+        primitive = new Primitive(clazz, expected, defaultValue, parser);
+        map.put(primitive.getRawType(), primitive);
+        return primitive;
     }
 
     //--
 
-    public static Type forEnum(Class<? extends Enum> clazz) {
+    public static Primitive forEnum(Class<? extends Enum> clazz) {
         Enum[] values = getValues(clazz);
-        return new Type(clazz, expected(values), values[0], str -> {
+        return new Primitive(clazz, expected(values), values[0], str -> {
             String name;
 
             str = normalizeEnum(str);
