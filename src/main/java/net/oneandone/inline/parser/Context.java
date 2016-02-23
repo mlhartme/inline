@@ -99,4 +99,19 @@ public class Context {
         }
         return result;
     }
+
+    //--
+
+    public static Context remove(List<Context> parents, Class<?> type) {
+        Context context;
+
+        for (int i = 0, max = parents.size(); i < max; i++) {
+            context = parents.get(i);
+            if (type.isAssignableFrom(context.handle.clazz())) {
+                parents.remove(i);
+                return context;
+            }
+        }
+        return null;
+    }
 }

@@ -4,6 +4,7 @@ import net.oneandone.inline.types.Repository;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +12,13 @@ import java.util.Map;
 
 /** Reference to a Class or an Instance. A ContextFactory factory. */
 public abstract class Handle {
-    public static Handle create(Object classOrInstance) {
-        if (classOrInstance instanceof Class<?>) {
-            return new ClassHandle((Class) classOrInstance);
+    public static Handle create(Context parent, Object handle) {
+        if (handle instanceof Class<?>) {
+            return new ClassHandle((Class) handle);
+        } else if (handle instanceof String) {
+            return FactoryHandle.doCreate(parent, (String) handle);
         } else {
-            return new InstanceHandle(classOrInstance);
+            return new InstanceHandle(handle);
         }
     }
 
@@ -53,6 +56,126 @@ public abstract class Handle {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
             return new IdentityContextFactory(instance);
+        }
+    }
+
+    public static class FactoryHandle extends Handle {
+        public static Handle doCreate(Context parent, String handle) {
+            int idx;
+            String ctx;
+
+            idx = handle.indexOf('.');
+            if (idx == -1) {
+                throw new InvalidCliException("invalid factory handle: " + handle);
+            }
+            ctx = handle.substring(0, idx);
+            while (parent != null) {
+                if (parent.name.equals(ctx)) {
+                    return new FactoryHandle(getMethod(parent, ctx.substring(idx + 1)));
+                }
+                parent = parent.parent;
+            }
+            throw new InvalidCliException("context not found: " + ctx);
+        }
+
+        private static Method getMethod(Context context, String name) {
+            Class<?> clazz;
+            Method result;
+
+            result = null;
+            clazz = context.handle.clazz();
+            for (Method method : clazz.getMethods()) {
+                if (name.equals(method.getName())) {
+                    if (result != null) {
+                        throw new InvalidCliException("method ambiguous: " + result + " vs " + method);
+                    }
+                    result = method;
+                }
+            }
+            if (result == null) {
+                throw new InvalidCliException("method not found: " + clazz.getName() + "." + name + "(...)");
+            }
+            return result;
+        }
+
+        private final Method method;
+
+        public FactoryHandle(Method method) {
+            this.method = method;
+        }
+
+        @Override
+        public Class<?> clazz() {
+            return method.getReturnType();
+        }
+
+        @Override
+        public ExceptionHandler exceptionHandler() {
+            return null;
+        }
+
+        @Override
+        public ContextFactory compile(Context context, Repository schema, List<Source> methodSources) {
+            Object[] actuals;
+            List<Argument> arguments;
+
+            actuals = null; // TODO
+            arguments = new ArrayList<>();
+            return new MethodContextFactory(context, method, arguments, actuals);
+        }
+    }
+
+    public static class MethodContextFactory extends ContextFactory {
+        public static ContextFactory create(Context context, Repository schema, Method method, List<Source> initialSources) {
+            List<Argument> arguments;
+            List<Context> remainingContext;
+            List<Source> remainingSources;
+            Parameter[] formals;
+            Object[] actuals;
+            Parameter formal;
+            Object ctx;
+            Source source;
+
+            arguments = new ArrayList<>();
+            remainingContext = context.parentList();
+            remainingSources = new ArrayList<>(initialSources);
+            formals = method.getParameters();
+            actuals = new Object[formals.length];
+            for (int i = 0; i < formals.length; i++) {
+                formal = formals[i];
+                ctx = Context.remove(remainingContext, formal.getType());
+                if (ctx != null) {
+                    actuals[i] = ctx;
+                } else if (remainingSources.isEmpty()) {
+                    return null; // too many constructor arguments
+                } else {
+                    source = remainingSources.remove(0);
+                    arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
+                }
+            }
+            if (!remainingSources.isEmpty()) {
+                return null; // not all arguments matched
+            }
+            return new MethodContextFactory(context, method, arguments, actuals);
+        }
+
+        private final Context context;
+        private final Method method;
+        private final Object[] actuals;
+
+        public MethodContextFactory(Context context, Method method, List<Argument> arguments, Object[] actuals) {
+            super(arguments);
+            this.method = method;
+            this.context = context;
+            this.actuals = actuals;
+        }
+
+        @Override
+        public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
+            Object instance;
+
+            instance = instantiatedContexts.get(context);
+            return method.invoke(instance, actuals);
         }
     }
 
@@ -125,7 +248,7 @@ public abstract class Handle {
             actuals = new Object[formals.length];
             for (int i = 0; i < formals.length; i++) {
                 formal = formals[i];
-                ctx = eatContext(remainingContext, formal.getType());
+                ctx = Context.remove(remainingContext, formal.getType());
                 if (ctx != null) {
                     actuals[i] = ctx;
                 } else if (remainingSources.isEmpty()) {
@@ -139,19 +262,6 @@ public abstract class Handle {
                 return null; // not all arguments matched
             }
             return new ConstructorContextFactory(constructor, actuals, arguments);
-        }
-
-        private static Context eatContext(List<Context> parents, Class<?> type) {
-            Context context;
-
-            for (int i = 0, max = parents.size(); i < max; i++) {
-                context = parents.get(i);
-                if (type.isAssignableFrom(context.handle.clazz())) {
-                    parents.remove(i);
-                    return context;
-                }
-            }
-            return null;
         }
 
         private final Constructor<?> constructor;
@@ -201,5 +311,4 @@ public abstract class Handle {
             return instance;
         }
     }
-
 }
