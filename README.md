@@ -23,6 +23,7 @@ Steps
 * For command base classes
   * Console no longer contains World ... 
 * For all classes that directly or indirectly implement Command
-  *	dump Command
+  * dump Command
+  * rename the invoke() method to run()
   * remove all @Value and @Option annotations and introducate constructor arguments instead; add the respective syntax to Main. 
   * remove @Remaining annotation and add a Mapping instead
