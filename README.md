@@ -16,10 +16,12 @@ Inline is a spin of from https://github.com/mlhartme/sushi/tree/sushi-2.8.19.
 Steps
 * Main class
 	* dump "extends Cli" and "implements Command"
-	* invoke
-	    Cli.create 
+	* in Main.main()
+	    Cli cli = Cli.create("my help"); 
   * move the help text from Main.printHelp to Cli.create argument
-  * for each @Child command invoke Cli.add()
+  * for each @Child command add one line cli.add(MyCommand.class, "commandName")
+* For command base classes
+  * Console no longer contains World ... 
 * For all classes that directly or indirectly implement Command
   *	dump Command
   * remove all @Value and @Option annotations and introducate constructor arguments instead; add the respective syntax to Main. 
