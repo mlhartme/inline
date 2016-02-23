@@ -62,20 +62,20 @@ public abstract class Handle {
     public static class FactoryHandle extends Handle {
         public static Handle doCreate(Context parent, String handle) {
             int idx;
-            String ctx;
+            String name;
 
             idx = handle.indexOf('.');
             if (idx == -1) {
                 throw new InvalidCliException("invalid factory handle: " + handle);
             }
-            ctx = handle.substring(0, idx);
+            name = handle.substring(0, idx);
             while (parent != null) {
-                if (parent.name.equals(ctx)) {
-                    return new FactoryHandle(getMethod(parent, ctx.substring(idx + 1)));
+                if (parent.name.equals(name)) {
+                    return new FactoryHandle(parent, getMethod(parent, handle.substring(idx + 1)));
                 }
                 parent = parent.parent;
             }
-            throw new InvalidCliException("context not found: " + ctx);
+            throw new InvalidCliException("context not found: " + name);
         }
 
         private static Method getMethod(Context context, String name) {
@@ -98,9 +98,12 @@ public abstract class Handle {
             return result;
         }
 
+        /** context object to call this method on */
+        private final Context target;
         private final Method method;
 
-        public FactoryHandle(Method method) {
+        public FactoryHandle(Context target, Method method) {
+            this.target = target;
             this.method = method;
         }
 
@@ -116,17 +119,12 @@ public abstract class Handle {
 
         @Override
         public ContextFactory compile(Context context, Repository schema, List<Source> methodSources) {
-            Object[] actuals;
-            List<Argument> arguments;
-
-            actuals = null; // TODO
-            arguments = new ArrayList<>();
-            return new MethodContextFactory(context, method, arguments, actuals);
+            return MethodContextFactory.create(context, schema, target, method, methodSources);
         }
     }
 
     public static class MethodContextFactory extends ContextFactory {
-        public static ContextFactory create(Context context, Repository schema, Method method, List<Source> initialSources) {
+        public static ContextFactory create(Context context, Repository schema, Context target, Method method, List<Source> initialSources) {
             List<Argument> arguments;
             List<Context> remainingContext;
             List<Source> remainingSources;
@@ -156,17 +154,17 @@ public abstract class Handle {
             if (!remainingSources.isEmpty()) {
                 return null; // not all arguments matched
             }
-            return new MethodContextFactory(context, method, arguments, actuals);
+            return new MethodContextFactory(target, method, arguments, actuals);
         }
 
-        private final Context context;
+        private final Context target;
         private final Method method;
         private final Object[] actuals;
 
-        public MethodContextFactory(Context context, Method method, List<Argument> arguments, Object[] actuals) {
+        public MethodContextFactory(Context target, Method method, List<Argument> arguments, Object[] actuals) {
             super(arguments);
+            this.target = target;
             this.method = method;
-            this.context = context;
             this.actuals = actuals;
         }
 
@@ -174,7 +172,7 @@ public abstract class Handle {
         public Object newInstance(Map<Context, Object> instantiatedContexts) throws Throwable {
             Object instance;
 
-            instance = instantiatedContexts.get(context);
+            instance = instantiatedContexts.get(target);
             return method.invoke(instance, actuals);
         }
     }
