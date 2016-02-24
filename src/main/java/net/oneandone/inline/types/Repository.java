@@ -15,6 +15,8 @@
  */
 package net.oneandone.inline.types;
 
+import net.oneandone.inline.parser.InvalidCliException;
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -72,7 +74,7 @@ public class Repository {
         primitive = map.get(clazz);
         if (primitive == null) {
             if (!Enum.class.isAssignableFrom(clazz)) {
-                throw new IllegalStateException();
+                throw new InvalidCliException("unknown primitive: " + clazz);
             }
             primitive = forEnum((Class) clazz);
             map.put(clazz, primitive);
