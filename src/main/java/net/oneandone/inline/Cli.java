@@ -156,9 +156,9 @@ public class Cli {
             clazz = classOrInstance.getClass();
         }
         try {
-            return clazz.getDeclaredMethod(name, NO_ARGS);
+            return clazz.getMethod(name, NO_ARGS);
         } catch (NoSuchMethodException e) {
-            throw new InvalidCliException("command method not found: " + clazz.getName() + "." + name + "()");
+            throw new InvalidCliException("command method not found: public " + clazz.getName() + "." + name + "()");
         }
     }
 

@@ -84,7 +84,7 @@ public abstract class Handle {
                 }
             }
             if (result == null) {
-                throw new InvalidCliException("method not found: " + clazz.getName() + "." + name + "(...)");
+                throw new InvalidCliException("method not found: public " + clazz.getName() + "." + name + "(...)");
             }
             return result;
         }
