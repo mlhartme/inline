@@ -9,3 +9,21 @@ yields command objects that can be re-used in normal code (e.g. if one command a
 Rationale: I know there's https://github.com/airlift, but I need context objects and my console with default options
 and exception handling. (And the same for JCommander)
 
+## Migration from Sushi 2.8.x
+
+Inline is a spin of from https://github.com/mlhartme/sushi/tree/sushi-2.8.19. 
+
+Steps
+* Main class
+	* dump "extends Cli" and "implements Command"
+	* in Main.main()
+	    Cli cli = Cli.create("my help"); 
+  * move the help text from Main.printHelp to Cli.create argument
+  * for each @Child command add one line cli.add(MyCommand.class, "commandName")
+* For command base classes
+  * Console no longer contains World ... 
+* For all classes that directly or indirectly implement Command
+  * dump Command
+  * rename the invoke() method to run()
+  * remove all @Value and @Option annotations and introducate constructor arguments instead; add the respective syntax to Main. 
+  * remove @Remaining annotation and add a Mapping instead
