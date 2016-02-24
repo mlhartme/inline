@@ -23,7 +23,6 @@ public abstract class Handle {
     }
 
     public abstract Class<?> clazz();
-    public abstract ExceptionHandler exceptionHandler();
     public abstract ContextFactory compile(Context context, Repository schema, List<Source> constructorSources);
 
     public String name() {
@@ -37,14 +36,6 @@ public abstract class Handle {
 
         public InstanceHandle(Object instance) {
             this.instance = instance;
-        }
-
-        public ExceptionHandler exceptionHandler() {
-            if (instance instanceof ExceptionHandler) {
-                return (ExceptionHandler) instance;
-            } else {
-                return null;
-            }
         }
 
         public Class<?> clazz() {
@@ -113,11 +104,6 @@ public abstract class Handle {
         }
 
         @Override
-        public ExceptionHandler exceptionHandler() {
-            return null;
-        }
-
-        @Override
         public ContextFactory compile(Context context, Repository schema, List<Source> methodSources) {
             return MethodContextFactory.create(context, schema, target, method, methodSources);
         }
@@ -182,10 +168,6 @@ public abstract class Handle {
 
         public ClassHandle(Class<?> clazz) {
             this.clazz = clazz;
-        }
-
-        public ExceptionHandler exceptionHandler() {
-            return null;
         }
 
         public Class<?> clazz() {

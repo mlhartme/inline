@@ -16,7 +16,6 @@
 package net.oneandone.inline;
 
 import net.oneandone.inline.parser.ArgumentException;
-import net.oneandone.inline.parser.ExceptionHandler;
 import net.oneandone.inline.util.SwitchableWriter;
 
 import java.io.InputStream;
@@ -26,7 +25,7 @@ import java.util.Scanner;
 /**
  * Configurable replacement for System.out, System.err and System.in. 
  */
-public class Console implements ExceptionHandler {
+public class Console {
     public static Console create() {
         return new Console(new PrintWriter(System.out, true), new PrintWriter(System.err, true), System.in);
     }

@@ -21,7 +21,6 @@ import net.oneandone.inline.parser.ArgumentException;
 import net.oneandone.inline.parser.Command;
 import net.oneandone.inline.parser.Context;
 import net.oneandone.inline.parser.ContextBuilder;
-import net.oneandone.inline.parser.ExceptionHandler;
 import net.oneandone.inline.parser.Handle;
 import net.oneandone.inline.parser.InvalidCliException;
 import net.oneandone.inline.parser.Mapping;
@@ -32,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * A command line interface. Define available command with begin(), add() and end(). Then invoke run() to actually invoke them.
@@ -42,7 +42,7 @@ public class Cli {
         Cli cli;
 
         console = Console.create();
-        cli = new Cli().begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
+        cli = new Cli(new Repository(), console::handleException).begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
         cli.add(command, syntax);
         return cli;
     }
@@ -52,7 +52,7 @@ public class Cli {
         Cli cli;
 
         console = Console.create();
-        cli = new Cli()
+        cli = new Cli(new Repository(), console::handleException)
                 .begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }")
                    .addDefault(new Help(console, help), "help")
                    .add(PackageVersion.class, "version");
@@ -60,20 +60,21 @@ public class Cli {
     }
 
     protected final Repository schema;
+    private final Function<Throwable, Integer> exceptionHandler;
     private final List<Command> commands;
     private Command defaultCommand;
     private Context currentContext;
-    private ExceptionHandler exceptionHandler;
 
     public Cli() {
-        this(new Repository());
+        this(new Repository(), e -> { e.printStackTrace(); return -1; });
     }
     
-    public Cli(Repository schema) {
+    public Cli(Repository schema, Function<Throwable, Integer> exceptionHandler) {
         this.schema = schema;
         this.commands = new ArrayList<>();
         this.currentContext = null;
         this.defaultCommand = null;
+        this.exceptionHandler = exceptionHandler;
     }
 
     public Cli begin(Object context) {
@@ -85,20 +86,12 @@ public class Cli {
     }
 
     public Cli begin(String name, Object context, String syntax) {
-        ExceptionHandler h;
         Handle handle;
 
         if (context == null) {
             throw new IllegalArgumentException();
         }
         handle = Handle.create(currentContext, context);
-        h = handle.exceptionHandler();
-        if (h != null) {
-            if (exceptionHandler != null) {
-                throw new InvalidCliException("duplicate exception handler: " + exceptionHandler + " vs "+ h);
-            }
-            exceptionHandler = h;
-        }
         this.currentContext = Context.create(currentContext, name, handle, syntax);
         return this;
     }
@@ -201,7 +194,7 @@ public class Cli {
             }
             return c.run(obj);
         } catch (Throwable e) {
-            return exceptionHandler.handleException(e);
+            return exceptionHandler.apply(e);
         }
     }
 
