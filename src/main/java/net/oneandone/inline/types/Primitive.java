@@ -16,6 +16,7 @@
 package net.oneandone.inline.types;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -25,7 +26,7 @@ public class Primitive {
     public final String expected;
     private final Object defaultValue;
 
-    public Primitive(java.lang.reflect.Type raw, String expected, Object dflt, Function<String, ? extends Object> parser) {
+    public Primitive(Type raw, String expected, Object dflt, Function<String, ? extends Object> parser) {
         if (raw instanceof Class) {
             this.raw = (Class) raw;
         } else {

@@ -21,11 +21,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 
 public class TargetMethod extends Target {
     public static Target create(boolean iterated, Repository schema, Method method) {
         Parameter[] formals;
-        java.lang.reflect.Type type;
+        Type type;
 
         if (Modifier.isStatic(method.getModifiers())) {
             throw new InvalidCliException(method + ": static not allowed");
@@ -49,7 +50,7 @@ public class TargetMethod extends Target {
 
     private final Method method;
     
-    public TargetMethod(Repository schema, java.lang.reflect.Type type, Method method) {
+    public TargetMethod(Repository schema, Type type, Method method) {
         super(schema, type);
         this.method = method;
     }

@@ -19,6 +19,7 @@ import net.oneandone.inline.types.Repository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 
 public class TargetField extends Target {
     public static TargetField create(Repository schema, Field field) {
@@ -32,7 +33,7 @@ public class TargetField extends Target {
 
     private final Field field;
     
-    public TargetField(Repository schema, java.lang.reflect.Type type, Field field) {
+    public TargetField(Repository schema, Type type, Field field) {
         super(schema, type);
         this.field = field;
     }

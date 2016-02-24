@@ -13,21 +13,19 @@ import java.util.List;
 public class ServiceManager {
     public static void main(String[] args) {
         Cli cli;
-        ServiceManager manager;
 
+        //-- define cli
         cli = Cli.create("usage:\n"
                 + "list            list available services\n"
                 + "start <name>    starts the specified service\n"
                 + "stop <name>     stop the specified service\n");
-
-        manager = new ServiceManager();
-        cli.begin("manager", manager, "");
+        cli.begin("manager", new ServiceManager(), "");
           cli.add(Ls.class, "list");
           cli.begin("manager.service", "service" );
             cli.add(Start.class, "start");
             cli.add(Stop.class, "stop");
 
-        //--
+        //-- use cli
         cli.run("list");
         cli.run("start", "apache");
         cli.run("stop", "apache");

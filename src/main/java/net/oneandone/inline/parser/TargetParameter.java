@@ -2,11 +2,13 @@ package net.oneandone.inline.parser;
 
 import net.oneandone.inline.types.Repository;
 
+import java.lang.reflect.Type;
+
 public class TargetParameter extends Target {
     private final Object[] actuals;
     private final int idx;
 
-    protected TargetParameter(Repository schema, java.lang.reflect.Type type, Object[] actuals, int idx) {
+    protected TargetParameter(Repository schema, Type type, Object[] actuals, int idx) {
         super(schema, type);
         this.actuals = actuals;
         this.idx = idx;
