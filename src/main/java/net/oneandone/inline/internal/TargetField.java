@@ -15,8 +15,6 @@
  */
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.types.Repository;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;

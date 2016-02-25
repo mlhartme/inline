@@ -1,6 +1,5 @@
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.types.Repository;
 import net.oneandone.inline.util.Split;
 
 import java.lang.reflect.Field;

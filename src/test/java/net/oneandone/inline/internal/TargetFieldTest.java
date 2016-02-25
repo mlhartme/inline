@@ -15,7 +15,6 @@
  */
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.types.Repository;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

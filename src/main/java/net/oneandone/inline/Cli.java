@@ -23,7 +23,7 @@ import net.oneandone.inline.internal.ContextBuilder;
 import net.oneandone.inline.internal.Handle;
 import net.oneandone.inline.internal.InvalidCliException;
 import net.oneandone.inline.internal.Mapping;
-import net.oneandone.inline.types.Repository;
+import net.oneandone.inline.internal.Repository;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

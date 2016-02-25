@@ -1,7 +1,5 @@
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.types.Repository;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

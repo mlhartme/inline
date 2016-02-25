@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.types;
-
-import net.oneandone.inline.internal.InvalidCliException;
+package net.oneandone.inline.internal;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

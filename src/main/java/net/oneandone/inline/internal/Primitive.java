@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.types;
+package net.oneandone.inline.internal;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

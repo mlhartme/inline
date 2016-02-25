@@ -1,8 +1,5 @@
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.types.Primitive;
-import net.oneandone.inline.types.Repository;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;

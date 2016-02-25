@@ -16,7 +16,6 @@
 package net.oneandone.inline.internal;
 
 import net.oneandone.inline.ArgumentException;
-import net.oneandone.inline.types.Primitive;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
