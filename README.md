@@ -2,6 +2,17 @@
 
 Library for command line parsing.
 
+Examples:
+
+Simple: https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/Simple.java
+
+Normal: https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/Normal.java
+
+None-trivial: https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/ServiceManager.java
+
+
+## Concepts
+
 A command line consists of options (anything starting with '-') and values (anything else).
 Use Inline to map command lines to Command objects and invoke a method on them.
 
@@ -11,8 +22,6 @@ yields command objects that can be re-used in normal code (e.g. if one command a
 Rationale: Inline uses systax specification instead of annotations. Because:
 * easier to read and write, more expressive
 * existing code (where you cannot add annotations) can be used for commands
-
-## Concepts
 
 ### Command
 
@@ -27,20 +36,6 @@ into an Object (e.g. an int or a File). They are use to convert arguments passed
 
 A Context is an object used by Commands that originates not from the command line. 
 Typical example is an object for global configuration used by all commands.
-
-## Example
-
-Simple:
-
-https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/Simple.java
-
-Normal:
-
-https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/Normal.java
-
-None-trivial: 
-
-https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/ServiceManager.java
 
 ## Exception handling
 
