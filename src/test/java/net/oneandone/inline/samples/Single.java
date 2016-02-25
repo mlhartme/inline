@@ -25,11 +25,11 @@ import java.util.List;
  * choose between different commands. This is done with Cli.single() (Note that is not the typical use case, you
  * normally have multiple commands and use Cli.create())
 */
-public class Simple {
+public class Single {
     public static void main(String[] args) throws IOException {
         Cli cli;
 
-        cli = Cli.single(Simple.class, "ignored -flag=true -number first remaining*");
+        cli = Cli.single(Single.class, "ignored -flag=true -number first remaining*");
         System.exit(cli.run("first", "-number", "42"));
     }
 
@@ -41,7 +41,7 @@ public class Simple {
 
     private List<String> remaining;
 
-    public Simple(boolean flag, int number, String first, List<String> remaining) {
+    public Single(boolean flag, int number, String first, List<String> remaining) {
         this.flag = flag;
         this.number = number;
         this.first = first;
