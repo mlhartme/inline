@@ -58,7 +58,7 @@ public class Cli {
         return cli;
     }
 
-    protected final Repository schema;
+    protected final Repository repository;
     private final Function<Throwable, Integer> exceptionHandler;
     private final List<Command> commands;
     private Command defaultCommand;
@@ -68,8 +68,8 @@ public class Cli {
         this(new Repository(), e -> { e.printStackTrace(); return -1; });
     }
     
-    public Cli(Repository schema, Function<Throwable, Integer> exceptionHandler) {
-        this.schema = schema;
+    public Cli(Repository repository, Function<Throwable, Integer> exceptionHandler) {
+        this.repository = repository;
         this.commands = new ArrayList<>();
         this.currentContext = null;
         this.defaultCommand = null;
@@ -127,7 +127,7 @@ public class Cli {
             definition = definition.substring(idx + 1);
         }
         context = Context.create(currentContext, null, Handle.create(currentContext, clazzOrInstance), definition);
-        builder = context.compile(schema);
+        builder = context.compile(repository);
         if (lookup(name) != null) {
             throw new IllegalArgumentException("duplicate command: " + name);
         }

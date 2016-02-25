@@ -9,13 +9,13 @@ public abstract class Target {
     private final boolean list;
     private final Primitive component;
 
-    public Target(Repository schema, Type type) {
+    public Target(Repository repository, Type type) {
         ParameterizedType p;
         Type[] args;
 
         if (type instanceof Class) {
             this.list = false;
-            this.component = schema.get((Class) type);
+            this.component = repository.get((Class) type);
         } else if (type instanceof ParameterizedType) {
             p = (ParameterizedType) type;
             args = p.getActualTypeArguments();
@@ -29,7 +29,7 @@ public abstract class Target {
                 throw new InvalidCliException("too much nesting: " + type.toString());
             }
             this.list = true;
-            this.component = schema.get((Class) args[0]);
+            this.component = repository.get((Class) args[0]);
         } else {
             throw new InvalidCliException("unsupported type: " + type);
         }

@@ -20,19 +20,19 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 
 public class TargetField extends Target {
-    public static TargetField create(Repository schema, Field field) {
+    public static TargetField create(Repository repository, Field field) {
         if (Modifier.isStatic(field.getModifiers())) {
             throw new InvalidCliException(field + ": static not allowed");
         }
-        return new TargetField(schema, field.getGenericType(), field);
+        return new TargetField(repository, field.getGenericType(), field);
     }
     
     //--
 
     private final Field field;
     
-    public TargetField(Repository schema, Type type, Field field) {
-        super(schema, type);
+    public TargetField(Repository repository, Type type, Field field) {
+        super(repository, type);
         this.field = field;
     }
 

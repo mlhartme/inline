@@ -51,14 +51,14 @@ public class Context {
         this.lazyCompiledContext = null;
     }
 
-    public ContextBuilder compile(Repository schema) {
+    public ContextBuilder compile(Repository repository) {
         if (lazyCompiledContext == null) {
-            lazyCompiledContext = doCompile(schema);
+            lazyCompiledContext = doCompile(repository);
         }
         return lazyCompiledContext;
     }
 
-    private ContextBuilder doCompile(Repository schema) {
+    private ContextBuilder doCompile(Repository repository) {
         List<Source> constructorSources;
         List<Source> extraSources;
         ContextBuilder result;
@@ -73,19 +73,19 @@ public class Context {
                 constructorSources.add(s);
             }
         }
-        factory = handle.compile(this, schema, constructorSources);
-        result = new ContextBuilder(this, compiledParent(schema), factory);
+        factory = handle.compile(this, repository, constructorSources);
+        result = new ContextBuilder(this, compiledParent(repository), factory);
         for (Argument a : factory.arguments()) {
             result.addArgument(a);
         }
         for (Source s : extraSources) {
-            result.addArgument(new Argument(this, s, mapping.target(schema, s.getName())));
+            result.addArgument(new Argument(this, s, mapping.target(repository, s.getName())));
         }
         return result;
     }
 
-    private ContextBuilder compiledParent(Repository schema) {
-        return parent == null ? null : parent.compile(schema);
+    private ContextBuilder compiledParent(Repository repository) {
+        return parent == null ? null : parent.compile(repository);
     }
 
     public List<Context> parentList() {

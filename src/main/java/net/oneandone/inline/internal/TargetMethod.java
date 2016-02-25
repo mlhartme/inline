@@ -24,7 +24,7 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 
 public class TargetMethod extends Target {
-    public static Target create(boolean iterated, Repository schema, Method method) {
+    public static Target create(boolean iterated, Repository repository, Method method) {
         Parameter[] formals;
         Type type;
 
@@ -40,9 +40,9 @@ public class TargetMethod extends Target {
         }
         type = formals[0].getParameterizedType();
         if (iterated) {
-            return new TargetMethodIterated(true, schema.get((Class) type), method);
+            return new TargetMethodIterated(true, repository.get((Class) type), method);
         } else {
-            return new TargetMethod(schema, type, method);
+            return new TargetMethod(repository, type, method);
         }
     }
     
@@ -50,8 +50,8 @@ public class TargetMethod extends Target {
 
     private final Method method;
     
-    public TargetMethod(Repository schema, Type type, Method method) {
-        super(schema, type);
+    public TargetMethod(Repository repository, Type type, Method method) {
+        super(repository, type);
         this.method = method;
     }
 

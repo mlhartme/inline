@@ -6,8 +6,8 @@ public class TargetParameter extends Target {
     private final Object[] actuals;
     private final int idx;
 
-    protected TargetParameter(Repository schema, Type type, Object[] actuals, int idx) {
-        super(schema, type);
+    protected TargetParameter(Repository repository, Type type, Object[] actuals, int idx) {
+        super(repository, type);
         this.actuals = actuals;
         this.idx = idx;
     }

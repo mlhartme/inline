@@ -102,21 +102,21 @@ public class Mapping {
         return fields.containsKey(name) || methods.containsKey(name) || iteratedMethods.containsKey(name);
     }
 
-    public Target target(Repository schema, String argument) {
+    public Target target(Repository repository, String argument) {
         Field field;
         Method method;
 
         field = fields.get(argument);
         if (field != null) {
-            return TargetField.create(schema, field);
+            return TargetField.create(repository, field);
         }
         method = methods.get(argument);
         if (method != null) {
-            return TargetMethod.create(false, schema, method);
+            return TargetMethod.create(false, repository, method);
         }
         method = iteratedMethods.get(argument);
         if (method != null) {
-            return TargetMethod.create(true, schema, method);
+            return TargetMethod.create(true, repository, method);
         }
         throw new IllegalStateException();
     }

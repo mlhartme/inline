@@ -21,7 +21,7 @@ public abstract class Handle {
     }
 
     public abstract Class<?> clazz();
-    public abstract ContextFactory compile(Context context, Repository schema, List<Source> constructorSources);
+    public abstract ContextFactory compile(Context context, Repository repository, List<Source> constructorSources);
 
     public String name() {
         return clazz().toString();
@@ -40,7 +40,7 @@ public abstract class Handle {
             return instance.getClass();
         }
 
-        public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
+        public ContextFactory compile(Context context, Repository repository, List<Source> constructorSources) {
             if (!constructorSources.isEmpty()) {
                 throw new InvalidCliException("cannot apply constructor argument to an instance");
             }
@@ -102,13 +102,13 @@ public abstract class Handle {
         }
 
         @Override
-        public ContextFactory compile(Context context, Repository schema, List<Source> methodSources) {
-            return MethodContextFactory.create(context, schema, target, method, methodSources);
+        public ContextFactory compile(Context context, Repository repository, List<Source> methodSources) {
+            return MethodContextFactory.create(context, repository, target, method, methodSources);
         }
     }
 
     public static class MethodContextFactory extends ContextFactory {
-        public static ContextFactory create(Context context, Repository schema, Context target, Method method, List<Source> initialSources) {
+        public static ContextFactory create(Context context, Repository repository, Context target, Method method, List<Source> initialSources) {
             List<Argument> arguments;
             List<Context> remainingContext;
             List<Source> remainingSources;
@@ -132,7 +132,7 @@ public abstract class Handle {
                     return null; // too many constructor arguments
                 } else {
                     source = remainingSources.remove(0);
-                    arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
+                    arguments.add(new Argument(context, source, new TargetParameter(repository, formal.getParameterizedType(), actuals, i)));
                 }
             }
             if (!remainingSources.isEmpty()) {
@@ -172,13 +172,13 @@ public abstract class Handle {
             return clazz;
         }
 
-        public ContextFactory compile(Context context, Repository schema, List<Source> constructorSources) {
+        public ContextFactory compile(Context context, Repository repository, List<Source> constructorSources) {
             ContextFactory found;
             ContextFactory candidate;
 
             found = null;
             for (Constructor constructor : clazz.getDeclaredConstructors()) {
-                candidate = ConstructorContextFactory.createOpt(context, schema, constructor, constructorSources);
+                candidate = ConstructorContextFactory.createOpt(context, repository, constructor, constructorSources);
                 if (candidate != null) {
                     if (found != null) {
                         throw new InvalidCliException("constructor is ambiguous: " + clazz.getName());
@@ -209,7 +209,7 @@ public abstract class Handle {
     //--
 
     public static class ConstructorContextFactory extends ContextFactory {
-        public static ContextFactory createOpt(Context context, Repository schema, Constructor constructor, List<Source> initialSources) {
+        public static ContextFactory createOpt(Context context, Repository repository, Constructor constructor, List<Source> initialSources) {
             List<Argument> arguments;
             List<Context> remainingContext;
             List<Source> remainingSources;
@@ -233,7 +233,7 @@ public abstract class Handle {
                     return null; // too many constructor arguments
                 } else {
                     source = remainingSources.remove(0);
-                    arguments.add(new Argument(context, source, new TargetParameter(schema, formal.getParameterizedType(), actuals, i)));
+                    arguments.add(new Argument(context, source, new TargetParameter(repository, formal.getParameterizedType(), actuals, i)));
                 }
             }
             if (!remainingSources.isEmpty()) {
