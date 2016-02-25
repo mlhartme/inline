@@ -6,12 +6,12 @@ Library for command line parsing.
 
 Start with the following example:
 
-  public class Hello {
-    public static int main(String[] args) {
-      Cli cli = Cli.create("Hello, World")
-      System.exit(cli.run(args));
+    public class Hello {
+      public static int main(String[] args) {
+        Cli cli = Cli.create("Hello, World")
+        System.exit(cli.run(args));
+      }
     }
-  }
 
 Running this code with not argument prints the usage message passed to the create method: Hello, World.
 Passing a single "help" argument has the same effect; the create method returns a command line interface
@@ -20,33 +20,33 @@ arguments.
 
 Now add you a "greetings" command - change the code to
 
-  public class Hello {
-    public static int main(String[] args) {
-      Cli cli = Cli.create("Hello, World");
-      cli.add(Greetings.class, "greetings -count=1 name");
-      System.exit(cli.run(args));
-    }
-
-    public static class Greetings {
-      private final String count;
-      private final String name;
-
-      public Hello(int count, String name) {
-        this.count = count;
-        this.name = name;
+    public class Hello {
+      public static int main(String[] args) {
+        Cli cli = Cli.create("Hello, World");
+        cli.add(Greetings.class, "greetings -count=1 name");
+        System.exit(cli.run(args));
       }
 
-      public void run() {
-        for (int i = 0; i < count; i++) {
-          System.out.println("greetings, " + name);
+      public static class Greetings {
+        private final String count;
+        private final String name;
+
+        public Hello(int count, String name) {
+          this.count = count;
+          this.name = name;
+        }
+
+        public void run() {
+          for (int i = 0; i < count; i++) {
+            System.out.println("greetings, " + name);
+          }
         }
       }
     }
-  }
 
 A command is defined by an arbitrary Class with a "run" method, and you use
 
-  Cli.add(Greetings.class, "greetings -count=1 name")
+    Cli.add(Greetings.class, "greetings -count=1 name")
 
 to add it to the command line parser. It takes a class and a syntax argument. The syntax that Cli will
 the class if the first argument is "greetings" and a count option and a name value are passed as arguments
