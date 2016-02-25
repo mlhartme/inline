@@ -68,25 +68,39 @@ Restrictions:
 * the built-in option -pretend is gone
 
 Steps
-* Main class
+
+* Globals
+  * create a new class Globals as a copy of the Main class
+  * dump the static methods, just keep the main object with it's state
+  * remove annotations from fields, but remember the syntax
+  * create getter methods for the arguments passed to the command 
+    objects when calling @child methods
+  * remove all @child methods and the invoke method
+
+* Main
 	* dump "extends Cli" and "implements Command"
 	* replace new Main().run(args) with
 	    Cli cli = Cli.create(""); 
+	    cli.begin(Globals.class, (syntax from globals))
+        ( - commands will be inserted here - )
 	    cli.run(args);
+	* add
   * move the help text from Main.printHelp to the Cli.create argument and dump Main.printHelp
   * dump Main.invoke() { printHelp(); }
-  * for all arguments passed from @Child methods to Command classes: 
-    * if they are options: duplicate them in all commands
-    * otherwise: create factory methods
   * for each @Child method: remove the method and add a line cli.add(MyCommand.class, "commandName") instead
-  * optional: rename the main class to Context
-* For command base classes
-  * Console no longer contains World ... 
+
 * For all classes that directly or indirectly implement Command
   * dump Command
+  * change the constructor to take one Globals argument instead of the current arguments; 
+    fill the respective fields of the command by using getters from Globals
   * rename the invoke() method to run()
-  * remove all @Value and @Option annotations and introducate constructor arguments instead; add the respective syntax to Main. 
+  * remove all @Value and @Option annotations and append constructor arguments instead; 
+    add the respective syntax to Main. 
   * remove @Remaining annotation and add a Mapping instead
+
+* For command base classes
+  * adjust the constructor to pass around globals
+  * add a world field to your Base command class and use it instead of console.world
 
 
 ## Alternatives
