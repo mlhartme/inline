@@ -15,6 +15,8 @@
  */
 package net.oneandone.inline.parser;
 
+import net.oneandone.inline.ArgumentException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

@@ -17,7 +17,6 @@ package net.oneandone.inline;
 
 import net.oneandone.inline.commands.Help;
 import net.oneandone.inline.commands.PackageVersion;
-import net.oneandone.inline.parser.ArgumentException;
 import net.oneandone.inline.parser.Command;
 import net.oneandone.inline.parser.Context;
 import net.oneandone.inline.parser.ContextBuilder;

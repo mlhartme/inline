@@ -2,7 +2,7 @@ package net.oneandone.inline.samples;
 
 import net.oneandone.inline.Cli;
 import net.oneandone.inline.Console;
-import net.oneandone.inline.parser.ArgumentException;
+import net.oneandone.inline.ArgumentException;
 
 import java.util.ArrayList;
 import java.util.List;

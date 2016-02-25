@@ -15,6 +15,8 @@
  */
 package net.oneandone.inline.parser;
 
+import net.oneandone.inline.ArgumentException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

@@ -25,8 +25,8 @@ into an Object (e.g. an int or a File). They are use to convert arguments passed
 
 ### Contexts
 
-A Context is an object used by Commands that originates not from the command line.
-
+A Context is an object used by Commands that originates not from the command line. 
+Typical example is an object for global configuration used by all commands.
 
 ## Example
 
@@ -41,6 +41,14 @@ https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inlin
 None-trivial: 
 
 https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/ServiceManager.java
+
+## Exception handling
+
+The default exception handling is to catch checked exceptions and ArgumentExceptions, print the message
+to the user, and return with exit code -1. Other exceptions are not caught, the jvm will print a stacktrace 
+for them.
+
+You can change the exception handling by creating Cli with a different exceptionHandler.
 
 ## Unused code elimination
 

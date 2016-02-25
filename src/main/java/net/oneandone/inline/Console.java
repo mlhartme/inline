@@ -15,7 +15,6 @@
  */
 package net.oneandone.inline;
 
-import net.oneandone.inline.parser.ArgumentException;
 import net.oneandone.inline.util.SwitchableWriter;
 
 import java.io.InputStream;

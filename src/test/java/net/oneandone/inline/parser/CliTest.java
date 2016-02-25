@@ -15,6 +15,7 @@
  */
 package net.oneandone.inline.parser;
 
+import net.oneandone.inline.ArgumentException;
 import net.oneandone.inline.Cli;
 import org.junit.Test;
 

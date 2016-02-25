@@ -15,6 +15,7 @@
  */
 package net.oneandone.inline.parser;
 
+import net.oneandone.inline.ArgumentException;
 import net.oneandone.inline.types.Repository;
 
 import java.lang.reflect.InvocationTargetException;
