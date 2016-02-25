@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Cli example with a single command.
+ * Cli example with a single command. Demonstrates a cli with a single command, i.e. there is no first argument to
+ * choose between different commands. This is done with Cli.single() (Note that is not the typical use case, you
+ * normally have multiple commands and use Cli.create())
 */
 public class Simple {
     public static void main(String[] args) throws IOException {
