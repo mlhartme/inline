@@ -59,7 +59,6 @@ to the constructor.
 See https://github.com/mlhartme/inline/blob/master/src/test/java/net/oneandone/inline/samples/
 
 
-
 ## Concepts
 
 A command line consists of options (anything starting with '-') and values (anything else).
