@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Dummy implementation of the 'service' command. Demonstraces contexts.
+ * Dummy implementation of the 'service' command.
  */
 public class ServiceManager {
     public static void main(String[] args) {
