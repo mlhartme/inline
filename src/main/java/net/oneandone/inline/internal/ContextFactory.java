@@ -1,4 +1,4 @@
-package net.oneandone.inline.parser;
+package net.oneandone.inline.internal;
 
 import java.util.List;
 import java.util.Map;

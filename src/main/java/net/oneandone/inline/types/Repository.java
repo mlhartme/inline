@@ -15,7 +15,7 @@
  */
 package net.oneandone.inline.types;
 
-import net.oneandone.inline.parser.InvalidCliException;
+import net.oneandone.inline.internal.InvalidCliException;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;

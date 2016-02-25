@@ -13,35 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.parser;
+package net.oneandone.inline.internal;
 
 import net.oneandone.inline.types.Repository;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
 import static org.junit.Assert.assertEquals;
 
-public class TargetMethodIteratedTest {
+public class TargetFieldTest {
     @Test
-    public void number() throws NoSuchMethodException {
-        Target arg;
-        List<Long> lst;
+    public void integer() {
+        check("XY");
+    }
+    
+    private void check(String expected) {
+        TargetField arg;
+        
+        arg = TargetField.create(new Repository(), getField("fld"));
+        arg.doSet(this, expected);
+        assertEquals(expected, fld);
+    }
 
-        arg = TargetMethod.create(true, new Repository(), getClass().getMethod("setInt", Long.TYPE));
-        lst = new ArrayList<>();
-        lst.add((long) 1);
-        lst.add((long) 2);
-        arg.doSet(this, lst);
-        assertEquals(lst, values);
+    private Field getField(String name) {
+        Class<?> c;
+        
+        c = getClass();
+        try {
+            return c.getDeclaredField(name);
+        } catch (SecurityException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //--
     
-    private List<Long> values = new ArrayList<>();
-    
-    public void setInt(long l) {
-        values.add(l);
-    }
+    private String fld;
 }
