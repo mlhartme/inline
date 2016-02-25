@@ -36,25 +36,26 @@ import java.util.function.Function;
  * A command line interface. Define available command with begin(), add() and end(). Then invoke run() to actually invoke them.
  */
 public class Cli {
-    public static Cli single(Class<?> command, String syntax) throws IOException {
-        Console console;
-        Cli cli;
-
-        console = Console.create();
-        cli = new Cli(new Repository(), console::handleException).begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
-        cli.add(command, syntax);
-        return cli;
-    }
-
     public static Cli create(String help) {
         Console console;
         Cli cli;
 
         console = Console.create();
-        cli = new Cli(new Repository(), console::handleException)
-                .begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }")
-                   .addDefault(new Help(console, help), "help")
-                   .add(PackageVersion.class, "version");
+        cli = new Cli(new Repository(), console::handleException);
+        cli.begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }")
+              .addDefault(new Help(console, help), "help")
+              .add(PackageVersion.class, "version");
+        return cli;
+    }
+
+    public static Cli single(Class<?> command, String syntax) throws IOException {
+        Console console;
+        Cli cli;
+
+        console = Console.create();
+        cli = new Cli(new Repository(), console::handleException);
+        cli.begin(console, "-v -e  { setVerbose(v) setStacktraces(e) }");
+        cli.add(command, syntax);
         return cli;
     }
 
