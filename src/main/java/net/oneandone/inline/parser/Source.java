@@ -73,9 +73,21 @@ public class Source {
                     max = 1;
                     break;
             }
+            if (lookup(result, name) != null) {
+                throw new InvalidCliException("duplicate argument: " + name);
+            }
             result.add(new Source(option, name, min, max, dflt));
         }
         return result;
+    }
+
+    private static Source lookup(List<Source> sources, String name) {
+        for (Source source : sources) {
+            if (source.getName().equals(name)) {
+                return source;
+            }
+        }
+        return null;
     }
 
     //--
