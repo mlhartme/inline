@@ -15,8 +15,10 @@ public class SplitTest {
 
     @Test
     public void one() {
+        check("§20", " ");
         check("1", "1");
         check(" 1", "1");
+        check("sport§20schau", "sport schau");
         check("1  ", "1");
     }
 
@@ -28,5 +30,10 @@ public class SplitTest {
     }
     private void check(String str, String ... expected) {
         assertEquals(Arrays.asList(expected), Split.split(str));
+    }
+
+    @Test
+    public void escape() {
+        assertEquals("f bA", Split.escape("f§20b§41"));
     }
 }

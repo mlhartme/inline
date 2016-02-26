@@ -66,6 +66,7 @@ public class Actuals {
     }
 
     public void fill(List<String> args, Map<String, Argument> options, List<Argument> values) {
+        boolean inOptions;
         int position;
         String arg;
         Argument argument;
@@ -73,9 +74,10 @@ public class Actuals {
         StringBuilder builder;
 
         position = 0;
+        inOptions = true;
         for (int i = 0, max = args.size(); i < max; i++) {
             arg = args.get(i);
-            if (ContextBuilder.isOption(arg)) {
+            if (inOptions && ContextBuilder.isOption(arg)) {
                 argument = options.get(arg.substring(1));
                 if (argument == null) {
                     throw new ArgumentException("unknown option " + arg);
@@ -91,9 +93,8 @@ public class Actuals {
                 }
                 add(argument, value);
             } else {
-                if (position < values.size()) {
-                    argument = values.get(position);
-                } else {
+                inOptions = false;
+                if (position >= values.size()) {
                     builder = new StringBuilder("unknown value(s):");
                     for ( ; i < max; i++) {
                         builder.append(' ');
@@ -101,6 +102,7 @@ public class Actuals {
                     }
                     throw new ArgumentException(builder.toString());
                 }
+                argument = values.get(position);
                 value = arg;
                 if (add(argument, value)) {
                     position++;

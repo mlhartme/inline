@@ -15,6 +15,8 @@
  */
 package net.oneandone.inline.util;
 
+import net.oneandone.inline.internal.InvalidCliException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +37,36 @@ public class Split {
             next = str.indexOf(' ', idx);
             if (next == -1) {
                 if (idx < max) {
-                    result.add(str.substring(idx, max));
+                    result.add(escape(str.substring(idx, max)));
                 }
                 return result;
             }
-            result.add(str.substring(idx, next));
+            result.add(escape(str.substring(idx, next)));
             idx = next + 1;
         }
+    }
+
+    public static String escape(String str) {
+        int prev;
+        int idx;
+        StringBuilder result;
+
+        idx = str.indexOf('§');
+        if (idx == -1) {
+            return str;
+        }
+        prev = 0;
+        result = new StringBuilder(str.length());
+        do {
+            result.append(str.substring(prev, idx));
+            if (idx + 3 > str.length()) {
+                throw new InvalidCliException("invalid $ constant in " + str);
+            }
+            result.append((char) Integer.parseInt(str.substring(idx + 1, idx + 3), 16));
+            prev = idx + 3;
+            idx = str.indexOf('§', prev);
+        } while (idx != -1);
+        result.append(str.substring(prev));
+        return result.toString();
     }
 }

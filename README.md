@@ -113,7 +113,10 @@ Benefits:
 * configurable exception handling
 
 Changes:
-* options can be placed anywhere one the command line now
+* options:
+  * no longer distinguish global and local options
+  * boolean options can be placed anywhere one the command line now
+  * none-boolean options can be placed anywhere behind the command
 
 Restrictions:
 * the built-in option -pretend is gone

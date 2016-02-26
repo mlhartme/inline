@@ -77,6 +77,11 @@ public class Cli {
         this.exceptionHandler = exceptionHandler;
     }
 
+    public Cli primitive(Class<?> clazz, String expected, Object dflt, Function<String, Object> f) {
+        repository.register(clazz, expected, dflt, f);
+        return this;
+    }
+
     public Cli begin(Object context) {
         return begin(context, "");
     }
