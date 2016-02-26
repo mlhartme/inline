@@ -32,17 +32,21 @@ public class PackageVersion {
         pkg = getClass().getPackage();
         if (pkg == null) {
             console.info.println("unknown version");
+        } else if (console.getVerbose()) {
+            console.verbose.println(pkg.getName());
+            console.verbose.println("  specification title: " + pkg.getSpecificationTitle());
+            console.verbose.println("  specification version: " + pkg.getSpecificationVersion());
+            console.verbose.println("  specification vendor: " + pkg.getSpecificationVendor());
+            console.verbose.println("  implementation title: " + pkg.getImplementationTitle());
+            console.verbose.println("  implementation version: " + pkg.getImplementationVersion());
+            console.verbose.println("  implementation vendor: " + pkg.getImplementationVendor());
+            console.verbose.println();
+            console.verbose.println("Java Version: " + System.getProperty("java.version"));
+            console.verbose.println("Platform encoding: " + System.getProperty("file.encoding"));
+            console.verbose.println("Default Locale: " + Locale.getDefault());
+            console.verbose.println("Scanner Locale: " + console.input.locale());
         } else {
-            console.info.println(pkg.getName());
-            console.info.println("  specification title: " + pkg.getSpecificationTitle());
-            console.info.println("  specification version: " + pkg.getSpecificationVersion());
-            console.info.println("  specification vendor: " + pkg.getSpecificationVendor());
-            console.info.println("  implementation title: " + pkg.getImplementationTitle());
-            console.info.println("  implementation version: " + pkg.getImplementationVersion());
-            console.info.println("  implementation vendor: " + pkg.getImplementationVendor());
+            console.info.println(pkg.getSpecificationVersion());
         }
-        console.verbose.println("Platform encoding: " + System.getProperty("file.encoding"));
-        console.verbose.println("Default Locale: " + Locale.getDefault());
-        console.verbose.println("Scanner Locale: " + console.input.locale());
     }
 }

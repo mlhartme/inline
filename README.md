@@ -113,6 +113,7 @@ Benefits:
 * configurable exception handling
 
 Changes:
+* version command now prints the version number only; use -v to get more details
 * options:
   * no longer distinguish global and local options
   * boolean options can be placed anywhere one the command line now
