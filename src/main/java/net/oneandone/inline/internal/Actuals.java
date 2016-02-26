@@ -94,6 +94,10 @@ public class Actuals {
                 add(argument, value);
             } else {
                 inOptions = false;
+                if ("\\".equals(arg)) {
+                    // ignore \ arguments - they are used to force switching from option- to value mode
+                    continue;
+                }
                 if (position >= values.size()) {
                     builder = new StringBuilder("unknown value(s):");
                     for ( ; i < max; i++) {
