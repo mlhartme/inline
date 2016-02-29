@@ -2,6 +2,8 @@
 
 Library for command line parsing.
 
+Caution: this is the first public release - expect major incompatilities in future versions.
+
 ## Usage
 
 Start with the following example:
