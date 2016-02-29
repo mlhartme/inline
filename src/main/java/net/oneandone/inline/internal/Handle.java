@@ -42,7 +42,7 @@ public abstract class Handle {
 
         public ContextFactory compile(Context context, Repository repository, List<Source> constructorSources) {
             if (!constructorSources.isEmpty()) {
-                throw new InvalidCliException("cannot apply constructor argument to an instance");
+                throw new InvalidCliException("cannot apply constructor argument to an instance of class " + instance.getClass());
             }
             return new IdentityContextFactory(instance);
         }

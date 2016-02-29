@@ -48,6 +48,8 @@ public class Argument {
                 d = source.getDefaultString();
                 if (Source.DEFAULT_UNDEFINED.equals(d)) {
                     value = target.defaultComponent();
+                } else if ("null".equals(d)) {
+                    value = null;
                 } else {
                     try {
                         value = parse(d);
