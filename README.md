@@ -6,7 +6,15 @@ Caution: this is the first public release - expect major incompatilities in futu
 
 ## Usage
 
-Start with the following example:
+Add the dependency 
+
+    <dependency>
+      <groupId>net.oneandone</groupId>
+      <artifactId>inline</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+and start with the following code:
 
     public class Hello {
       public static int main(String[] args) {

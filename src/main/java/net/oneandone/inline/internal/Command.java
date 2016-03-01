@@ -15,8 +15,6 @@
  */
 package net.oneandone.inline.internal;
 
-import net.oneandone.inline.ArgumentException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -62,8 +60,7 @@ public class Command {
         return name;
     }
 
-    public int run(Object obj) {
-        Throwable cause;
+    public int run(Object obj) throws Throwable {
         Object result;
         
         try {
@@ -71,17 +68,7 @@ public class Command {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            cause = e.getCause();
-            if (cause instanceof Error) {
-                throw (Error) cause;
-            }
-            if (cause instanceof ArgumentException) {
-                throw (ArgumentException) cause;
-            }
-            if (cause instanceof RuntimeException) {
-                throw new RuntimeException(name, cause);
-            }
-            throw new RuntimeException("unexpected exception" , cause);
+            throw e.getCause();
         }
         if (result instanceof Integer) {
             return (Integer) result;
