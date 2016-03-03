@@ -60,7 +60,6 @@ public class Argument {
             } else {
                 value = parse(actual.get(0));
             }
-            target.doSet(dest, value);
         }
         target.doSet(dest, value);
     }
