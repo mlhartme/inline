@@ -4,6 +4,8 @@ Library for command line parsing.
 
 Caution: this is the first public release - expect major incompatilities in future versions.
 
+(Changes)[https://github.com/mlhartme/inline/blob/master/CHANGES.md]
+
 ## Usage
 
 Add the dependency 
