@@ -62,8 +62,9 @@ public class Cli {
     protected final Repository repository;
     private final Function<Throwable, Integer> exceptionHandler;
     private final List<Command> commands;
-    private Command defaultCommand;
     private Context currentContext;
+    private Base currentBase;
+    private Command defaultCommand;
 
     public Cli() {
         this(e -> { e.printStackTrace(); return -1; });
@@ -77,6 +78,7 @@ public class Cli {
         this.repository = repository;
         this.commands = new ArrayList<>();
         this.currentContext = null;
+        this.currentBase = new Base(null, "", "");
         this.defaultCommand = null;
         this.exceptionHandler = exceptionHandler;
     }
@@ -86,22 +88,27 @@ public class Cli {
         return this;
     }
 
+    public Cli base(Class<?> base, String syntax) {
+        currentBase = Base.create(currentBase, base, syntax);
+        return this;
+    }
+
     public Cli begin(Object context) {
         return begin(context, "");
     }
 
-    public Cli begin(Object context, String syntax) {
-        return begin(null, context, syntax);
+    public Cli begin(Object context, String definition) {
+        return begin(null, context, definition);
     }
 
-    public Cli begin(String name, Object context, String syntax) {
+    public Cli begin(String name, Object context, String definition) {
         Handle handle;
 
         if (context == null) {
             throw new IllegalArgumentException();
         }
         handle = Handle.create(currentContext, context);
-        this.currentContext = Context.create(currentContext, name, handle, syntax);
+        this.currentContext = Context.create(currentContext, currentBase, name, handle, definition);
         return this;
     }
 
@@ -136,7 +143,7 @@ public class Cli {
             name = definition.substring(0, idx);
             definition = definition.substring(idx + 1);
         }
-        context = Context.create(currentContext, null, Handle.create(currentContext, clazzOrInstance), definition);
+        context = Context.create(currentContext, currentBase, null, Handle.create(currentContext, clazzOrInstance), definition);
         builder = context.compile(repository);
         if (lookup(name) != null) {
             throw new IllegalArgumentException("duplicate command: " + name);

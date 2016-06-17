@@ -15,6 +15,8 @@
  */
 package net.oneandone.inline.internal;
 
+import net.oneandone.inline.Base;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import java.util.List;
  * "compiles" into a ContextBuilder.
  */
 public class Context {
-    public static Context create(Context parent, String explicitName, Handle handle, String definition) {
+    public static Context create(Context parent, Base base, String explicitName, Handle handle, String definition) {
         String name;
         int idx;
         String syntax;
@@ -45,7 +47,7 @@ public class Context {
         } else {
             name = explicitName;
         }
-        return new Context(parent, name, handle, Source.forSyntax(syntax), Mapping.parse(mapping, handle.clazz()));
+        return new Context(parent, name, handle, Source.forSyntax(base.fullSyntax(syntax)), Mapping.parse(base.fullMapping(mapping), handle.clazz()));
     }
 
     /** may be null */

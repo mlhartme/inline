@@ -20,6 +20,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.function.Function;
 
+/** Factory to create an object from a String */
 public class Primitive {
     protected final Class<?> raw;
     private final Function<String, ? extends Object> parser;

@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/** Defines how to instantiate type from command line arguments. */
 public class Repository {
     private final Map<Class<?>, Primitive> map;
     
