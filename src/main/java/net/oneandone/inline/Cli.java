@@ -66,9 +66,13 @@ public class Cli {
     private Context currentContext;
 
     public Cli() {
-        this(new Repository(), e -> { e.printStackTrace(); return -1; });
+        this(e -> { e.printStackTrace(); return -1; });
     }
-    
+
+    public Cli(Function<Throwable, Integer> exceptionHandler) {
+        this(new Repository(), exceptionHandler);
+    }
+
     public Cli(Repository repository, Function<Throwable, Integer> exceptionHandler) {
         this.repository = repository;
         this.commands = new ArrayList<>();
