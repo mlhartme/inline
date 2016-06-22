@@ -26,8 +26,10 @@ import java.util.Map;
 /** Maps formals to actuals */
 public class Actuals {
     private final Map<Argument, List<String>> actuals;
+    private final Map<String, String> defaults;
 
-    public Actuals() {
+    public Actuals(Map<String, String> defaults) {
+        this.defaults = defaults;
         this.actuals = new HashMap<>();
     }
 
@@ -36,6 +38,7 @@ public class Actuals {
             define(formal);
         }
     }
+
     public void define(Argument formal) {
         if (actuals.put(formal, new ArrayList<>()) != null) {
             throw new InvalidCliException("duplicate argument: " + formal);
@@ -59,7 +62,7 @@ public class Actuals {
             if (argument.context == context) {
                 if (argument.target.before() == (target == null)) {
                     entry.getKey().source.checkCardinality(entry.getValue().size());
-                    argument.set(target, entry.getValue());
+                    argument.set(target, entry.getValue(), defaults);
                 }
             }
         }

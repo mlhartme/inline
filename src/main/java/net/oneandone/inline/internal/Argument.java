@@ -19,6 +19,7 @@ import net.oneandone.inline.ArgumentException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** Associates a source with a target. */
 public class Argument {
@@ -32,7 +33,7 @@ public class Argument {
         this.target = target;
     }
 
-    public void set(Object dest, List<String> actual) {
+    public void set(Object dest, List<String> actual, Map<String, String> defaults) {
         String d;
         List<Object> lst;
         Object value;
@@ -47,7 +48,16 @@ public class Argument {
             if (actual.isEmpty()) {
                 d = source.getDefaultString();
                 if (Source.DEFAULT_UNDEFINED.equals(d)) {
-                    value = target.defaultComponent();
+                    d = defaults.get(source.getName());
+                    if (d != null) {
+                        try {
+                            value = parse(d);
+                        } catch (ArgumentException e) {
+                            throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
+                        }
+                    } else {
+                        value = target.defaultComponent();
+                    }
                 } else if ("null".equals(d)) {
                     value = null;
                 } else {

@@ -1,5 +1,6 @@
 # Inline 1.0.2
 
+* Added Cli.defaults for configurable default values
 * Added Cli.base to inherit definitions
 
 

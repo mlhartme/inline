@@ -59,17 +59,17 @@ public class ContextBuilder {
     //--
 
     /** Convenience for Testing */
-    public Object run(String ... args) throws Throwable {
-        return run(Arrays.asList(args));
+    public Object run(Map<String, String> defaults, String ... args) throws Throwable {
+        return run(defaults, Arrays.asList(args));
     }
 
     /** @return Target */
-    public Object run(List<String> args) throws Throwable {
+    public Object run(Map<String, String> defaults, List<String> args) throws Throwable {
         Actuals actuals;
         Map<String, Argument> allOptions;
         List<Argument> allValues;
 
-        actuals = new Actuals();
+        actuals = new Actuals(defaults);
         define(actuals);
         allOptions = new HashMap<>();
         addOptions(allOptions);

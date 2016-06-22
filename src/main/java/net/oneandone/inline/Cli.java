@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -65,6 +67,7 @@ public class Cli {
     private Context currentContext;
     private Base currentBase;
     private Command defaultCommand;
+    private final Map<String, String> defaults;
 
     public Cli() {
         this(e -> { e.printStackTrace(); return -1; });
@@ -81,6 +84,7 @@ public class Cli {
         this.currentBase = new Base(null, "", "");
         this.defaultCommand = null;
         this.exceptionHandler = exceptionHandler;
+        this.defaults = new HashMap<>();
     }
 
     public Cli primitive(Class<?> clazz, String expected, Object dflt, Function<String, Object> f) {
@@ -91,6 +95,10 @@ public class Cli {
     public Cli base(Class<?> base, String syntax) {
         currentBase = Base.create(currentBase, base, syntax);
         return this;
+    }
+
+    public void defaults(Map<String, String> map) {
+        defaults.putAll(map);
     }
 
     public Cli begin(Object context) {
@@ -194,7 +202,7 @@ public class Cli {
         try {
             if (commands.size() == 1) {
                 c = commands.get(0);
-                obj = c.getBuilder().run(args);
+                obj = c.getBuilder().run(defaults, args);
             } else {
                 lst = new ArrayList<>(args);
                 name = eatCommand(lst);
@@ -206,7 +214,7 @@ public class Cli {
                 } else {
                     c = get(name);
                 }
-                obj = c.getBuilder().run(lst);
+                obj = c.getBuilder().run(defaults, lst);
             }
             return c.run(obj);
         } catch (Throwable e) {

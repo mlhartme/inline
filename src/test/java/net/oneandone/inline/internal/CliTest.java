@@ -21,7 +21,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -41,21 +43,21 @@ public class CliTest {
         ContextBuilder parser;
 
         parser = parser(Empty.class, "");
-        assertTrue(parser.run() instanceof Empty);
+        assertTrue(parser.run(new HashMap<>()) instanceof Empty);
         try {
-            parser.run("-a", "10");
+            parser.run(new HashMap<>(), "-a", "10");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage().contains("unknown option"));
         }
         try {
-            parser.run("a");
+            parser.run(new HashMap<>(), "a");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("unknown value"));
         }
         try {
-            parser.run("-");
+            parser.run(new HashMap<>(), "-");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("unknown value"));
@@ -69,26 +71,26 @@ public class CliTest {
 
         parser = parser(Values.class, "first second third remaining* { second=second third(third) remaining*(remaining) }");
         try {
-            parser.run();
+            parser.run(new HashMap<>());
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage().contains("missing"));
         }
 
         try {
-            parser.run("1");
+            parser.run(new HashMap<>(), "1");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("missing"));
         }
 
-        values = (Values) parser.run("1", "red", "third");
+        values = (Values) parser.run(new HashMap<>(), "1", "red", "third");
         assertEquals(1, values.first);
         assertEquals(Color.RED, values.second);
         assertEquals("third", values.third);
         assertEquals(0, values.remaining.size());
 
-        values = (Values) parser.run("2", "blue", "third", "forth", "fifth");
+        values = (Values) parser.run(new HashMap<>(), "2", "blue", "third", "forth", "fifth");
         assertEquals(2, values.first);
         assertEquals(Color.BLUE, values.second);
         assertEquals("third", values.third);
@@ -103,51 +105,64 @@ public class CliTest {
         Options options;
 
         parser = parser(Options.class, "-first -second=bla -third { first=first node(second) }");
-        options = (Options) parser.run();
+        options = (Options) parser.run(new HashMap<>());
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
+        options = (Options) parser.run(map("first", "2", "third", "true"));
+        assertEquals(2, options.first);
+        assertEquals(true, options.third);
 
-        options = (Options) parser.run("-first", "1");
+        options = (Options) parser.run(new HashMap<>(), "-first", "1");
         assertEquals(1, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
 
         try {
-            parser.run("-first");
+            parser.run(new HashMap<>(), "-first");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("missing value"));
         }
 
-        options = (Options) parser.run("-second", "foo");
+        options = (Options) parser.run(new HashMap<>(), "-second", "foo");
         assertEquals(0, options.first);
         assertEquals("foo", options.second);
         assertFalse(options.third);
 
-        options = (Options) parser.run("-third");
+        options = (Options) parser.run(new HashMap<>(), "-third");
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertTrue(options.third);
 
-        options = (Options) parser.run("-third", "-first", "-1", "-second", "bar");
+        options = (Options) parser.run(new HashMap<>(), "-third", "-first", "-1", "-second", "bar");
         assertEquals(-1, options.first);
         assertEquals("bar", options.second);
         assertTrue(options.third);
 
         try {
-            parser.run("-first");
+            parser.run(new HashMap<>(), "-first");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage().contains("missing"));
         }
 
         try {
-            parser.run("-first", "a");
+            parser.run(new HashMap<>(), "-first", "a");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("expected integer"));
         }
+    }
+
+    private static Map<String, String> map(String ... args) {
+        Map<String, String> result;
+
+        result = new HashMap<>();
+        for (int i = 0; i < args.length; i += 2) {
+            result.put(args[i], args[i + 1]);
+        }
+        return result;
     }
 
     @Test
