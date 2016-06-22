@@ -103,53 +103,55 @@ public class CliTest {
     public void options() throws Throwable {
         ContextBuilder parser;
         Options options;
+        Map<String, String> dflt;
 
-        parser = parser(Options.class, "-first -second=bla -third { first=first node(second) }");
-        options = (Options) parser.run(new HashMap<>());
+        dflt = map("first", "0", "s", "bla", "third", "false");
+        parser = parser(Options.class, "-first=@ -second=@s -third=@ { first=first node(second) }");
+        options = (Options) parser.run(map("first", "0", "s", "bla", "third", "false"));
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
-        options = (Options) parser.run(map("first", "2", "second", "s", "third", "true"), "-first", "1");
+        options = (Options) parser.run(map("first", "2", "s", "s", "third", "true"), "-first", "1");
         assertEquals(1, options.first);
         assertEquals("s", options.second);
         assertEquals(true, options.third);
 
-        options = (Options) parser.run(new HashMap<>(), "-first", "1");
+        options = (Options) parser.run(map("first", "0", "s", "bla", "third", "false"), "-first", "1");
         assertEquals(1, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
 
         try {
-            parser.run(new HashMap<>(), "-first");
+            parser.run(dflt, "-first");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("missing value"));
         }
 
-        options = (Options) parser.run(new HashMap<>(), "-second", "foo");
+        options = (Options) parser.run(dflt, "-second", "foo");
         assertEquals(0, options.first);
         assertEquals("foo", options.second);
         assertFalse(options.third);
 
-        options = (Options) parser.run(new HashMap<>(), "-third");
+        options = (Options) parser.run(dflt, "-third");
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertTrue(options.third);
 
-        options = (Options) parser.run(new HashMap<>(), "-third", "-first", "-1", "-second", "bar");
+        options = (Options) parser.run(dflt, "-third", "-first", "-1", "-second", "bar");
         assertEquals(-1, options.first);
         assertEquals("bar", options.second);
         assertTrue(options.third);
 
         try {
-            parser.run(new HashMap<>(), "-first");
+            parser.run(dflt, "-first");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage().contains("missing"));
         }
 
         try {
-            parser.run(new HashMap<>(), "-first", "a");
+            parser.run(dflt, "-first", "a");
             fail();
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("expected integer"));

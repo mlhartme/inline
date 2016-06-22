@@ -37,6 +37,7 @@ public class Argument {
         String d;
         List<Object> lst;
         Object value;
+        String name;
 
         if (target.isList()) {
             lst = new ArrayList<>();
@@ -46,25 +47,27 @@ public class Argument {
             value = lst;
         } else {
             if (actual.isEmpty()) {
-                d = defaults.get(source.getName());
-                if (d != null) {
+                d = source.getDefaultString();
+                if (d.startsWith("@")) {
+                    d = defaults.get(d.length() == 1 ? source.getName() : d.substring(1));
+                    if (d == null) {
+                        throw new IllegalStateException(source.getName());
+                    }
                     try {
                         value = parse(d);
                     } catch (ArgumentException e) {
                         throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                     }
+                }
+                if (Source.DEFAULT_UNDEFINED.equals(d)) {
+                    value = target.defaultComponent();
+                } else if ("null".equals(d)) {
+                    value = null;
                 } else {
-                    d = source.getDefaultString();
-                    if (Source.DEFAULT_UNDEFINED.equals(d)) {
-                        value = target.defaultComponent();
-                    } else if ("null".equals(d)) {
-                        value = null;
-                    } else {
-                        try {
-                            value = parse(d);
-                        } catch (ArgumentException e) {
-                            throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
-                        }
+                    try {
+                        value = parse(d);
+                    } catch (ArgumentException e) {
+                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                     }
                 }
             } else {
