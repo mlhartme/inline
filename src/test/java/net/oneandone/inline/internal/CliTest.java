@@ -109,8 +109,9 @@ public class CliTest {
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
-        options = (Options) parser.run(map("first", "2", "third", "true"));
-        assertEquals(2, options.first);
+        options = (Options) parser.run(map("first", "2", "second", "s", "third", "true"), "-first", "1");
+        assertEquals(1, options.first);
+        assertEquals("ss", options.second);
         assertEquals(true, options.third);
 
         options = (Options) parser.run(new HashMap<>(), "-first", "1");

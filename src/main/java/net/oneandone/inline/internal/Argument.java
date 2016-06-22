@@ -46,25 +46,25 @@ public class Argument {
             value = lst;
         } else {
             if (actual.isEmpty()) {
-                d = source.getDefaultString();
-                if (Source.DEFAULT_UNDEFINED.equals(d)) {
-                    d = defaults.get(source.getName());
-                    if (d != null) {
+                d = defaults.get(source.getName());
+                if (d != null) {
+                    try {
+                        value = parse(d);
+                    } catch (ArgumentException e) {
+                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
+                    }
+                } else {
+                    d = source.getDefaultString();
+                    if (Source.DEFAULT_UNDEFINED.equals(d)) {
+                        value = target.defaultComponent();
+                    } else if ("null".equals(d)) {
+                        value = null;
+                    } else {
                         try {
                             value = parse(d);
                         } catch (ArgumentException e) {
                             throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                         }
-                    } else {
-                        value = target.defaultComponent();
-                    }
-                } else if ("null".equals(d)) {
-                    value = null;
-                } else {
-                    try {
-                        value = parse(d);
-                    } catch (ArgumentException e) {
-                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
                     }
                 }
             } else {
