@@ -38,6 +38,8 @@ public class Argument {
         List<Object> lst;
         Object value;
         String name;
+        String dv;
+        int idx;
 
         if (target.isList()) {
             lst = new ArrayList<>();
@@ -49,32 +51,42 @@ public class Argument {
             if (actual.isEmpty()) {
                 d = source.getDefaultString();
                 if (d.startsWith("@")) {
-                    d = defaults.get(d.length() == 1 ? source.getName() : d.substring(1));
+                    if (d.length() == 1) {
+                        name = source.getName();
+                        dv = Source.DEFAULT_UNDEFINED;
+                    } else {
+                        name = d.substring(1);
+                        idx = name.indexOf(':');
+                        if (idx == -1) {
+                            dv = Source.DEFAULT_UNDEFINED;
+                        } else {
+                            dv = name.substring(idx + 1);
+                            name = name.substring(0, idx);
+                        }
+                    }
+                    d = defaults.get(name);
                     if (d == null) {
-                        throw new IllegalStateException(source.getName());
-                    }
-                    try {
-                        value = parse(d);
-                    } catch (ArgumentException e) {
-                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
+                        d = dv;
                     }
                 }
-                if (Source.DEFAULT_UNDEFINED.equals(d)) {
-                    value = target.defaultComponent();
-                } else if ("null".equals(d)) {
-                    value = null;
-                } else {
-                    try {
-                        value = parse(d);
-                    } catch (ArgumentException e) {
-                        throw new IllegalStateException("cannot convert default value to type " + target + ": " + d);
-                    }
-                }
+                value = dflt(d);
             } else {
                 value = parse(actual.get(0));
             }
         }
         target.doSet(dest, value);
+    }
+
+    private Object dflt(String str) {
+        if (Source.DEFAULT_UNDEFINED.equals(str)) {
+            return target.defaultComponent();
+        } else if ("null".equals(str)) {
+            return null;
+        } else try {
+            return  parse(str);
+        } catch (ArgumentException e) {
+            throw new IllegalStateException("cannot convert default value to type " + target + ": " + str);
+        }
     }
 
     private Object parse(String str) {
