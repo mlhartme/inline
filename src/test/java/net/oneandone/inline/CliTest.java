@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.oneandone.inline.internal;
+package net.oneandone.inline;
 
 import net.oneandone.inline.ArgumentException;
 import net.oneandone.inline.Cli;
+import net.oneandone.inline.internal.ContextBuilder;
+import net.oneandone.sushi.util.Strings;
 import org.junit.Test;
 
 import java.io.File;
@@ -105,16 +107,16 @@ public class CliTest {
         Options options;
 
         parser = parser(Options.class, "-first=@ -second=@s:bla -third=@ { first=first node(second) }");
-        options = (Options) parser.run(map("first", "0", "s", "bla", "third", "false"));
+        options = (Options) parser.run(Strings.toMap("first", "0", "s", "bla", "third", "false"));
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
-        options = (Options) parser.run(map("first", "2", "s", "s", "third", "true"), "-first=1");
+        options = (Options) parser.run(Strings.toMap("first", "2", "s", "s", "third", "true"), "-first=1");
         assertEquals(1, options.first);
         assertEquals("s", options.second);
         assertEquals(true, options.third);
 
-        options = (Options) parser.run(map("first", "0", "s", "blub", "third", "false"), "-first", "1");
+        options = (Options) parser.run(Strings.toMap("first", "0", "s", "blub", "third", "false"), "-first", "1");
         assertEquals(1, options.first);
         assertEquals("blub", options.second);
         assertFalse(options.third);
@@ -154,16 +156,6 @@ public class CliTest {
         } catch (ArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("expected integer"));
         }
-    }
-
-    private static Map<String, String> map(String ... args) {
-        Map<String, String> result;
-
-        result = new HashMap<>();
-        for (int i = 0; i < args.length; i += 2) {
-            result.put(args[i], args[i + 1]);
-        }
-        return result;
     }
 
     @Test
