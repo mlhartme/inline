@@ -1,5 +1,6 @@
-# Inline 1.0.2
+# Inline 1.1.0
 
+* Options can be specified in a single argument now: -foo=bar.
 * Added Cli.defaults for configurable default values
 * Added Cli.base to inherit definitions
 

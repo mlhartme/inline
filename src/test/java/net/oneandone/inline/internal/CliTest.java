@@ -109,7 +109,7 @@ public class CliTest {
         assertEquals(0, options.first);
         assertEquals("bla", options.second);
         assertFalse(options.third);
-        options = (Options) parser.run(map("first", "2", "s", "s", "third", "true"), "-first", "1");
+        options = (Options) parser.run(map("first", "2", "s", "s", "third", "true"), "-first=1");
         assertEquals(1, options.first);
         assertEquals("s", options.second);
         assertEquals(true, options.third);
