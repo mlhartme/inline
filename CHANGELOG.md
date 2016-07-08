@@ -1,6 +1,6 @@
 ## Changelog 
 
-### 1.1.0
+### 1.1.0 (2016-07-08)
 
 * Options can be specified in a single argument now: -foo=bar.
 * Added Cli.defaults for configurable default values
