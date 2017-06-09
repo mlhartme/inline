@@ -1,5 +1,10 @@
 ## Changelog 
 
+### 1.1.1 (pending)
+
+* Cli.commands is public now (to allow collecting command names for bash completion)
+
+
 ### 1.1.0 (2016-07-08)
 
 * Options can be specified in a single argument now: -foo=bar.

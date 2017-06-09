@@ -63,7 +63,7 @@ public class Cli {
 
     protected final Repository repository;
     private final Function<Throwable, Integer> exceptionHandler;
-    private final List<Command> commands;
+    public final List<Command> commands;
     private Context currentContext;
     private Base currentBase;
     private Command defaultCommand;
