@@ -1,6 +1,6 @@
 ## Changelog 
 
-### 1.1.1 (pending)
+### 1.1.1 (2017-07-17)
 
 * Cli.commands is public now (to allow collecting command names for bash completion)
 
