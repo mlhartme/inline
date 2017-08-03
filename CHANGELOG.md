@@ -1,5 +1,10 @@
 ## Changelog 
 
+### 1.1.2 (pending)
+
+* update sushi 3.1.1 to 3.1.6
+
+
 ### 1.1.1 (2017-07-17)
 
 * Cli.commands is public now (to allow collecting command names for bash completion)
