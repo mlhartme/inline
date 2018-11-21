@@ -43,7 +43,7 @@ public class Repository {
                         } else if ("false".equals(str)) {
                             return Boolean.FALSE;
                         } else {
-                            throw new RuntimeException("not a boolean");
+                            throw new RuntimeException("not a boolean: '" + str + "'");
                         }
                     });
         register(Character.class, Character.TYPE, "single character", (char) 0,
