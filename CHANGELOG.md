@@ -3,7 +3,7 @@
 ### 1.1.2 (pending)
 
 * update sushi 3.1.1 to 3.1.6
-
+* update lazy-foss-parent 1.0.2 to 1.0.3
 
 ### 1.1.1 (2017-07-17)
 
