@@ -2,6 +2,7 @@
 
 ### 1.1.2 (pending)
 
+* changed default for java.lang.Boolean to null (default for boolean is still 'false')
 * update sushi 3.1.1 to 3.2.0
 * update lazy-foss-parent 1.0.2 to 1.0.3
 

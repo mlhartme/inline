@@ -36,16 +36,7 @@ public class Repository {
         register(Long.class, Long.TYPE, "long integer", (long) 0, Long::parseLong);
         register(Float.class, Float.TYPE, "float number", (float) 0, Float::parseFloat);
         register(Double.class, Double.TYPE, "double", (double) 0, Double::parseDouble);
-        register(Boolean.class, Boolean.TYPE, "'true' or 'false'", false, str -> {
-                        str = str.toLowerCase();
-                        if ("true".equals(str)) {
-                            return Boolean.TRUE;
-                        } else if ("false".equals(str)) {
-                            return Boolean.FALSE;
-                        } else {
-                            throw new RuntimeException("not a boolean: '" + str + "'");
-                        }
-                    });
+        registerBoolean();
         register(Character.class, Character.TYPE, "single character", (char) 0,
                     str -> {
                         if (str.length() == 1) {
@@ -57,6 +48,25 @@ public class Repository {
         register(File.class, "file name", new File("."), str -> new File(str));
         register(URL.class, "url", url("http://localhost"), Repository::url);
         register(URI.class, "uri", URI.create("http://localhost"), URI::create);
+    }
+
+    private void registerBoolean() {
+        final String expected = "'true' or 'false'";
+        Function<String, ? extends Object> parser;
+
+        parser = str -> {
+            str = str.toLowerCase();
+            if ("true".equals(str)) {
+                return Boolean.TRUE;
+            } else if ("false".equals(str)) {
+                return Boolean.FALSE;
+            } else {
+                throw new RuntimeException("not a boolean: '" + str + "'");
+            }
+        };
+
+        map.put(Boolean.TYPE, new Primitive(Boolean.class /* not type! */, expected, false, parser));
+        map.put(Boolean.class, new Primitive(Boolean.class, expected, null, parser));
     }
 
     private static URL url(String str) {
