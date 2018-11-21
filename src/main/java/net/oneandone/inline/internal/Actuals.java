@@ -61,7 +61,7 @@ public class Actuals {
             argument = entry.getKey();
             if (argument.context == context) {
                 if (argument.target.before() == (target == null)) {
-                    entry.getKey().source.checkCardinality(entry.getValue().size());
+                    argument.source.checkCardinality(entry.getValue().size());
                     argument.set(target, entry.getValue(), defaults);
                 }
             }

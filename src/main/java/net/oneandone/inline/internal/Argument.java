@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** Associates a source with a target. */
+/** A formal argument, i.e. without value (= actual). Associates a source with a target. */
 public class Argument {
     public final Context context;
     public final Source source;
