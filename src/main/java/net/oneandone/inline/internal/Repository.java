@@ -31,13 +31,21 @@ public class Repository {
     
     public Repository() {
         map = new HashMap<>();
-        register(String.class, "string", "", str -> str);
-        register(Integer.class, Integer.TYPE, "integer", 0, Integer::parseInt);
-        register(Long.class, Long.TYPE, "long integer", (long) 0, Long::parseLong);
-        register(Float.class, Float.TYPE, "float number", (float) 0, Float::parseFloat);
-        register(Double.class, Double.TYPE, "double", (double) 0, Double::parseDouble);
-        registerBoolean();
-        register(Character.class, Character.TYPE, "single character", (char) 0,
+        registerWrapper(Integer.class, Integer.TYPE, "integer", 0, Integer::parseInt);
+        registerWrapper(Long.class, Long.TYPE, "long integer", (long) 0, Long::parseLong);
+        registerWrapper(Float.class, Float.TYPE, "float number", (float) 0, Float::parseFloat);
+        registerWrapper(Double.class, Double.TYPE, "double", (double) 0, Double::parseDouble);
+        registerWrapper(Boolean.class, Boolean.TYPE, "'true' or 'false'", false, str -> {
+            switch (str.toLowerCase()) {
+                case "true":
+                    return Boolean.TRUE;
+                case "false":
+                    return Boolean.FALSE;
+                default:
+                    throw new RuntimeException("not a boolean: '" + str + "'");
+            }
+        });
+        registerWrapper(Character.class, Character.TYPE, "single character", (char) 0,
                     str -> {
                         if (str.length() == 1) {
                             return str.charAt(0);
@@ -45,28 +53,10 @@ public class Repository {
                             throw new RuntimeException("unexpected string length: " + str.length());
                         }
                     });
-        register(File.class, "file name", new File("."), str -> new File(str));
-        register(URL.class, "url", url("http://localhost"), Repository::url);
-        register(URI.class, "uri", URI.create("http://localhost"), URI::create);
-    }
-
-    private void registerBoolean() {
-        final String expected = "'true' or 'false'";
-        Function<String, ? extends Object> parser;
-
-        parser = str -> {
-            str = str.toLowerCase();
-            if ("true".equals(str)) {
-                return Boolean.TRUE;
-            } else if ("false".equals(str)) {
-                return Boolean.FALSE;
-            } else {
-                throw new RuntimeException("not a boolean: '" + str + "'");
-            }
-        };
-
-        map.put(Boolean.TYPE, new Primitive(Boolean.class /* not type! */, expected, false, parser));
-        map.put(Boolean.class, new Primitive(Boolean.class, expected, null, parser));
+        register(String.class, "string", null, str -> str);
+        register(File.class, "file name", null, str -> new File(str));
+        register(URL.class, "url", null, Repository::url);
+        register(URI.class, "uri", null, URI::create);
     }
 
     private static URL url(String str) {
@@ -91,8 +81,9 @@ public class Repository {
         return primitive;
     }
 
-    public void register(Class<?> clazz, Class<?> primitive, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
-        map.put(primitive, register(clazz, expected, defaultValue, parser));
+    public void registerWrapper(Class<?> wrapper, Class<?> type, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
+        map.put(wrapper, new Primitive(wrapper, expected, null, parser));
+        map.put(type, new Primitive(wrapper, expected, defaultValue, parser));
     }
 
     public Primitive register(Class<?> clazz, String expected, Object defaultValue, Function<String, ? extends Object> parser) {
