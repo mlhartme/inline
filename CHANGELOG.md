@@ -8,7 +8,7 @@
   Rationale: this is consistent with the other reference types, and it allows to
   detect if a boolean flags has not been set
 * update sushi 3.1.1 to 3.2.0
-* update lazy-foss-parent 1.0.2 to 1.0.3
+* update lazy-foss-parent 1.0.2 to 1.0.4
 
 ### 1.1.1 (2017-07-17)
 
