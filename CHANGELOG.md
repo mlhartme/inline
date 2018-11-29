@@ -1,12 +1,12 @@
 ## Changelog 
 
-### 1.2.0 (pending)
+### 1.2.0 (2018-11-29)
 
 * changed default values for all reference types to null; in particular:
   * default for Strings, Files, URIs and URLs
   * default for Wrapper types (java.lang.Boolean, java.lang.Integer etc)
   Rationale: this is consistent with the other reference types, and it allows to
-  detect if a boolean flags has not been set
+  detect if a boolean flags has been specified (either true or false) or not
 * update sushi 3.1.1 to 3.2.0
 * update lazy-foss-parent 1.0.2 to 1.0.4
 
